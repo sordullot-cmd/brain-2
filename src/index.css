@@ -1,0 +1,260 @@
+@import 'tailwindcss';
+
+/* --------------------------------------------------------------------------
+   Design system — repris des tokens de sordulo-gallery
+   -------------------------------------------------------------------------- */
+
+@theme {
+  --ff-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --ff-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --c-white: #fff;
+  --c-black: #000;
+  --c-gray: #5f5f5f;
+  --c-night: #00082e;
+  --c-green: #10b981;
+
+  --font-sans: var(--ff-sans);
+  --font-display: var(--ff-display);
+
+  --color-background: var(--c-white);
+  --color-foreground: var(--c-black);
+  --color-muted: var(--c-gray);
+  --color-subtle: color-mix(in srgb, var(--c-night) 55%, transparent);
+  --color-brand: var(--c-night);
+  --color-accent: var(--c-green);
+  --color-surface: color-mix(in srgb, var(--c-night) 5%, transparent);
+  --color-surface-strong: color-mix(in srgb, var(--c-night) 10%, transparent);
+  --color-border: color-mix(in srgb, var(--c-night) 12%, transparent);
+
+  --text-display: 43px;
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -1.72px;
+  --text-display--font-weight: 700;
+
+  --text-label: 14px;
+  --text-label--line-height: 0.94;
+  --text-label--letter-spacing: -0.7px;
+  --text-label--font-weight: 600;
+
+  --text-caption: 11px;
+  --text-caption--line-height: 1;
+  --text-caption--letter-spacing: -0.3px;
+  --text-caption--font-weight: 600;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--ff-sans);
+}
+
+::selection {
+  background: var(--c-night);
+  color: #fff;
+}
+
+/* Titre de section géant, façon référence : très serré, très lourd */
+.display-xl {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  font-size: clamp(2.6rem, 7.5vw, 6.5rem);
+}
+
+.display-md {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-size: clamp(1.75rem, 3.4vw, 2.9rem);
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  line-height: 0.94;
+}
+
+.caption {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Rendu des notes markdown
+   -------------------------------------------------------------------------- */
+
+.prose-vault {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--c-night) 88%, transparent);
+}
+.prose-vault > * + * {
+  margin-top: 0.95em;
+}
+.prose-vault h1 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  margin-top: 0;
+  color: var(--c-black);
+}
+.prose-vault h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  margin-top: 2.4em;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--color-border);
+  color: var(--c-black);
+}
+.prose-vault h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.9em;
+  color: var(--c-black);
+}
+.prose-vault h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 1.5em;
+  color: var(--c-black);
+}
+.prose-vault p,
+.prose-vault li {
+  text-wrap: pretty;
+}
+.prose-vault ul,
+.prose-vault ol {
+  padding-left: 1.15em;
+}
+.prose-vault ul {
+  list-style: disc;
+}
+.prose-vault ol {
+  list-style: decimal;
+}
+.prose-vault li + li {
+  margin-top: 0.35em;
+}
+.prose-vault strong {
+  font-weight: 600;
+  color: var(--c-black);
+}
+.prose-vault a,
+.prose-vault .vault-link {
+  color: var(--c-night);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--c-night) 30%, transparent);
+  transition: text-decoration-color 0.15s;
+}
+.prose-vault a:hover,
+.prose-vault .vault-link:hover {
+  text-decoration-color: var(--c-night);
+}
+.prose-vault .vault-link-dead {
+  color: color-mix(in srgb, var(--c-night) 35%, transparent);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+.prose-vault blockquote {
+  border-left: 2px solid var(--color-border);
+  padding-left: 1.1em;
+  color: var(--color-subtle);
+  font-size: 0.97em;
+}
+.prose-vault code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+.prose-vault pre {
+  background: var(--color-surface);
+  padding: 1em 1.15em;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.85em;
+}
+.prose-vault pre code {
+  background: none;
+  padding: 0;
+}
+.prose-vault hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2.4em 0;
+}
+.prose-vault table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  display: block;
+  overflow-x: auto;
+}
+.prose-vault th,
+.prose-vault td {
+  border: 1px solid var(--color-border);
+  padding: 0.6em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-vault th {
+  background: var(--color-surface);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.prose-vault .vault-embed {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  display: block;
+}
+.prose-vault td .vault-embed {
+  max-height: 190px;
+  width: auto;
+  border: 0;
+  background: none;
+}
+
+/* Damier discret sous les visuels transparents (SVG, PNG) */
+.checker {
+  background-image:
+    linear-gradient(45deg, color-mix(in srgb, var(--c-night) 4%, transparent) 25%, transparent 25%),
+    linear-gradient(-45deg, color-mix(in srgb, var(--c-night) 4%, transparent) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, color-mix(in srgb, var(--c-night) 4%, transparent) 75%),
+    linear-gradient(-45deg, transparent 75%, color-mix(in srgb, var(--c-night) 4%, transparent) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

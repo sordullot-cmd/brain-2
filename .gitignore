@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vercel
+
+# Généré par `npm run index` depuis le vault.
+# Décommente si tu déploies sur Vercel : les médias doivent alors être commités.
+# public/vault.json
+# public/media
