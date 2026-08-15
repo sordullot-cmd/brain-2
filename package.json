@@ -1,9 +1,9 @@
 {
-  "name": "vault-gallery",
+  "name": "brain-2",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Galerie web du vault Obsidian de Sacha — navigation visuelle des inspirations, univers et notes.",
+  "description": "brain^2 — le second cerveau de Sacha en site : navigation visuelle des inspirations, univers et notes.",
   "scripts": {
     "index": "node scripts/index-vault.mjs",
     "dev": "npm run index && vite",

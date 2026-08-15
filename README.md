@@ -1,6 +1,6 @@
-# vault-gallery
+# brain^2
 
-Galerie web du vault Obsidian — pour se balader visuellement dans le second cerveau au lieu de l'ouvrir dossier par dossier.
+Le second cerveau en site web — pour se balader visuellement dans le vault Obsidian au lieu de l'ouvrir dossier par dossier.
 
 Le code vit **hors du vault**, conformément à la règle d'architecture du vault (`CLAUDE.md` : « le code ne vit PAS dans le vault »).
 
