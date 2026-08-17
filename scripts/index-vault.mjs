@@ -27,6 +27,15 @@ const MEDIA_DIR = path.join(OUT_DIR, 'media')
 const OUT_JSON = path.join(OUT_DIR, 'vault.json')
 
 const SKIP_DIRS = new Set(['.git', '.obsidian', '.claude', '.trash', 'node_modules', '__pycache__'])
+
+/**
+ * `planches/` = planches de vignettes generees pour la lecture dans Obsidian
+ * (une image par famille de visuels). Elles restent indexees, sinon les embeds
+ * de la fiche ne se resolvent pas — mais elles sont ECARTEES des galeries par
+ * aspect : le site compose lui-meme les visuels d'origine, une planche y ferait
+ * doublon avec les fichiers qu'elle montre.
+ */
+const isPlanche = (folder) => folder.split('/').includes('planches')
 const SKIP_FILES = new Set(['.DS_Store', '.gitattributes'])
 
 const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.svg'])
@@ -340,6 +349,7 @@ for (const slug of [...uniDirs].sort()) {
 
   const aspectMap = new Map()
   for (const m of own) {
+    if (isPlanche(m.folder)) continue
     const aspect = m.folder === prefix ? 'divers' : m.folder.slice(prefix.length + 1).split('/')[0]
     if (!aspectMap.has(aspect)) aspectMap.set(aspect, [])
     aspectMap.get(aspect).push(m.id)
@@ -353,7 +363,7 @@ for (const slug of [...uniDirs].sort()) {
     slug,
     title: fm.univers || note?.title || slug,
     noteId: note?.id || null,
-    count: own.length,
+    count: own.filter((m) => !isPlanche(m.folder)).length,
     aspects,
     cover: pickCover(own, fm),
     couleurs: Array.isArray(fm.couleurs) ? fm.couleurs : [],
