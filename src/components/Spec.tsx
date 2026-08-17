@@ -7,6 +7,7 @@
  * qu'en une seule grille indifférenciée.
  */
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 /* --------------------------------------------------------------------------
    Couleur
@@ -49,6 +50,7 @@ export function SpecHero({
   art,
   artAlt,
   right,
+  pager,
 }: {
   eyebrow?: string
   title: string
@@ -59,6 +61,8 @@ export function SpecHero({
   art?: string | null
   artAlt?: string
   right?: React.ReactNode
+  /** Flèches de navigation entre projets, posées en haut du bandeau. */
+  pager?: React.ReactNode
 }) {
   const bg = tint && hexToRgb(tint) ? tint : '#00082e'
   const light = isLight(bg)
@@ -78,6 +82,14 @@ export function SpecHero({
             className="h-[64%] w-full max-w-[90%] object-contain object-right"
             style={{ filter: light ? 'none' : 'drop-shadow(0 12px 40px rgba(0,0,0,.28))' }}
           />
+        </div>
+      )}
+
+      {/* Flèches ancrées en haut à gauche : le contenu du bandeau est aligné en bas
+          (justify-end), et le visuel de couverture occupe la droite. */}
+      {pager && (
+        <div className="absolute inset-x-0 top-5 z-10 sm:top-6">
+          <div className="mx-auto max-w-[1400px] px-5 sm:px-8">{pager}</div>
         </div>
       )}
 
@@ -106,6 +118,61 @@ export function SpecHero({
         </div>
       )}
     </div>
+  )
+}
+
+/* --------------------------------------------------------------------------
+   Flèches de navigation entre projets
+   -------------------------------------------------------------------------- */
+
+export interface PagerItem {
+  /** Route de destination, ex. /univers/kraken */
+  to: string
+  title: string
+}
+
+/**
+ * Précédent / suivant, à poser en haut d'un bandeau `SpecHero`. Les couleurs
+ * sont héritées (`currentColor`) pour rester lisibles sur un fond teinté.
+ * Le nom de la destination n'apparaît qu'à partir de `sm` — sur mobile, les
+ * flèches seules.
+ */
+export function SpecPager({ prev, next }: { prev?: PagerItem | null; next?: PagerItem | null }) {
+  if (!prev && !next) return null
+
+  return (
+    <div className="flex items-center gap-2" aria-label="Navigation entre projets">
+      <PagerLink item={prev} direction="prev" />
+      <PagerLink item={next} direction="next" />
+    </div>
+  )
+}
+
+function PagerLink({ item, direction }: { item?: PagerItem | null; direction: 'prev' | 'next' }) {
+  const isPrev = direction === 'prev'
+  const arrow = isPrev ? '←' : '→'
+  const shell =
+    'label flex h-9 items-center gap-2 rounded-lg border border-current/25 px-3 transition-opacity'
+
+  if (!item) {
+    return (
+      <span className={`${shell} opacity-25`} aria-hidden="true">
+        {arrow}
+      </span>
+    )
+  }
+
+  return (
+    <Link
+      to={item.to}
+      className={`${shell} opacity-80 hover:opacity-100`}
+      title={`${isPrev ? 'Précédent' : 'Suivant'} : ${item.title}`}
+      aria-label={`${isPrev ? 'Projet précédent' : 'Projet suivant'} : ${item.title}`}
+    >
+      {isPrev && <span aria-hidden="true">{arrow}</span>}
+      <span className="hidden max-w-[16ch] truncate sm:inline">{item.title}</span>
+      {!isPrev && <span aria-hidden="true">{arrow}</span>}
+    </Link>
   )
 }
 
@@ -163,7 +230,10 @@ export function SpecNav({
   const accent = tint && hexToRgb(tint) && !isLight(tint) ? tint : undefined
 
   return (
-    <nav className="sticky top-24 hidden lg:block" aria-label="Sommaire">
+    // self-start est indispensable : sans lui, la grille parente étire le <nav> sur
+    // toute la hauteur de la page et `sticky` n'a plus rien à faire glisser — le
+    // sommaire disparaissait dès qu'on descendait.
+    <nav className="sticky top-24 self-start hidden lg:block" aria-label="Sommaire">
       <div className="overflow-hidden rounded-xl border border-border">
         <div className="label border-b border-border px-4 py-3.5">{title}</div>
         <ul className="py-1.5">

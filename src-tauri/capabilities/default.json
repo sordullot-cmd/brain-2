@@ -1,10 +1,16 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "enables the default permissions",
+  "description": "Permissions de base de la fenêtre principale, accordées aussi à la page distante servie par Vercel.",
   "windows": [
     "main"
   ],
+  "remote": {
+    "urls": [
+      "https://brain-2-cookozmail-7767s-projects.vercel.app",
+      "https://brain-2-cookozmail-7767s-projects.vercel.app/*"
+    ]
+  },
   "permissions": [
     "core:default"
   ]

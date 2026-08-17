@@ -2,21 +2,22 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "brain^2",
   "version": "1.0.0",
-  "identifier": "design.sacha.brain2",
+  "identifier": "design.sacha.brain2.live",
   "build": {
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:5180",
-    "beforeDevCommand": "npm run app:vite",
-    "beforeBuildCommand": "npm run build"
+    "frontendDist": "https://brain-2-cookozmail-7767s-projects.vercel.app",
+    "devUrl": "https://brain-2-cookozmail-7767s-projects.vercel.app",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": ""
   },
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "brain^2",
-        "width": 1440,
-        "height": 900,
-        "minWidth": 720,
-        "minHeight": 560,
+        "width": 1280,
+        "height": 800,
+        "minWidth": 960,
+        "minHeight": 600,
         "center": true,
         "resizable": true,
         "fullscreen": false
@@ -29,10 +30,10 @@
   "bundle": {
     "active": true,
     "targets": ["app"],
-    "copyright": "Sacha Moricet",
     "category": "Productivity",
-    "shortDescription": "Le second cerveau, en app",
-    "longDescription": "Navigation visuelle du vault Obsidian : inspirations, univers de référence, composants, animations et notes.",
+    "copyright": "Sacha Moricet",
+    "shortDescription": "Le second cerveau, en fenêtre native",
+    "longDescription": "Fenêtre native sur le site brain^2 déployé : le site reste la source de vérité, un déploiement suffit à mettre l'app à jour.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

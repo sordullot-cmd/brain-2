@@ -1,0 +1,86 @@
+name: Applications de bureau
+
+# Compile l'app Tauri sur les trois systèmes. Tauri ne sait pas compiler pour un
+# autre OS que celui sur lequel il tourne : il faut donc un runner par plateforme.
+#
+# Déclenchement manuel (onglet Actions → « Applications de bureau » → Run workflow),
+# ou automatique en poussant un tag `app-v…` :
+#     git tag app-v1.0.0 && git push origin app-v1.0.0
+#
+# Les installeurs sont attachés à l'exécution, dans « Artifacts ».
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'app-v*'
+
+jobs:
+  build:
+    name: ${{ matrix.nom }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - nom: macOS (.dmg)
+            os: macos-latest
+            rust-targets: aarch64-apple-darwin,x86_64-apple-darwin
+            args: --target universal-apple-darwin --bundles app,dmg
+          - nom: Windows (.msi + .exe)
+            os: windows-latest
+            rust-targets: ''
+            args: --bundles msi,nsis
+          - nom: Linux (.deb + .AppImage)
+            os: ubuntu-22.04
+            rust-targets: ''
+            args: --bundles deb,appimage
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # webkit2gtk fournit la WebView, libappindicator l'icône de barre, librsvg le rendu des SVG.
+      - name: Dépendances système Linux
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            build-essential \
+            libssl-dev
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      # `npm ci` suffit : l'app ne compile aucun front, elle charge le site déployé.
+      - run: npm ci
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ${{ matrix.args }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: brain2-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            src-tauri/target/**/release/bundle/**/*.dmg
+            src-tauri/target/**/release/bundle/**/*.msi
+            src-tauri/target/**/release/bundle/**/*setup.exe
+            src-tauri/target/**/release/bundle/**/*.deb
+            src-tauri/target/**/release/bundle/**/*.AppImage

@@ -7,6 +7,7 @@ import {
   SpecHero,
   SpecNav,
   SpecNavMobile,
+  SpecPager,
   SpecRow,
   SwatchGrid,
   hexToRgb,
@@ -135,6 +136,22 @@ export function UniversDetail({ data }: { data: VaultData }) {
   const ids = useMemo(() => sections.map((s) => s.id), [sections])
   const active = useScrollSpy(ids)
 
+  /**
+   * Projet précédent / suivant, dans l'ordre de la liste des univers. On boucle
+   * (le dernier renvoie au premier) pour pouvoir tourner indéfiniment entre les
+   * projets sans jamais tomber sur une flèche morte.
+   */
+  const { prev, next } = useMemo(() => {
+    const list = data.universes
+    const i = list.findIndex((x) => x.slug === slug)
+    if (i < 0 || list.length < 2) return { prev: null, next: null }
+    const at = (n: number) => {
+      const x = list[(n + list.length) % list.length]
+      return { to: `/univers/${x.slug}`, title: x.title }
+    }
+    return { prev: at(i - 1), next: at(i + 1) }
+  }, [data.universes, slug])
+
   if (!u)
     return (
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-24">
@@ -158,6 +175,7 @@ export function UniversDetail({ data }: { data: VaultData }) {
         }
         tint={tint}
         art={cover?.kind === 'image' ? cover.url : null}
+        pager={<SpecPager prev={prev} next={next} />}
         right={
           <div className="flex flex-wrap items-center gap-2.5">
             {u.source && (

@@ -9,11 +9,10 @@
     "dev": "npm run index && vite",
     "build": "npm run index && vite build",
     "preview": "vite preview",
-    "app:vite": "npm run index && vite --no-open",
-    "app": "tauri dev",
-    "app:build": "tauri build",
-    "app:dmg": "bash scripts/make-dmg.sh",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:dmg": "bash scripts/make-dmg.sh"
   },
   "dependencies": {
     "react": "^19.1.0",

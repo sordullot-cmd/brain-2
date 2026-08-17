@@ -48,6 +48,10 @@ npm run index      # réindexe seul
 # ou simplement relancer npm run dev
 ```
 
+### Navigateur ouvert au démarrage
+
+`.env` fixe `BROWSER=Arc`. Sans cette variable, Vite ne suit pas le navigateur par défaut de macOS : il cherche un Chromium de sa liste interne (Chrome, Edge, Brave, Vivaldi, Chromium) déjà lancé pour y réutiliser un onglet — Arc n'y figure pas, donc le site partait dans Chrome. Pour un autre navigateur, changer cette valeur ; `BROWSER=none` n'ouvre rien.
+
 ### Vault situé ailleurs
 
 Le chemin par défaut est `~/Documents/brain^2`. Pour en viser un autre :
@@ -74,12 +78,15 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 
 ## App macOS (Tauri)
 
-Le même site, empaqueté en application native — une fenêtre à part, une icône dans le Dock, pas d'onglet de navigateur. Tauri utilise le WebView du système (WKWebView) : pas de Chromium embarqué, donc un binaire léger.
+Le site déployé, dans une fenêtre native — une icône dans le Dock, pas d'onglet de
+navigateur. L'app n'embarque **rien** : elle charge l'URL de production, donc un
+déploiement Vercel suffit à la mettre à jour, sans recompilation ni réinstallation.
+Tauri utilise le WebView du système (WKWebView), d'où un binaire de 12 Mo.
 
 ```bash
-npm run app          # lance l'app en dev (réindexe, démarre Vite, ouvre la fenêtre)
-npm run app:build    # compile l'app (≈ 6 min la première fois, quelques secondes ensuite)
-npm run app:dmg      # emballe le .app compilé dans un .dmg distribuable
+npm run tauri:dev      # ouvre la fenêtre sur le site en ligne
+npm run tauri:build    # compile l'app (≈ 1 min, les dépendances Rust étant en cache)
+npm run tauri:dmg      # emballe le .app compilé dans un .dmg distribuable
 ```
 
 Les livrables sortent dans :
@@ -89,25 +96,57 @@ src-tauri/target/release/bundle/macos/brain^2.app
 src-tauri/target/release/bundle/dmg/brain^2_1.0.0_x64.dmg
 ```
 
-Installation : `cp -R src-tauri/target/release/bundle/macos/brain^2.app /Applications/`.
+Installation : ouvrir le `.dmg` et glisser l'app sur le raccourci *Applications*, ou
+
+```bash
+cp -R "src-tauri/target/release/bundle/macos/brain^2.app" /Applications/
+```
+
+### Wrapper de site distant
+
+`build.frontendDist` **et** `build.devUrl` pointent tous les deux sur l'URL de
+production ; il n'y a ni `beforeBuildCommand`, ni export statique, ni bundle du front.
+`app.security.csp` reste `null` : la page est distante, c'est le serveur qui décide
+sa politique.
+
+Point critique : une page distante n'a **aucun droit** d'appeler les API Tauri tant que
+son origine n'est pas déclarée dans `src-tauri/capabilities/default.json` sous la clé
+`remote`, sous ses deux formes (l'URL nue et l'URL suivie de `/*`). Sans ça, les appels
+échouent en silence. Aucun plugin n'est installé aujourd'hui, mais la déclaration est
+en place.
 
 ### Pourquoi le .dmg est fait à part
 
-Le `bundle_dmg.sh` de Tauri place les icônes dans la fenêtre du montage en pilotant le **Finder via AppleScript** — il échoue tant que le terminal n'a pas l'autorisation *Automatisation*. La cible `dmg` est donc retirée de `tauri.conf.json` (`bundle.targets: ["app"]`) et `scripts/make-dmg.sh` fabrique l'image avec `hdiutil` : même résultat (app + raccourci vers `/Applications`), sans dépendre du Finder.
+Le `bundle_dmg.sh` de Tauri place les icônes dans la fenêtre du montage en pilotant le
+**Finder via AppleScript** — il échoue tant que le terminal n'a pas l'autorisation
+*Automatisation*. La cible `dmg` est donc retirée de `tauri.conf.json`
+(`bundle.targets: ["app"]`) et `scripts/make-dmg.sh` fabrique l'image avec `hdiutil` :
+même résultat (app + raccourci vers `/Applications`), sans dépendre du Finder.
 
 ### Prérequis
 
-Rust (une fois pour toutes) : `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`, plus les Command Line Tools d'Xcode.
+Rust (une fois pour toutes) : `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`,
+plus les Command Line Tools d'Xcode.
 
 ### Ce qu'il faut savoir
 
-- **Les données sont figées au build.** `npm run app:build` réindexe le vault et embarque le résultat dans l'app : le contenu affiché est celui du vault au moment de la compilation. Après avoir modifié le vault, relancer `npm run app:build` (ou travailler avec `npm run app`, qui réindexe à chaque démarrage).
-- **L'app est volumineuse** — elle contient les médias copiés depuis le vault (≈ 200 Mo aujourd'hui).
-- **DM Sans est embarquée** (`@fontsource-variable/dm-sans`, importée dans `src/index.css`) : l'app ne dépend pas de Google Fonts et fonctionne hors ligne.
-- **L'app n'est pas signée** ni notariée. Au premier lancement, macOS affiche un avertissement : clic droit → *Ouvrir*, ou Réglages Système → Confidentialité et sécurité → *Ouvrir quand même*. Une signature demanderait un compte Apple Developer.
-- **Icône** : générée depuis `public/lofo.svg` (`npx tauri icon <png 1024×1024 RGBA>`), tous les formats sont dans `src-tauri/icons/`.
+- **L'app suit le site.** Le contenu affiché est celui du dernier déploiement Vercel :
+  pas de rebuild après une mise à jour du vault, mais pas de fonctionnement hors ligne
+  non plus.
+- **Le site doit rester public.** Si la protection de déploiement de Vercel est
+  réactivée, l'app n'affichera qu'un écran de connexion.
+- **L'app n'est pas signée** ni notariée. Compilée localement elle s'ouvre sans
+  avertissement ; distribuée à un autre Mac, il faut faire clic droit → *Ouvrir*.
+- **Windows et Linux ne se compilent pas depuis macOS.** Tauri ne croise pas les
+  compilations : il faut un runner par plateforme (GitHub Actions), ou compiler sur la
+  machine cible.
+- **Icône** : générée depuis `public/favicon.svg`, posée au gabarit Apple (la forme
+  occupe 824 px dans un canevas de 1024, le reste transparent — sans cette marge,
+  l'icône paraît plus grosse que les autres dans le Dock). Tous les formats sont dans
+  `src-tauri/icons/`.
 
-La config vit dans `src-tauri/tauri.conf.json` (nom, identifiant `design.sacha.brain2`, taille de fenêtre, cibles du bundle).
+La config vit dans `src-tauri/tauri.conf.json` (nom, identifiant
+`design.sacha.brain2.live`, URL de production, taille de fenêtre, cibles du bundle).
 
 ---
 

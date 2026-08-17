@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import type { Media } from '../lib/vault'
-import { layoutMedia, mediaRatio, previewRows, type Row } from '../lib/layout'
+import { layoutMedia, previewRows, type Row } from '../lib/layout'
 import { useLightbox } from './Lightbox'
 
 /**
  * Rend les visuels d'un aspect en suivant la composition calculee par
- * `layoutMedia` : visuel de signature en pleine largeur, quadrillages pour les
- * series, rangees justifiees pour le reste.
+ * `layoutMedia` : chaque ligne remplit toute la largeur, et ses cellules sont
+ * identiques — donc de meme hauteur. La variation est entre les lignes.
  */
 export function MediaLayout({ items, preview }: { items: Media[]; preview?: number }) {
   const rows = useMemo(() => layoutMedia(items), [items])
@@ -65,51 +65,16 @@ function RowView({ row, start, onOpen }: { row: Row; start: number; onOpen: (i: 
     )
   }
 
-  if (row.kind === 'grid') {
-    return (
-      <div
-        className="grid gap-3 sm:gap-4"
-        style={{ gridTemplateColumns: `repeat(${row.cols}, minmax(0, 1fr))` }}
-      >
-        {row.items.map((m, k) => (
-          <Tile key={m.id} m={m} onClick={() => onOpen(start + k)} style={{ aspectRatio: mediaRatio(m) }} />
-        ))}
-      </div>
-    )
-  }
-
-  // Une rangee trop « etroite » (un seul portrait, par exemple) ne doit pas etre
-  // etiree sur toute la largeur : on lui donne une hauteur fixe et on cale a gauche.
-  if (row.sum < 1.7) {
-    const H = 300
-    return (
-      <div className="flex gap-3 sm:gap-4" style={{ height: H }}>
-        {row.items.map((m, k) => (
-          <Tile
-            key={m.id}
-            m={m}
-            onClick={() => onOpen(start + k)}
-            className="h-full"
-            style={{ width: mediaRatio(m) * H, flexShrink: 1, minWidth: 0 }}
-          />
-        ))}
-      </div>
-    )
-  }
-
-  // Rangee justifiee : la rangee porte le format cumule, chaque visuel prend sa
-  // part de largeur — les hauteurs s'alignent toutes seules. Les coefficients
-  // sont normalises : en dessous de 1 au total, flex-grow ne distribue pas tout.
+  // Une ligne de cellules identiques, qui remplit toute la largeur : le format
+  // vient de la LIGNE, pas de chaque visuel — sinon les hauteurs divergent sur
+  // une meme ligne. Chaque visuel est centre et contenu dans sa cellule.
   return (
-    <div className="flex gap-3 sm:gap-4" style={{ aspectRatio: row.sum, maxHeight: 420 }}>
+    <div
+      className="grid gap-3 sm:gap-4"
+      style={{ gridTemplateColumns: `repeat(${row.cols}, minmax(0, 1fr))` }}
+    >
       {row.items.map((m, k) => (
-        <Tile
-          key={m.id}
-          m={m}
-          onClick={() => onOpen(start + k)}
-          className="h-full min-w-0"
-          style={{ flexGrow: mediaRatio(m) / row.sum, flexShrink: 1, flexBasis: 0 }}
-        />
+        <Tile key={m.id} m={m} onClick={() => onOpen(start + k)} style={{ aspectRatio: row.ratio }} />
       ))}
     </div>
   )
