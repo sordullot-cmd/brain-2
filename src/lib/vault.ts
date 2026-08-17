@@ -16,6 +16,9 @@ export interface Media {
   folder: string
   size: number
   mtime: number
+  /** Dimensions natives, quand l'indexeur a su les lire (images seulement). */
+  w?: number
+  h?: number
 }
 
 export interface Note {

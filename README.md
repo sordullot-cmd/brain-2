@@ -72,6 +72,45 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 
 ---
 
+## App macOS (Tauri)
+
+Le même site, empaqueté en application native — une fenêtre à part, une icône dans le Dock, pas d'onglet de navigateur. Tauri utilise le WebView du système (WKWebView) : pas de Chromium embarqué, donc un binaire léger.
+
+```bash
+npm run app          # lance l'app en dev (réindexe, démarre Vite, ouvre la fenêtre)
+npm run app:build    # compile l'app (≈ 6 min la première fois, quelques secondes ensuite)
+npm run app:dmg      # emballe le .app compilé dans un .dmg distribuable
+```
+
+Les livrables sortent dans :
+
+```
+src-tauri/target/release/bundle/macos/brain^2.app
+src-tauri/target/release/bundle/dmg/brain^2_1.0.0_x64.dmg
+```
+
+Installation : `cp -R src-tauri/target/release/bundle/macos/brain^2.app /Applications/`.
+
+### Pourquoi le .dmg est fait à part
+
+Le `bundle_dmg.sh` de Tauri place les icônes dans la fenêtre du montage en pilotant le **Finder via AppleScript** — il échoue tant que le terminal n'a pas l'autorisation *Automatisation*. La cible `dmg` est donc retirée de `tauri.conf.json` (`bundle.targets: ["app"]`) et `scripts/make-dmg.sh` fabrique l'image avec `hdiutil` : même résultat (app + raccourci vers `/Applications`), sans dépendre du Finder.
+
+### Prérequis
+
+Rust (une fois pour toutes) : `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`, plus les Command Line Tools d'Xcode.
+
+### Ce qu'il faut savoir
+
+- **Les données sont figées au build.** `npm run app:build` réindexe le vault et embarque le résultat dans l'app : le contenu affiché est celui du vault au moment de la compilation. Après avoir modifié le vault, relancer `npm run app:build` (ou travailler avec `npm run app`, qui réindexe à chaque démarrage).
+- **L'app est volumineuse** — elle contient les médias copiés depuis le vault (≈ 200 Mo aujourd'hui).
+- **DM Sans est embarquée** (`@fontsource-variable/dm-sans`, importée dans `src/index.css`) : l'app ne dépend pas de Google Fonts et fonctionne hors ligne.
+- **L'app n'est pas signée** ni notariée. Au premier lancement, macOS affiche un avertissement : clic droit → *Ouvrir*, ou Réglages Système → Confidentialité et sécurité → *Ouvrir quand même*. Une signature demanderait un compte Apple Developer.
+- **Icône** : générée depuis `public/lofo.svg` (`npx tauri icon <png 1024×1024 RGBA>`), tous les formats sont dans `src-tauri/icons/`.
+
+La config vit dans `src-tauri/tauri.conf.json` (nom, identifiant `design.sacha.brain2`, taille de fenêtre, cibles du bundle).
+
+---
+
 ## Déployer sur Vercel
 
 Vercel n'a évidemment pas accès au vault local. Le site déployé consomme donc l'index **commité dans le repo** — c'est pourquoi `vercel.json` lance `vite build` seul, sans réindexer.

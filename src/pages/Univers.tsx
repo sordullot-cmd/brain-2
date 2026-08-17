@@ -1,8 +1,19 @@
 import { Link, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { PageHead, Empty } from '../components/Layout'
-import { MediaGrid } from '../components/MediaGrid'
-import { indexById, type VaultData } from '../lib/vault'
+import { MediaLayout } from '../components/MediaLayout'
+import {
+  SpecCanvas,
+  SpecHero,
+  SpecNav,
+  SpecNavMobile,
+  SpecRow,
+  SwatchGrid,
+  hexToRgb,
+  useScrollSpy,
+  type SpecSection,
+} from '../components/Spec'
+import { indexById, type Media, type VaultData } from '../lib/vault'
 
 export function UniversList({ data }: { data: VaultData }) {
   const idx = indexById(data)
@@ -56,11 +67,73 @@ export function UniversList({ data }: { data: VaultData }) {
   )
 }
 
+/* --------------------------------------------------------------------------
+   Fiche projet — mise en page « charte de marque » :
+   bandeau teinté, sommaire à gauche, aspects présentés un par un.
+   -------------------------------------------------------------------------- */
+
+/** Ce que montre chaque aspect. Sert de commentaire dans la colonne de droite. */
+const ASPECT_NOTES: Record<string, string> = {
+  branding:
+    "Le logo, ses déclinaisons et les éléments de signature : ce qui reste reconnaissable quand tout le reste disparaît.",
+  couleurs: "Les palettes déclarées par la marque et les couleurs réellement relevées dans les écrans.",
+  ui: "Les écrans du produit tels qu'ils sont réellement affichés — hiérarchie, composants, densité.",
+  ecrans: "Les écrans du produit tels qu'ils sont réellement affichés — hiérarchie, composants, densité.",
+  flows: "Des parcours complets, écran par écran : onboarding, achat, paramètres.",
+  site: "Le site public : pages marketing, mise en scène de la marque hors du produit.",
+  web: "Le site public : pages marketing, mise en scène de la marque hors du produit.",
+  produit: "Les visuels produit et les mises en situation officielles.",
+  'character-design': "Les personnages et mascottes, leurs expressions et leurs déclinaisons.",
+  illustrations: "Le système d'illustration : trait, couleurs, mise en scène, niveau de détail.",
+  animations: "Les séquences animées : trailers, démos, micro-interactions.",
+  campagnes: "Les prises de parole publicitaires et les campagnes de marque.",
+  photographie: "Le traitement photo : cadrage, lumière, direction artistique.",
+  marketing: "Les visuels de promotion : stores, réseaux, publicités.",
+  composants: "Des blocs d'interface isolés, sortis de leur page.",
+  gameplay: "Le produit en action, capté tel qu'il se joue ou s'utilise.",
+  typographie: "Les polices de la marque et leur mise en œuvre.",
+}
+
+const aspectLabel = (name: string) => name.replace(/-/g, ' ')
+
+/** Résumé factuel d'un lot de médias : nombre de fichiers et formats présents. */
+function mediaMeta(items: Media[]) {
+  const exts = [...new Set(items.map((m) => m.ext.replace('.', '').toUpperCase()))].sort()
+  return `${items.length} fichier${items.length > 1 ? 's' : ''} · ${exts.join(' · ')}`
+}
+
+/** Nombre de visuels montrés d'emblée dans un aspect, avant dépliage. */
+const PREVIEW = 10
+
 export function UniversDetail({ data }: { data: VaultData }) {
   const { slug } = useParams()
-  const idx = indexById(data)
+  const idx = useMemo(() => indexById(data), [data])
   const u = data.universes.find((x) => x.slug === slug)
-  const [aspect, setAspect] = useState<string>('tout')
+
+  const palette = useMemo(() => (u?.couleurs ?? []).filter((c) => hexToRgb(c)), [u])
+
+  /** Un aspect = une rangée. On résout les médias une fois pour toutes. */
+  const rows = useMemo(
+    () =>
+      (u?.aspects ?? []).map((a) => ({
+        ...a,
+        items: a.media.map((id) => idx.media.get(id)!).filter(Boolean),
+      })),
+    [u, idx]
+  )
+
+  const note = u?.noteId ? idx.notes.get(u.noteId) : null
+
+  const sections: SpecSection[] = useMemo(() => {
+    const s: SpecSection[] = []
+    if (palette.length) s.push({ id: 'palette', label: 'palette', count: palette.length })
+    for (const r of rows) s.push({ id: `aspect-${r.name}`, label: aspectLabel(r.name), count: r.count })
+    if (note) s.push({ id: 'fiche', label: 'la fiche' })
+    return s
+  }, [palette.length, rows, note])
+
+  const ids = useMemo(() => sections.map((s) => s.id), [sections])
+  const active = useScrollSpy(ids)
 
   if (!u)
     return (
@@ -69,97 +142,103 @@ export function UniversDetail({ data }: { data: VaultData }) {
       </div>
     )
 
-  const note = u.noteId ? idx.notes.get(u.noteId) : null
-  const shown =
-    aspect === 'tout'
-      ? u.aspects.flatMap((a) => a.media)
-      : (u.aspects.find((a) => a.name === aspect)?.media ?? [])
-  const items = shown.map((id) => idx.media.get(id)!).filter(Boolean)
+  const cover = u.cover ? idx.media.get(u.cover) : null
+  const tint = palette[0] ?? null
+  const aspectList = rows.map((r) => aspectLabel(r.name)).join(', ')
 
   return (
     <>
-      <PageHead
+      <SpecHero
         eyebrow={[u.categorie, u.secteur].filter(Boolean).join(' · ') || 'Univers'}
         title={u.title}
-        desc={u.annee ? `Identité ${u.annee}` : undefined}
+        desc={
+          rows.length
+            ? `${u.count} visuels rapatriés en pleine qualité, rangés en ${rows.length} aspects : ${aspectList}.`
+            : undefined
+        }
+        tint={tint}
+        art={cover?.kind === 'image' ? cover.url : null}
         right={
-          u.source ? (
-            <a
-              href={u.source}
-              target="_blank"
-              rel="noreferrer"
-              className="label px-4 py-2.5 rounded-lg border border-border hover:border-brand/40 transition-colors shrink-0"
-            >
-              Source ↗
-            </a>
-          ) : undefined
+          <div className="flex flex-wrap items-center gap-2.5">
+            {u.source && (
+              <a
+                href={u.source}
+                target="_blank"
+                rel="noreferrer"
+                className="label rounded-lg border border-current/35 px-4 py-2.5 transition-opacity hover:opacity-70"
+              >
+                Source ↗
+              </a>
+            )}
+            {u.annee && (
+              <span className="caption rounded-lg border border-current/20 px-3 py-2.5" style={{ opacity: 0.8 }}>
+                {u.annee}
+              </span>
+            )}
+          </div>
         }
       />
 
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
-        {/* Palette */}
-        {u.couleurs.length > 0 && (
-          <div className="mb-12">
-            <div className="caption uppercase text-subtle mb-4">
-              Palette{u.couleurPrincipale ? ` — ${u.couleurPrincipale}` : ''}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {u.couleurs.map((c, i) => (
-                <div key={i} className="w-24">
-                  <div className="h-16 rounded-lg border border-border" style={{ background: c }} />
-                  <div className="caption text-subtle mt-2 mono">{c}</div>
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pt-12 pb-28">
+        <SpecNavMobile sections={sections} active={active} />
+
+        <div className="grid grid-cols-1 gap-x-12 lg:grid-cols-[196px_minmax(0,1fr)]">
+          <SpecNav title={u.title} sections={sections} active={active} tint={tint} />
+
+          <div className="min-w-0">
+            {palette.length > 0 && (
+              <SpecRow
+                first
+                id="palette"
+                eyebrow={u.title}
+                title="Palette"
+                notes={[
+                  u.couleurPrincipale
+                    ? `La couleur de tête est le ${u.couleurPrincipale}. Les suivantes sont classées par importance décroissante dans l'identité.`
+                    : 'Les couleurs sont classées par importance décroissante dans l’identité.',
+                  'Cliquer sur un code copie sa valeur hexadécimale.',
+                ]}
+                meta={`${palette.length} couleurs`}
+              >
+                <SpecCanvas>
+                  <SwatchGrid colors={palette} />
+                </SpecCanvas>
+              </SpecRow>
+            )}
+
+            {rows.map((r, i) => (
+              <SpecRow
+                key={r.name}
+                first={i === 0 && palette.length === 0}
+                id={`aspect-${r.name}`}
+                eyebrow={u.title}
+                title={aspectLabel(r.name)}
+                notes={[ASPECT_NOTES[r.name] ?? 'Les visuels rapatriés pour cet aspect de l’univers.']}
+                meta={r.items.length ? mediaMeta(r.items) : undefined}
+              >
+                <SpecCanvas>
+                  <MediaLayout items={r.items} preview={PREVIEW} />
+                </SpecCanvas>
+              </SpecRow>
+            ))}
+
+            {note && (
+              <SpecRow
+                id="fiche"
+                first={false}
+                eyebrow={u.title}
+                title="La fiche"
+                notes={['La note du vault : sources, crédits, mots-clés et tout ce qui a été noté à la main.']}
+              >
+                <div className="max-w-3xl">
+                  <NoteBody html={note.html} />
                 </div>
-              ))}
-            </div>
+              </SpecRow>
+            )}
           </div>
-        )}
-
-        {/* Filtres par aspect */}
-        <div className="flex flex-wrap gap-2 mb-8 pb-6 border-b border-border">
-          <Chip active={aspect === 'tout'} onClick={() => setAspect('tout')}>
-            tout <span className="tabular-nums">{u.count}</span>
-          </Chip>
-          {u.aspects.map((a) => (
-            <Chip key={a.name} active={aspect === a.name} onClick={() => setAspect(a.name)}>
-              {a.name.replace(/-/g, ' ')} <span className="tabular-nums">{a.count}</span>
-            </Chip>
-          ))}
         </div>
-
-        <MediaGrid items={items} />
-
-        {/* Fiche */}
-        {note && (
-          <section className="mt-20 pt-12 border-t border-border">
-            <div className="caption uppercase text-subtle mb-8">La fiche</div>
-            <div className="max-w-3xl">
-              <NoteBody html={note.html} />
-            </div>
-          </section>
-        )}
       </div>
     </>
-  )
-}
-
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`label px-3.5 py-2 rounded-lg transition-colors ${
-        active ? 'bg-brand text-white' : 'bg-surface text-subtle hover:bg-surface-strong hover:text-foreground'
-      }`}
-    >
-      {children}
-    </button>
   )
 }
 

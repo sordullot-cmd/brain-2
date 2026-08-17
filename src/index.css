@@ -1,12 +1,14 @@
 @import 'tailwindcss';
+/* DM Sans embarquée (pas de Google Fonts) : l'app desktop doit marcher hors ligne. */
+@import '@fontsource-variable/dm-sans/opsz.css';
 
 /* --------------------------------------------------------------------------
    Design system — repris des tokens de sordulo-gallery
    -------------------------------------------------------------------------- */
 
 @theme {
-  --ff-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  --ff-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --ff-sans: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --ff-display: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
   --c-white: #fff;
   --c-black: #000;

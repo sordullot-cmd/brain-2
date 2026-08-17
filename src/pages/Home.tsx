@@ -67,14 +67,6 @@ export function Home({ data }: { data: VaultData }) {
                     <h3 className="display-md group-hover:text-brand transition-colors">{u.title}</h3>
                     <span className="caption text-subtle tabular-nums ml-auto shrink-0">{u.count}</span>
                   </div>
-
-                  {u.couleurs.length > 0 && (
-                    <div className="mt-3.5 flex gap-1">
-                      {u.couleurs.slice(0, 10).map((c, i) => (
-                        <span key={i} className="h-4 flex-1 rounded-[2px]" style={{ background: c }} title={c} />
-                      ))}
-                    </div>
-                  )}
                 </Link>
               )
             })}

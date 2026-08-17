@@ -16,6 +16,7 @@ import os from 'node:os'
 import { fileURLToPath } from 'node:url'
 import matter from 'gray-matter'
 import { marked } from 'marked'
+import { imageSize } from './image-size.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -119,6 +120,8 @@ for (const full of mediaFiles) {
   const stat = fs.statSync(full)
   const ext = path.extname(full).toLowerCase()
   const name = path.basename(full)
+  // Dimensions : la mise en page du site compose les visuels selon leur format.
+  const dim = kindOf(ext) === 'image' ? imageSize(full, ext) : null
   const item = {
     id: rel.split(path.sep).join('/'),
     path: rel.split(path.sep).join('/'),
@@ -130,6 +133,7 @@ for (const full of mediaFiles) {
     folder: path.dirname(rel).split(path.sep).join('/'),
     size: stat.size,
     mtime: stat.mtimeMs,
+    ...(dim ? { w: dim.w, h: dim.h } : {}),
   }
   media.push(item)
   for (const key of [name, item.stem]) {
