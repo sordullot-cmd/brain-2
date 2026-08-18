@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { norm, type VaultData } from '../lib/vault'
 
-type Hit = { kind: 'Note' | 'Univers' | 'Média' | 'Tag'; title: string; sub: string; to: string; score: number }
+type Hit = { kind: 'Note' | 'Projet' | 'Média' | 'Tag'; title: string; sub: string; to: string; score: number }
 
 /** Palette de recherche (⌘K) sur l'ensemble du vault : notes, univers, médias, tags. */
 export function Search({ data, onClose }: { data: VaultData; onClose: () => void }) {
@@ -24,9 +24,15 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
     if (term.length < 2) return []
     const out: Hit[] = []
 
-    for (const u of data.universes) {
+    for (const u of data.projects) {
       if (norm(u.title + ' ' + u.slug).includes(term))
-        out.push({ kind: 'Univers', title: u.title, sub: `${u.count} médias`, to: `/univers/${u.slug}`, score: 0 })
+        out.push({
+          kind: 'Projet',
+          title: u.title,
+          sub: `${u.disciplineLabel} · ${u.count} médias`,
+          to: `/projet/${u.discipline}/${u.slug}`,
+          score: 0,
+        })
     }
     for (const n of data.notes) {
       const inTitle = norm(n.title).includes(term)

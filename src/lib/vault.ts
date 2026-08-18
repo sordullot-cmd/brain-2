@@ -51,8 +51,18 @@ export interface Aspect {
   media: string[]
 }
 
-export interface Universe {
+/**
+ * Un projet = un dossier d'inspiration, univers compris. Les deux avaient leur
+ * page ; ils partagent désormais un index unique, filtrable par discipline et
+ * par tag.
+ */
+export interface Project {
+  /** `DISCIPLINE/slug`, ex. `UI-DESIGN/kraken` — unique dans tout le vault. */
+  id: string
   slug: string
+  discipline: string
+  disciplineLabel: string
+  kind: 'univers' | 'inspiration'
   title: string
   noteId: string | null
   count: number
@@ -65,6 +75,8 @@ export interface Universe {
   annee: string | null
   source: string | null
   tags: string[]
+  /** Les 2-3 tags les plus distinctifs, calculés à l'indexation. */
+  topTags: string[]
 }
 
 export interface Discipline {
@@ -73,6 +85,7 @@ export interface Discipline {
   path: string
   mediaCount: number
   noteCount: number
+  projectCount: number
   indexId: string | null
   media: string[]
   notes: string[]
@@ -89,13 +102,14 @@ export interface VaultData {
     images: number
     videos: number
     tags: number
+    projects: number
     universes: number
     disciplines: number
     bytes: number
   }
   notes: Note[]
   media: Media[]
-  universes: Universe[]
+  projects: Project[]
   disciplines: Discipline[]
   tags: { name: string; count: number }[]
 }
@@ -130,6 +144,9 @@ export const fmtDate = (ms: number) =>
 /** Retire les accents et la casse, pour une recherche tolérante. */
 export const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+
+/** Lien vers la fiche d'un projet. */
+export const projectUrl = (p: Project) => `/projet/${p.discipline}/${p.slug}`
 
 /** Notes réellement rédigées par Sacha (hors templates et doc technique). */
 export const contentNotes = (d: VaultData) => d.notes.filter((n) => !n.isMeta)

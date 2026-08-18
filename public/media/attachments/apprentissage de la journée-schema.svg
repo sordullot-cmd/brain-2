@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1217" height="685" viewBox="-2.6 1204.3 1217 685" role="img" aria-label="Schéma de la note">
+  <style>.ink{stroke:#0D0D0D;color:#0D0D0D}.blue{stroke:#3B82F6;color:#3B82F6}.red{stroke:#EF4444;color:#EF4444}.green{stroke:#16A34A;color:#16A34A}.amber{stroke:#F97316;color:#F97316}.purple{stroke:#8B5CF6;color:#8B5CF6}
+  @media (prefers-color-scheme: dark){.ink{stroke:#EDEDED;color:#EDEDED}}</style>
+  <g>
+    <line class="ink" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" x1="10.7" y1="1217.2" x2="1183.7" y2="1217.2"/>
+    <line class="ink" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" x1="12.8" y1="1875.6" x2="1196.2" y2="1875.6"/>
+    <line class="ink" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" x1="10.3" y1="1457" x2="1201.1" y2="1457"/>
+  </g>
+</svg>

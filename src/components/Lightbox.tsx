@@ -69,7 +69,7 @@ export function Lightbox({
         </span>
         <button
           onClick={onClose}
-          className="label px-3 py-2 rounded-lg hover:bg-surface transition-colors shrink-0"
+          className="label px-3 py-2 rounded-full hover:bg-surface transition-colors shrink-0"
           aria-label="Fermer"
         >
           Fermer

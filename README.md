@@ -35,7 +35,9 @@ Le site s'ouvre sur <http://localhost:5180>.
 - **markdown rendu en HTML**, avec les `[[wikilinks]]` transformés en liens cliquables et les `![[embeds]]` en images/vidéos ;
 - **backlinks** calculés dans les deux sens ;
 - **tags**, ceux du frontmatter et ceux posés dans le corps du texte ;
-- **univers** (`INSPIRATION/UNIVERS/<slug>/`) découpés par aspect, avec leur palette ;
+- **projets** — tout dossier `INSPIRATION/<DISCIPLINE>/<slug>/`, `UNIVERS` compris : découpé
+  par aspect, avec sa palette, ses tags et les **2-3 tags les plus distinctifs** (`topTags`,
+  calculés en écartant les tags de structure et de discipline, puis en gardant les plus rares) ;
 - **disciplines** (`INSPIRATION/<DISCIPLINE>/`), y compris les vides — elles font partie de l'architecture ;
 - **médias** copiés dans `public/media/` en conservant l'arborescence.
 
@@ -67,12 +69,18 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 | Route | Contenu |
 | --- | --- |
 | `/` | Vue d'ensemble : compteurs, univers, notes récentes, tags |
-| `/inspirations` | Les disciplines et leur contenu ; les disciplines vides sont listées à part |
-| `/univers` · `/univers/:slug` | Dossiers de référence : palette, filtres par aspect, galerie, fiche complète |
+| `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline et par tag. Les disciplines encore vides sont listées à part |
+| `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète |
 | `/notes` · `/note/*` | Toutes les notes ; lecture avec propriétés, tags, liens sortants et backlinks |
 | `/tags` · `/tags/:tag` | Navigation par étiquette |
 
-`⌘K` ouvre la recherche (notes, univers, médias, tags). Dans la galerie : clic pour agrandir, flèches pour naviguer, `échap` pour fermer.
+`/inspirations` et `/univers` redirigent vers `/projets` ; les liens `/univers/<slug>`
+déjà partagés tombent sur la fiche correspondante.
+
+Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=crypto,dark`) :
+un tri se partage et le bouton retour le défait.
+
+`⌘K` ouvre la recherche (notes, projets, médias, tags). Dans la galerie : clic pour agrandir, flèches pour naviguer, `échap` pour fermer.
 
 ---
 

@@ -1,6 +1,6 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useMemo } from 'react'
-import { PageHead, Empty } from '../components/Layout'
+import { Empty } from '../components/Layout'
 import { MediaLayout } from '../components/MediaLayout'
 import {
   SpecCanvas,
@@ -14,63 +14,12 @@ import {
   useScrollSpy,
   type SpecSection,
 } from '../components/Spec'
-import { indexById, type Media, type VaultData } from '../lib/vault'
-
-export function UniversList({ data }: { data: VaultData }) {
-  const idx = indexById(data)
-
-  return (
-    <>
-      <PageHead
-        eyebrow="Univers"
-        title="Dossiers de référence"
-        desc="Des univers créatifs entiers rapatriés en pleine qualité — branding, UI, character design, illustrations — pour que les références ne disparaissent jamais."
-      />
-
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
-        {data.universes.length === 0 ? (
-          <Empty title="Aucun univers" hint="Lance /univers avec un nom de jeu, de marque ou de studio." />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-            {data.universes.map((u) => {
-              const cover = u.cover ? idx.media.get(u.cover) : null
-              return (
-                <Link key={u.slug} to={`/univers/${u.slug}`} className="group block">
-                  <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
-                    {cover ? (
-                      <img
-                        src={cover.url}
-                        alt={u.title}
-                        loading="lazy"
-                        className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-                      />
-                    ) : (
-                      <span className="caption text-subtle">aucun visuel</span>
-                    )}
-                  </div>
-
-                  <div className="mt-5 flex items-baseline gap-3">
-                    <h2 className="display-md group-hover:text-brand transition-colors">{u.title}</h2>
-                    <span className="caption text-subtle tabular-nums ml-auto shrink-0">{u.count}</span>
-                  </div>
-
-                  <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    {u.categorie && <span className="caption uppercase text-subtle">{u.categorie}</span>}
-                    {u.annee && <span className="caption text-subtle/60 mono">{u.annee}</span>}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    </>
-  )
-}
+import { indexById, projectUrl, type Media, type VaultData } from '../lib/vault'
 
 /* --------------------------------------------------------------------------
    Fiche projet — mise en page « charte de marque » :
    bandeau teinté, sommaire à gauche, aspects présentés un par un.
+   Vaut pour tout projet, univers de référence comme dossier d'inspiration.
    -------------------------------------------------------------------------- */
 
 /** Ce que montre chaque aspect. Sert de commentaire dans la colonne de droite. */
@@ -106,10 +55,10 @@ function mediaMeta(items: Media[]) {
 /** Nombre de visuels montrés d'emblée dans un aspect, avant dépliage. */
 const PREVIEW = 10
 
-export function UniversDetail({ data }: { data: VaultData }) {
-  const { slug } = useParams()
+export function ProjetDetail({ data }: { data: VaultData }) {
+  const { discipline, slug } = useParams()
   const idx = useMemo(() => indexById(data), [data])
-  const u = data.universes.find((x) => x.slug === slug)
+  const u = data.projects.find((x) => x.discipline === discipline && x.slug === slug)
 
   const palette = useMemo(() => (u?.couleurs ?? []).filter((c) => hexToRgb(c)), [u])
 
@@ -142,20 +91,24 @@ export function UniversDetail({ data }: { data: VaultData }) {
    * projets sans jamais tomber sur une flèche morte.
    */
   const { prev, next } = useMemo(() => {
-    const list = data.universes
-    const i = list.findIndex((x) => x.slug === slug)
+    // On tourne d'abord entre les projets de la même discipline ; s'il n'y en a
+    // qu'un, on ouvre la boucle à tout le vault plutôt que d'afficher des
+    // flèches mortes.
+    const same = data.projects.filter((x) => x.discipline === discipline)
+    const list = same.length > 1 ? same : data.projects
+    const i = list.findIndex((x) => x.discipline === discipline && x.slug === slug)
     if (i < 0 || list.length < 2) return { prev: null, next: null }
     const at = (n: number) => {
       const x = list[(n + list.length) % list.length]
-      return { to: `/univers/${x.slug}`, title: x.title }
+      return { to: projectUrl(x), title: x.title }
     }
     return { prev: at(i - 1), next: at(i + 1) }
-  }, [data.universes, slug])
+  }, [data.projects, discipline, slug])
 
   if (!u)
     return (
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-24">
-        <Empty title="Univers introuvable" />
+        <Empty title="Projet introuvable" hint="Le dossier a peut-être été renommé. Relance npm run index." />
       </div>
     )
 
@@ -166,7 +119,7 @@ export function UniversDetail({ data }: { data: VaultData }) {
   return (
     <>
       <SpecHero
-        eyebrow={[u.categorie, u.secteur].filter(Boolean).join(' · ') || 'Univers'}
+        eyebrow={[u.disciplineLabel, u.categorie, u.secteur].filter(Boolean).join(' · ')}
         title={u.title}
         desc={
           rows.length
@@ -183,7 +136,7 @@ export function UniversDetail({ data }: { data: VaultData }) {
                 href={u.source}
                 target="_blank"
                 rel="noreferrer"
-                className="label rounded-lg border border-current/35 px-4 py-2.5 transition-opacity hover:opacity-70"
+                className="label rounded-full border border-current/35 px-4 py-2.5 transition-opacity hover:opacity-70"
               >
                 Source ↗
               </a>

@@ -152,7 +152,7 @@ function PagerLink({ item, direction }: { item?: PagerItem | null; direction: 'p
   const isPrev = direction === 'prev'
   const arrow = isPrev ? '←' : '→'
   const shell =
-    'label flex h-9 items-center gap-2 rounded-lg border border-current/25 px-3 transition-opacity'
+    'label flex h-9 items-center gap-2 rounded-full border border-current/25 px-3 transition-opacity'
 
   if (!item) {
     return (
@@ -272,7 +272,7 @@ export function SpecNavMobile({ sections, active }: { sections: SpecSection[]; a
           <a
             key={s.id}
             href={`#${s.id}`}
-            className={`label whitespace-nowrap rounded-lg px-3 py-2 transition-colors ${
+            className={`label whitespace-nowrap rounded-full px-3 py-2 transition-colors ${
               s.id === active ? 'bg-surface-strong text-foreground' : 'text-subtle'
             }`}
           >

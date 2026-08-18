@@ -313,8 +313,10 @@ function pickCover(own, fm) {
   ]
   // Un visuel de construction ou un interdit ne represente pas la marque.
   const AVOID = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space)/i
+  // Ni un visuel d'archive : un projet se presente par son etat actuel.
+  const isArchive = (m) => m.folder.split('/').some((seg) => /^archive/i.test(seg))
 
-  const good = images.filter((m) => !AVOID.test(m.stem))
+  const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m))
   const pool = good.length ? good : images
 
   for (const re of PREFER) {
@@ -325,27 +327,31 @@ function pickCover(own, fm) {
 }
 
 /**
- * Un univers = INSPIRATION/UNIVERS/<slug>/ : une fiche + des medias ranges par
- * aspect (sous-dossier). C'est le contenu le plus visuel du vault.
+ * Un projet = un dossier d'inspiration, quelle que soit sa discipline :
+ * `INSPIRATION/UNIVERS/<slug>/` ou `INSPIRATION/<DISCIPLINE>/<slug>/`. Les deux
+ * ont exactement la meme forme — une fiche + des medias ranges par aspect
+ * (sous-dossier) — donc le site les presente dans un index unique, filtrable
+ * par discipline et par tag.
  */
-const universes = []
-const uniRoot = 'INSPIRATION/UNIVERS'
-const uniDirs = new Set(
-  media
-    .filter((m) => m.folder.startsWith(uniRoot + '/'))
-    .map((m) => m.folder.split('/')[2])
-    .filter(Boolean)
-)
-for (const note of notes) {
-  if (note.folder.startsWith(uniRoot + '/')) uniDirs.add(note.folder.split('/')[2])
+/** Annee affichable : `annee:` telle quelle, sinon l'annee de `date_capture`. */
+function annee(fm) {
+  if (fm.annee) return String(fm.annee)
+  const d = fm.date_capture
+  if (!d) return null
+  if (d instanceof Date) return String(d.getUTCFullYear())
+  const m = String(d).match(/\b(\d{4})\b/)
+  return m ? m[1] : null
 }
 
-for (const slug of [...uniDirs].sort()) {
-  const prefix = `${uniRoot}/${slug}`
+function buildProject(discipline, slug) {
+  const prefix = `INSPIRATION/${discipline}/${slug}`
   const own = media.filter((m) => m.folder === prefix || m.folder.startsWith(prefix + '/'))
   const note =
     notes.find((n) => n.folder === prefix && !n.isIndex) ||
-    notes.find((n) => n.folder === prefix)
+    notes.find((n) => n.folder === prefix) ||
+    notes.find((n) => n.folder.startsWith(prefix + '/') && !n.isIndex)
+
+  if (!own.length && !note) return null
 
   const aspectMap = new Map()
   for (const m of own) {
@@ -359,8 +365,12 @@ for (const slug of [...uniDirs].sort()) {
     .sort((a, b) => b.count - a.count)
 
   const fm = note?.frontmatter || {}
-  universes.push({
+  return {
+    id: `${discipline}/${slug}`,
     slug,
+    discipline,
+    disciplineLabel: discipline.replace(/-/g, ' ').toLowerCase(),
+    kind: discipline === 'UNIVERS' ? 'univers' : 'inspiration',
     title: fm.univers || note?.title || slug,
     noteId: note?.id || null,
     count: own.filter((m) => !isPlanche(m.folder)).length,
@@ -368,38 +378,91 @@ for (const slug of [...uniDirs].sort()) {
     cover: pickCover(own, fm),
     couleurs: Array.isArray(fm.couleurs) ? fm.couleurs : [],
     couleurPrincipale: fm.couleur_principale || null,
-    categorie: fm.categorie || null,
+    categorie: fm.categorie || fm.type_app || fm.type_site || null,
     secteur: fm.secteur || null,
-    annee: fm.annee ? String(fm.annee) : null,
+    annee: annee(fm),
     source: fm.source || null,
     tags: note?.tags || [],
-  })
+  }
 }
 
 /**
- * Une discipline = un sous-dossier direct d'INSPIRATION (hors UNIVERS), qui
- * contient soit des dossiers d'inspiration, soit un index transversal.
+ * Une discipline = un sous-dossier direct d'INSPIRATION. UNIVERS en fait partie
+ * comme les autres : c'est une discipline transversale, pas une categorie a part.
  */
 const disciplines = []
+const projects = []
 const inspiRoot = path.join(VAULT, 'INSPIRATION')
+
 if (fs.existsSync(inspiRoot)) {
   for (const e of fs.readdirSync(inspiRoot, { withFileTypes: true })) {
-    if (!e.isDirectory() || SKIP_DIRS.has(e.name) || e.name === 'UNIVERS') continue
-    const prefix = `INSPIRATION/${e.name}`
+    if (!e.isDirectory() || SKIP_DIRS.has(e.name)) continue
+    const discipline = e.name
+    const prefix = `INSPIRATION/${discipline}`
     const own = media.filter((m) => m.folder === prefix || m.folder.startsWith(prefix + '/'))
     const ownNotes = notes.filter((n) => n.folder === prefix || n.folder.startsWith(prefix + '/'))
     const index = ownNotes.find((n) => n.isIndex)
+
+    // Chaque sous-dossier direct qui a de la matiere devient un projet.
+    const slugs = []
+    for (const sub of fs.readdirSync(path.join(inspiRoot, discipline), { withFileTypes: true })) {
+      if (!sub.isDirectory() || SKIP_DIRS.has(sub.name)) continue
+      slugs.push(sub.name)
+    }
+    const mine = []
+    for (const slug of slugs.sort()) {
+      const p = buildProject(discipline, slug)
+      if (p) mine.push(p)
+    }
+    projects.push(...mine)
+
     disciplines.push({
-      name: e.name,
-      label: e.name.replace(/-/g, ' ').toLowerCase(),
+      name: discipline,
+      label: discipline.replace(/-/g, ' ').toLowerCase(),
       path: prefix,
       mediaCount: own.length,
       noteCount: ownNotes.filter((n) => !n.isIndex).length,
+      projectCount: mine.length,
       indexId: index?.id || null,
       media: own.map((m) => m.id),
       notes: ownNotes.filter((n) => !n.isIndex).map((n) => n.id),
     })
   }
+}
+
+// Les plus fournis d'abord : l'index de projets s'ouvre sur ce qui a de la matiere.
+projects.sort((a, b) => b.count - a.count || a.title.localeCompare(b.title, 'fr'))
+
+/**
+ * Les 2-3 tags qui resument le mieux un projet, pour la vignette de l'index.
+ *
+ * Deux exclusions, puis un tri :
+ *  - les tags de structure (`inspiration`, `univers`) sont sur tout le monde,
+ *    donc ne distinguent rien ;
+ *  - les tags de discipline (`ui`, `brand`, `web`...) repetent la puce de
+ *    discipline deja affichee sur la vignette ;
+ *  - le reste est trie du plus RARE au plus commun — un tag porte par un seul
+ *    projet le caracterise mieux qu'un tag porte par tous. A frequence egale on
+ *    garde l'ordre du frontmatter, qui est celui choisi a la main.
+ */
+const TAGS_STRUCTURE = new Set(['inspiration', 'univers', 'moc', 'note', 'app', 'site', 'post'])
+const TAGS_DISCIPLINE = new Set(['ui', 'ux', 'brand', 'web', 'motion', 'typo', '3d', 'print', 'graphisme'])
+
+const tagFreq = new Map()
+for (const p of projects) {
+  for (const t of new Set(p.tags)) tagFreq.set(t, (tagFreq.get(t) || 0) + 1)
+}
+
+for (const p of projects) {
+  const ranked = p.tags
+    .map((t, i) => ({ t, i, f: tagFreq.get(t) || 0 }))
+    .filter((x) => !TAGS_STRUCTURE.has(x.t))
+    .filter((x) => !TAGS_DISCIPLINE.has(x.t))
+    .sort((a, b) => a.f - b.f || a.i - b.i)
+  // Si le projet n'a que des tags de structure/discipline, on retombe dessus
+  // plutot que d'afficher une vignette muette.
+  const fallback = p.tags.filter((t) => !TAGS_STRUCTURE.has(t))
+  p.topTags = (ranked.length ? ranked.map((x) => x.t) : fallback).slice(0, 3)
 }
 
 // ------------------------------------------------------------------- sortie
@@ -419,13 +482,14 @@ const payload = {
     images: media.filter((m) => m.kind === 'image').length,
     videos: media.filter((m) => m.kind === 'video').length,
     tags: tagCounts.size,
-    universes: universes.length,
+    projects: projects.length,
+    universes: projects.filter((p) => p.kind === 'univers').length,
     disciplines: disciplines.length,
     bytes: media.reduce((a, m) => a + m.size, 0),
   },
   notes: notesOut,
   media,
-  universes,
+  projects,
   disciplines,
   tags: [...tagCounts.entries()]
     .map(([name, count]) => ({ name, count }))
@@ -439,5 +503,5 @@ const mb = (payload.stats.bytes / 1024 / 1024).toFixed(1)
 const jsonKb = (fs.statSync(OUT_JSON).size / 1024).toFixed(0)
 console.log(`\n  Vault indexe : ${VAULT}`)
 console.log(`  ${payload.stats.notesTotal} notes · ${payload.stats.media} medias (${mb} Mo) · ${payload.stats.tags} tags`)
-console.log(`  ${payload.stats.universes} univers · ${payload.stats.disciplines} disciplines`)
+console.log(`  ${payload.stats.projects} projets · ${payload.stats.disciplines} disciplines`)
 console.log(`  -> public/vault.json (${jsonKb} Ko) + public/media/\n`)

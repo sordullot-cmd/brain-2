@@ -2,11 +2,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { VaultData } from '../lib/vault'
 
+// « Notes » n'est volontairement pas exposé ici : la route /notes reste
+// accessible (liens internes, recherche), elle n'est plus dans la navigation.
 const NAV = [
   { to: '/', label: 'Accueil', end: true },
-  { to: '/inspirations', label: 'Inspirations' },
-  { to: '/univers', label: 'Univers' },
-  { to: '/notes', label: 'Notes' },
+  { to: '/projets', label: 'Projets' },
   { to: '/tags', label: 'Tags' },
 ]
 
@@ -54,7 +54,7 @@ export function Layout({
                 to={n.to}
                 end={n.end}
                 className={({ isActive }) =>
-                  `label px-3 py-2 rounded-lg transition-colors ${
+                  `label px-3 py-2 rounded-full transition-colors ${
                     isActive ? 'bg-surface-strong text-foreground' : 'text-subtle hover:text-foreground hover:bg-surface'
                   }`
                 }
@@ -67,7 +67,7 @@ export function Layout({
           <div className="ml-auto flex items-center gap-2">
             <button
               onClick={onSearch}
-              className="flex items-center gap-2.5 h-9 pl-3 pr-2 rounded-lg border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
+              className="flex items-center gap-2.5 h-9 pl-3 pr-2 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
               aria-label="Rechercher dans le vault"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -89,7 +89,7 @@ export function Layout({
                 to={n.to}
                 end={n.end}
                 className={({ isActive }) =>
-                  `label px-3 py-1.5 rounded-lg whitespace-nowrap ${
+                  `label px-3 py-1.5 rounded-full whitespace-nowrap ${
                     isActive ? 'bg-surface-strong text-foreground' : 'text-subtle'
                   }`
                 }

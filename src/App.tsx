@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { Search } from './components/Search'
 import { Home } from './pages/Home'
-import { Inspirations } from './pages/Inspirations'
-import { UniversList, UniversDetail } from './pages/Univers'
+import { Projets } from './pages/Projets'
+import { ProjetDetail } from './pages/Projet'
 import { NotesList, NoteView, TagsList, TagView } from './pages/Notes'
 import { loadVault, type VaultData } from './lib/vault'
 
@@ -52,9 +52,12 @@ export default function App() {
       <Layout data={data} onSearch={() => setSearch(true)}>
         <Routes>
           <Route path="/" element={<Home data={data} />} />
-          <Route path="/inspirations" element={<Inspirations data={data} />} />
-          <Route path="/univers" element={<UniversList data={data} />} />
-          <Route path="/univers/:slug" element={<UniversDetail data={data} />} />
+          <Route path="/projets" element={<Projets data={data} />} />
+          <Route path="/projet/:discipline/:slug" element={<ProjetDetail data={data} />} />
+          {/* Anciennes routes : /inspirations et /univers ont fusionné en /projets. */}
+          <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
+          <Route path="/univers" element={<Navigate to="/projets" replace />} />
+          <Route path="/univers/:slug" element={<LegacyUnivers />} />
           <Route path="/notes" element={<NotesList data={data} />} />
           <Route path="/note/*" element={<NoteView data={data} />} />
           <Route path="/tags" element={<TagsList data={data} />} />
@@ -65,4 +68,10 @@ export default function App() {
       {search && <Search data={data} onClose={() => setSearch(false)} />}
     </BrowserRouter>
   )
+}
+
+/** Les liens /univers/<slug> déjà partagés continuent de tomber au bon endroit. */
+function LegacyUnivers() {
+  const { slug } = useParams()
+  return <Navigate to={`/projet/UNIVERS/${slug}`} replace />
 }

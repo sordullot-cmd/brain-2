@@ -1,18 +1,13 @@
 import { Link } from 'react-router-dom'
-import { contentNotes, fmtBytes, fmtDate, indexById, type VaultData } from '../lib/vault'
+import { fmtBytes, indexById, projectUrl, type VaultData } from '../lib/vault'
 
 export function Home({ data }: { data: VaultData }) {
   const idx = indexById(data)
-  const recent = [...contentNotes(data)]
-    .filter((n) => !n.isIndex)
-    .sort((a, b) => b.mtime - a.mtime)
-    .slice(0, 6)
-  const topTags = data.tags.slice(0, 14)
 
   const stats = [
     { n: data.stats.notesTotal, l: 'notes' },
     { n: data.stats.media, l: 'médias' },
-    { n: data.stats.universes, l: 'univers' },
+    { n: data.stats.projects, l: 'projets' },
     { n: data.stats.tags, l: 'tags' },
   ]
 
@@ -27,8 +22,8 @@ export function Home({ data }: { data: VaultData }) {
           <span className="text-subtle">à portée d'œil.</span>
         </h1>
         <p className="mt-8 text-[16px] leading-relaxed text-muted max-w-xl text-pretty">
-          Les inspirations, les univers de référence et les notes du vault, parcourus visuellement plutôt que
-          dossier par dossier.
+          Les projets — inspirations et univers de référence — et les notes du vault, parcourus visuellement
+          plutôt que dossier par dossier.
         </p>
 
         <div className="mt-12 flex flex-wrap gap-x-14 gap-y-6">
@@ -41,15 +36,15 @@ export function Home({ data }: { data: VaultData }) {
         </div>
       </section>
 
-      {/* Univers en vedette */}
-      {data.universes.length > 0 && (
+      {/* Projets en vedette */}
+      {data.projects.length > 0 && (
         <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-20">
-          <SectionTitle title="Univers" to="/univers" count={data.universes.length} />
+          <SectionTitle title="Projets" to="/projets" count={data.projects.length} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-            {data.universes.map((u) => {
+            {data.projects.slice(0, 6).map((u) => {
               const cover = u.cover ? idx.media.get(u.cover) : null
               return (
-                <Link key={u.slug} to={`/univers/${u.slug}`} className="group block">
+                <Link key={u.id} to={projectUrl(u)} className="group block">
                   <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
                     {cover ? (
                       <img
@@ -63,51 +58,28 @@ export function Home({ data }: { data: VaultData }) {
                     )}
                   </div>
 
-                  <div className="mt-5 flex items-baseline gap-3">
+                  <div className="mt-5 px-2 flex items-baseline gap-3">
                     <h3 className="display-md group-hover:text-brand transition-colors">{u.title}</h3>
                     <span className="caption text-subtle tabular-nums ml-auto shrink-0">{u.count}</span>
                   </div>
+
+                  <div className="mt-2 px-2 caption uppercase text-subtle truncate">{u.disciplineLabel}</div>
+
+                  {u.topTags.length > 0 && (
+                    <div className="mt-3 px-2 flex flex-wrap gap-1.5">
+                      {u.topTags.map((t) => (
+                        <span key={t} className="caption rounded-full bg-surface px-2.5 py-1 text-subtle/80">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </Link>
               )
             })}
           </div>
         </section>
       )}
-
-      {/* Notes récentes */}
-      <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-20">
-        <SectionTitle title="Notes récentes" to="/notes" count={data.stats.notesTotal} />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {recent.map((n) => (
-            <Link
-              key={n.id}
-              to={`/note/${n.id.split('/').map(encodeURIComponent).join('/')}`}
-              className="rounded-xl border border-border p-5 hover:border-brand/30 transition-colors"
-            >
-              <div className="caption uppercase text-subtle mb-3 truncate">{n.folder || 'racine'}</div>
-              <div className="label mb-2.5">{n.title}</div>
-              <p className="caption text-subtle leading-[1.6] line-clamp-3">{n.excerpt || '—'}</p>
-              <div className="caption text-subtle/60 mt-4 mono">{fmtDate(n.mtime)}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Tags */}
-      <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
-        <SectionTitle title="Tags" to="/tags" count={data.stats.tags} />
-        <div className="flex flex-wrap gap-2">
-          {topTags.map((t) => (
-            <Link
-              key={t.name}
-              to={`/tags/${encodeURIComponent(t.name)}`}
-              className="label px-3.5 py-2 rounded-lg bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
-            >
-              #{t.name} <span className="text-subtle/60 tabular-nums">{t.count}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
         <p className="caption text-subtle mono">

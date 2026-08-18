@@ -40,7 +40,7 @@ export function MediaLayout({ items, preview }: { items: Media[]; preview?: numb
         <div className="mt-6 flex justify-center">
           <button
             onClick={() => setAll((v) => !v)}
-            className="label rounded-lg border border-border bg-background px-4 py-2.5 transition-colors hover:border-brand/40"
+            className="label rounded-full border border-border bg-background px-4 py-2.5 transition-colors hover:border-brand/40"
           >
             {all ? 'Réduire' : `Voir les ${rest} visuels suivants`}
           </button>

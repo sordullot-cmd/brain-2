@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { MediaGrid } from '../components/MediaGrid'
-import { NoteBody } from './Univers'
+import { NoteBody } from './Projet'
 import { fmtDate, indexById, norm, type Note, type VaultData } from '../lib/vault'
 
 export function NotesList({ data }: { data: VaultData }) {
@@ -43,7 +43,7 @@ export function NotesList({ data }: { data: VaultData }) {
           />
           <button
             onClick={() => setShowMeta((v) => !v)}
-            className={`label px-3.5 py-2.5 rounded-lg transition-colors ${
+            className={`label px-3.5 py-2.5 rounded-full transition-colors ${
               showMeta ? 'bg-brand text-white' : 'bg-surface text-subtle hover:text-foreground'
             }`}
           >
@@ -154,7 +154,7 @@ export function NoteView({ data }: { data: VaultData }) {
                   <Link
                     key={t}
                     to={`/tags/${encodeURIComponent(t)}`}
-                    className="caption px-2 py-1.5 rounded-md bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
+                    className="caption px-2 py-1.5 rounded-full bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
                   >
                     #{t}
                   </Link>
@@ -239,7 +239,7 @@ export function TagsList({ data }: { data: VaultData }) {
             <Link
               key={t.name}
               to={`/tags/${encodeURIComponent(t.name)}`}
-              className="label px-4 py-2.5 rounded-lg bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
+              className="label px-4 py-2.5 rounded-full bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
             >
               #{t.name} <span className="text-subtle/60 tabular-nums ml-1">{t.count}</span>
             </Link>
