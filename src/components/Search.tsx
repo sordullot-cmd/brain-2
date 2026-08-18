@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { norm, type VaultData } from '../lib/vault'
+import { norm, useNotesText, type VaultData } from '../lib/vault'
 
 type Hit = { kind: 'Note' | 'Projet' | 'Média' | 'Tag'; title: string; sub: string; to: string; score: number }
 
@@ -10,6 +10,9 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
   const [sel, setSel] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
+  // Le corps des notes arrive dans un second fichier. Tant qu'il n'est pas là on
+  // cherche dans les titres ; la liste se complète toute seule à son arrivée.
+  const text = useNotesText()
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -36,7 +39,7 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
     }
     for (const n of data.notes) {
       const inTitle = norm(n.title).includes(term)
-      if (!inTitle && !n.search.includes(term)) continue
+      if (!inTitle && !(text?.[n.id]?.search ?? '').includes(term)) continue
       out.push({
         kind: 'Note',
         title: n.title,
@@ -55,7 +58,7 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
     }
 
     return out.sort((a, b) => a.score - b.score || a.title.localeCompare(b.title)).slice(0, 40)
-  }, [q, data])
+  }, [q, data, text])
 
   useEffect(() => setSel(0), [q])
 

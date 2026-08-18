@@ -112,7 +112,7 @@ function Tile({
           pad ? 'p-6 sm:p-10' : padded ? 'p-2 sm:p-3' : ''
         }`}
       >
-        <Thumb m={m} className="h-full w-full object-contain" />
+        <Thumb m={m} sizes="(max-width: 640px) 90vw, 420px" className="h-full w-full object-contain" />
       </span>
 
       {/* Le nom du fichier ne s'affiche qu'au survol : la planche reste lisible. */}

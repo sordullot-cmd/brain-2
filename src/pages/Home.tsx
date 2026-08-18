@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { fmtBytes, indexById, projectUrl, type VaultData } from '../lib/vault'
+import { displaySrc, fmtBytes, indexById, projectUrl, type VaultData } from '../lib/vault'
 
 export function Home({ data }: { data: VaultData }) {
   const idx = indexById(data)
@@ -48,9 +48,12 @@ export function Home({ data }: { data: VaultData }) {
                   <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
                     {cover ? (
                       <img
-                        src={cover.url}
+                        src={displaySrc(cover, 'thumb')}
                         alt={u.title}
+                        width={cover.dw}
+                        height={cover.dh}
                         loading="lazy"
+                        decoding="async"
                         className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
                       />
                     ) : (

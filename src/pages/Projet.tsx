@@ -14,7 +14,7 @@ import {
   useScrollSpy,
   type SpecSection,
 } from '../components/Spec'
-import { indexById, projectUrl, type Media, type VaultData } from '../lib/vault'
+import { indexById, projectUrl, useNotesText, type Media, type VaultData } from '../lib/vault'
 
 /* --------------------------------------------------------------------------
    Fiche projet — mise en page « charte de marque » :
@@ -202,7 +202,7 @@ export function ProjetDetail({ data }: { data: VaultData }) {
                 notes={['La note du vault : sources, crédits, mots-clés et tout ce qui a été noté à la main.']}
               >
                 <div className="max-w-3xl">
-                  <NoteBody html={note.html} />
+                  <NoteBody id={note.id} />
                 </div>
               </SpecRow>
             )}
@@ -213,7 +213,26 @@ export function ProjetDetail({ data }: { data: VaultData }) {
   )
 }
 
-/** Le HTML vient de notre propre indexeur (contenu local), pas d'une source tierce. */
-export function NoteBody({ html }: { html: string }) {
+/**
+ * Le corps d'une note.
+ *
+ * Le HTML ne vient pas de l'index principal : il vit dans `/vault-notes.json`,
+ * chargé en tâche de fond après le premier écran (il pesait à lui seul plus que
+ * tout le reste de l'index). D'où le squelette le temps qu'il arrive — en
+ * pratique il est déjà là, le préchargement au repos ayant eu lieu bien avant.
+ *
+ * Le HTML vient de notre propre indexeur (contenu local), pas d'une source tierce.
+ */
+export function NoteBody({ id }: { id: string }) {
+  const text = useNotesText()
+  const html = text?.[id]?.html
+  if (html === undefined)
+    return (
+      <div className="space-y-3 animate-pulse" aria-hidden>
+        <div className="h-4 w-2/3 rounded bg-surface" />
+        <div className="h-4 w-full rounded bg-surface" />
+        <div className="h-4 w-5/6 rounded bg-surface" />
+      </div>
+    )
   return <div className="prose-vault" dangerouslySetInnerHTML={{ __html: html }} />
 }

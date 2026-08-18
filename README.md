@@ -39,9 +39,68 @@ Le site s'ouvre sur <http://localhost:5180>.
   par aspect, avec sa palette, ses tags et les **2-3 tags les plus distinctifs** (`topTags`,
   calculés en écartant les tags de structure et de discipline, puis en gardant les plus rares) ;
 - **disciplines** (`INSPIRATION/<DISCIPLINE>/`), y compris les vides — elles font partie de l'architecture ;
-- **médias** copiés dans `public/media/` en conservant l'arborescence.
+- **médias** copiés dans `public/media/` en conservant l'arborescence — **copie
+  incrémentale** : seuls les fichiers dont la taille ou la date ont changé sont
+  recopiés, et les orphelins sont supprimés ;
+- **dérivés web** dans `public/derived/` (voir ci-dessous).
 
 Les liens non résolus (cibles supprimées) ne cassent rien : ils s'affichent en pointillé grisé, comme dans Obsidian.
+
+### Ce qui pèse au premier écran
+
+L'index est coupé en deux. `public/vault.json` (65 Ko gz) porte tout ce qu'un écran
+d'accueil ou une grille affiche. Le **HTML rendu des notes et leur texte de recherche**
+— 94 Ko gz à eux seuls, pour deux pages — vivent dans `public/vault-notes.json`,
+récupéré en tâche de fond une fois la page peinte (`prefetchNotesText`, sur
+`requestIdleCallback`) : quand on ouvre une note, il est déjà là.
+
+Le reste tient en quatre points :
+
+- `index.html` **précharge** `/vault.json` : la requête part pendant l'analyse du HTML,
+  sans attendre que le bundle soit téléchargé puis exécuté.
+- Les **routes sont découpées** (`React.lazy`) : l'entrée ne porte que la coquille et
+  l'accueil ; la fiche projet, les notes et la recherche arrivent quand on y va.
+- Les tuiles de grille sont en `content-visibility: auto` : hors écran, elles ne sont
+  ni peintes ni mises en page.
+- `vercel.json` pose les **en-têtes de cache** : `immutable` sur `/assets` (noms hachés),
+  un jour + `stale-while-revalidate` sur `/media` et `/derived` (mêmes URL d'une
+  indexation à l'autre, donc pas d'`immutable`), revalidation systématique sur l'index.
+
+### Les dérivés d'images — pourquoi le site n'affiche jamais les originaux
+
+Le vault garde les originaux en pleine qualité, c'est sa raison d'être. Mais un PNG
+de 11 Mo en 4010 × 8055 posé dans une tuile de 168 px se décode en RAM **à sa taille
+native** (~130 Mo de bitmap, pour une vignette). Multiplié par cent tuiles, l'onglet
+ne répond plus — c'était l'état du site avant.
+
+`scripts/derivatives.mjs` produit donc, à l'indexation :
+
+| Variante | Taille max | Usage |
+| --- | --- | --- |
+| `mini` | 400 × 900, q66 | tuiles de grille (168 px, retina compris) |
+| `thumb` | 640 × 1400, q72 | planches, grilles larges, couvertures, images des notes |
+| `view` | 1800 × 3600, q78 | visionneuse plein écran, et `srcset` retina des notes |
+| `preview` | MP4 960 px, CRF 30, faststart | **tout** ce qui est lu dans la page |
+
+Les tuiles sont servies en `srcset` `mini`/`thumb` : le navigateur prend 400 px sur une
+petite tuile, 640 px sur un écran retina ou une tuile large. Une fiche de 132 visuels
+charge 1,4 Mo de vignettes au lieu de 2,4 Mo — et 180 Mo si on servait les originaux.
+
+- Les **petits SVG ne sont pas touchés** (vectoriels, déjà légers). Au-delà de 40 Ko un
+  SVG coûte plus cher qu'un WebP : il est rasterisé comme une image (une texture de
+  795 Ko tombe à 33 Ko), l'original restant sous la main.
+- Une **vidéo** ne monte plus de `<video>` dans une grille : elle affiche une **image
+  d'affiche** extraite par ffmpeg, et le lecteur n'est monté qu'au survol (`preload="none"`).
+  Ce lecteur lit le dérivé `preview`, jamais le master : **105 Mo de vidéos → 12 Mo**,
+  un teaser de 21 Mo se regarde en 0,7 Mo. Même chose pour les vidéos intégrées aux notes.
+- L'original reste accessible depuis la visionneuse, via le lien **original ↗**.
+- Tout est **mis en cache** sur (chemin, taille, date) : une réindexation qui ne change
+  rien ne recalcule rien (~3 s au lieu de ~65 s).
+- `sharp` est une dépendance de dev. S'il manque, l'indexation ne casse pas : elle
+  prévient et sert les originaux.
+
+`ffmpeg` doit être sur le `PATH` pour les affiches de vidéos ; sans lui, les vidéos
+s'affichent sans image d'affiche et l'indexation le signale.
 
 ### Après avoir modifié le vault
 

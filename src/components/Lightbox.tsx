@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Media } from '../lib/vault'
-import { fmtBytes, displaySrc } from '../lib/vault'
+import { fmtBytes, displaySrc, playSrc } from '../lib/vault'
 
 /**
  * Visionneuse plein ecran, partagee par la grille simple et la composition.
@@ -64,7 +64,7 @@ export function Lightbox({
           {item.ext.toUpperCase()} · {item.w && item.h ? `${item.w}×${item.h} · ` : ''}
           {fmtBytes(item.size)}
         </span>
-        {item.view && (
+        {(item.view || item.preview) && (
           <a
             href={item.url}
             target="_blank"
@@ -75,7 +75,7 @@ export function Lightbox({
             original ↗
           </a>
         )}
-        <span className={`caption text-subtle mono shrink-0 ${item.view ? '' : 'ml-auto'}`}>
+        <span className={`caption text-subtle mono shrink-0 ${item.view || item.preview ? '' : 'ml-auto'}`}>
           {index + 1} / {total}
         </span>
         <button
@@ -100,8 +100,10 @@ export function Lightbox({
 
         <div className="checker flex-1 h-full rounded-2xl border border-border flex items-center justify-center p-4 sm:p-10 min-w-0">
           {item.kind === 'video' ? (
+            /* Le `preview` (960 px, CRF 30) suffit à l'écran ; le master du
+               vault, jusqu'à 21 Mo, reste derrière le lien « original ». */
             <video
-              src={item.url}
+              src={playSrc(item)}
               poster={item.thumb}
               controls
               autoPlay

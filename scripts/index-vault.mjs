@@ -26,6 +26,10 @@ const VAULT = process.env.VAULT_PATH || path.join(os.homedir(), 'Documents', 'br
 const OUT_DIR = path.join(ROOT, 'public')
 const MEDIA_DIR = path.join(OUT_DIR, 'media')
 const OUT_JSON = path.join(OUT_DIR, 'vault.json')
+// Le HTML des notes et leur texte de recherche pesaient 60 % du JSON charge au
+// premier ecran, pour deux pages qui en ont besoin. Ils partent dans un second
+// fichier, recupere en tache de fond (voir src/lib/vault.ts).
+const OUT_TEXT = path.join(OUT_DIR, 'vault-notes.json')
 
 const SKIP_DIRS = new Set(['.git', '.obsidian', '.claude', '.trash', 'node_modules', '__pycache__'])
 
@@ -286,13 +290,14 @@ function resolveLinks(note) {
         // `preload="none"` : une note peut embarquer dix videos de 20 Mo, on ne
         // telecharge que celles qu'on lance. L'affiche vient du derive.
         const poster = m.thumb ? ` poster="${m.thumb}"` : ''
-        return `<video src="${m.url}"${poster} controls loop muted playsinline preload="none" class="vault-embed"></video>`
+        // `m.preview` : le master du vault fait jusqu'a 21 Mo, le derive ~1 Mo.
+        return `<video src="${m.preview || m.url}"${poster} controls loop muted playsinline preload="none" class="vault-embed"></video>`
       }
       // Le corps d'une note fait ~700 px de large : le derive suffit largement,
       // et l'original (jusqu'a 11 Mo) n'est plus jamais charge pour rien.
       const dim = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : ''
       if (m.thumb && m.view) {
-        return `<img src="${m.thumb}" srcset="${m.thumb} ${SIZES.thumb.w}w, ${m.view} ${SIZES.view.w}w" sizes="(max-width: 768px) 100vw, 720px" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
+        return `<img src="${m.thumb}" srcset="${m.mini ? `${m.mini} ${SIZES.mini.w}w, ` : ''}${m.thumb} ${SIZES.thumb.w}w, ${m.view} ${SIZES.view.w}w" sizes="(max-width: 768px) 100vw, 720px" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
       }
       return `<img src="${m.url}" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
     }
@@ -540,8 +545,10 @@ for (const p of projects) {
 // ------------------------------------------------------------------- sortie
 
 // Le corps brut n'est plus utile cote client (on sert le HTML) : on l'ecarte
-// pour garder un JSON leger.
-const notesOut = notes.map(({ body, ...rest }) => rest)
+// pour garder un JSON leger. Le HTML rendu et le texte de recherche sortent eux
+// aussi de l'index principal — 367 Ko pour 48 notes — et vont dans vault-notes.json.
+const notesOut = notes.map(({ body, html, search, ...rest }) => rest)
+const notesText = Object.fromEntries(notes.map((n) => [n.id, { html: n.html, search: n.search }]))
 
 const payload = {
   generatedAt: new Date().toISOString(),
@@ -570,6 +577,7 @@ const payload = {
 
 fs.mkdirSync(OUT_DIR, { recursive: true })
 fs.writeFileSync(OUT_JSON, JSON.stringify(payload))
+fs.writeFileSync(OUT_TEXT, JSON.stringify(notesText))
 
 const mb = (payload.stats.bytes / 1024 / 1024).toFixed(1)
 const jsonKb = (fs.statSync(OUT_JSON).size / 1024).toFixed(0)
@@ -582,4 +590,5 @@ console.log(
     (deriv.removed ? ` · ${deriv.removed} obsoletes supprimes` : '') +
     ` -> public/derived/ (${(deriv.bytes / 1024 / 1024).toFixed(1)} Mo generes)`
 )
-console.log(`  -> public/vault.json (${jsonKb} Ko) + public/media/\n`)
+const textKb = (fs.statSync(OUT_TEXT).size / 1024).toFixed(0)
+console.log(`  -> public/vault.json (${jsonKb} Ko) + vault-notes.json (${textKb} Ko, differe) + public/media/\n`)

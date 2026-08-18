@@ -136,7 +136,7 @@ export function NoteView({ data }: { data: VaultData }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_270px] gap-12 lg:gap-16">
         <article onClick={onClick} className="min-w-0">
-          <NoteBody html={note.html} />
+          <NoteBody id={note.id} />
 
           {media.length > 0 && (
             <section className="mt-16 pt-10 border-t border-border">

@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { PageHead, Empty } from '../components/Layout'
-import { indexById, projectUrl, type Project, type VaultData } from '../lib/vault'
+import { displaySrc, indexById, projectUrl, type Media, type Project, type VaultData } from '../lib/vault'
 
 /**
  * Index unique des projets — les inspirations rangées par discipline et les
@@ -178,15 +178,18 @@ export function Projets({ data }: { data: VaultData }) {
 }
 
 /** Vignette d'un projet : visuel, titre, discipline, et ses tags en petit. */
-function ProjectCard({ p, cover }: { p: Project; cover: { url: string; kind: string } | null }) {
+function ProjectCard({ p, cover }: { p: Project; cover: Media | null }) {
   return (
     <Link to={projectUrl(p)} className="group block">
       <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
         {cover && cover.kind === 'image' ? (
           <img
-            src={cover.url}
+            src={displaySrc(cover, 'thumb')}
             alt={p.title}
+            width={cover.dw}
+            height={cover.dh}
             loading="lazy"
+            decoding="async"
             className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
           />
         ) : (

@@ -1,24 +1,36 @@
 import { useState } from 'react'
-import { displaySrc, type Media } from '../lib/vault'
+import { playSrc, tileSrcSet, type Media } from '../lib/vault'
 
 /**
  * Le visuel d'une tuile, partagé par la grille et les planches.
  *
- * Trois règles, toutes là pour que la page reste utilisable :
+ * Quatre règles, toutes là pour que la page reste utilisable :
  *
- *  1. On affiche le **dérivé** (`thumb`), jamais l'original. Un PNG de 11 Mo en
+ *  1. On affiche le **dérivé**, jamais l'original. Un PNG de 11 Mo en
  *     4010 × 8055 se décode en RAM à sa taille native même dans une tuile de
  *     168 px : cent tuiles suffisaient à figer l'onglet.
- *  2. Une vidéo n'est plus un `<video>` : c'est son **image d'affiche**. Le
- *     lecteur n'est monté qu'au survol, donc on ne télécharge les 22 Mo que si
- *     on les regarde vraiment.
- *  3. `width`/`height` sont posés depuis les dimensions du dérivé : le
+ *  2. Le dérivé vient en `srcset` : une tuile de 168 px prend `mini` (400 px),
+ *     un écran retina ou une tuile large prend `thumb` (640 px). C'est le
+ *     navigateur qui tranche, avec le bon poids à chaque fois.
+ *  3. Une vidéo n'est pas un `<video>` : c'est son **image d'affiche**. Le
+ *     lecteur n'est monté qu'au survol, et il lit le `preview` recompressé
+ *     (~1 Mo), jamais le master de 21 Mo.
+ *  4. `width`/`height` sont posés depuis les dimensions du dérivé : le
  *     navigateur réserve la place et la grille ne saute pas pendant le
  *     chargement.
  */
-export function Thumb({ m, className = '' }: { m: Media; className?: string }) {
+export function Thumb({
+  m,
+  className = '',
+  sizes,
+}: {
+  m: Media
+  className?: string
+  /** Largeur d'affichage de la tuile, pour que `srcset` choisisse juste. */
+  sizes?: string
+}) {
   const [hover, setHover] = useState(false)
-  const poster = displaySrc(m, 'thumb')
+  const img = tileSrcSet(m, sizes)
 
   if (m.kind === 'video') {
     return (
@@ -29,7 +41,7 @@ export function Thumb({ m, className = '' }: { m: Media; className?: string }) {
       >
         {hover ? (
           <video
-            src={m.url}
+            src={playSrc(m)}
             poster={m.thumb}
             autoPlay
             muted
@@ -41,7 +53,9 @@ export function Thumb({ m, className = '' }: { m: Media; className?: string }) {
         ) : (
           <>
             <img
-              src={poster}
+              src={img.src}
+              srcSet={img.srcSet}
+              sizes={img.sizes}
               alt={m.stem}
               width={m.dw}
               height={m.dh}
@@ -67,7 +81,9 @@ export function Thumb({ m, className = '' }: { m: Media; className?: string }) {
 
   return (
     <img
-      src={poster}
+      src={img.src}
+      srcSet={img.srcSet}
+      sizes={img.sizes}
       alt={m.stem}
       width={m.dw}
       height={m.dh}

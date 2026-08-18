@@ -1,12 +1,22 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { Layout } from './components/Layout'
-import { Search } from './components/Search'
 import { Home } from './pages/Home'
-import { Projets } from './pages/Projets'
-import { ProjetDetail } from './pages/Projet'
-import { NotesList, NoteView, TagsList, TagView } from './pages/Notes'
-import { loadVault, type VaultData } from './lib/vault'
+import { loadVault, prefetchNotesText, type VaultData } from './lib/vault'
+
+/*
+ * Seuls l'accueil et la coquille sont dans le bundle d'entrée. La fiche projet
+ * traîne toute la mise en page « charte » (Spec, 400 lignes), les notes leur
+ * rendu, la recherche son index : rien de tout ça n'est utile pour peindre le
+ * premier écran, donc rien de tout ça n'est téléchargé avant qu'on y aille.
+ */
+const Projets = lazy(() => import('./pages/Projets').then((m) => ({ default: m.Projets })))
+const ProjetDetail = lazy(() => import('./pages/Projet').then((m) => ({ default: m.ProjetDetail })))
+const NotesList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NotesList })))
+const NoteView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NoteView })))
+const TagsList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagsList })))
+const TagView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagView })))
+const Search = lazy(() => import('./components/Search').then((m) => ({ default: m.Search })))
 
 export default function App() {
   const [data, setData] = useState<VaultData | null>(null)
@@ -16,6 +26,16 @@ export default function App() {
   useEffect(() => {
     loadVault().then(setData).catch((e) => setErr(String(e.message ?? e)))
   }, [])
+
+  // Le texte des notes (HTML rendu + index de recherche) vit dans un second
+  // fichier. On le tire une fois la page peinte : la navigation le trouve déjà
+  // là, sans qu'il ait pesé sur le premier écran.
+  useEffect(() => {
+    if (!data) return
+    const idle = window.requestIdleCallback ?? ((fn: () => void) => window.setTimeout(fn, 1200))
+    const id = idle(() => prefetchNotesText())
+    return () => (window.cancelIdleCallback ?? window.clearTimeout)(id as number)
+  }, [data])
 
   // ⌘K / Ctrl+K ouvre la recherche
   useEffect(() => {
@@ -50,22 +70,28 @@ export default function App() {
   return (
     <BrowserRouter>
       <Layout data={data} onSearch={() => setSearch(true)}>
-        <Routes>
-          <Route path="/" element={<Home data={data} />} />
-          <Route path="/projets" element={<Projets data={data} />} />
-          <Route path="/projet/:discipline/:slug" element={<ProjetDetail data={data} />} />
-          {/* Anciennes routes : /inspirations et /univers ont fusionné en /projets. */}
-          <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
-          <Route path="/univers" element={<Navigate to="/projets" replace />} />
-          <Route path="/univers/:slug" element={<LegacyUnivers />} />
-          <Route path="/notes" element={<NotesList data={data} />} />
-          <Route path="/note/*" element={<NoteView data={data} />} />
-          <Route path="/tags" element={<TagsList data={data} />} />
-          <Route path="/tags/:tag" element={<TagView data={data} />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<div className="caption text-subtle p-8 animate-pulse">Chargement…</div>}>
+          <Routes>
+            <Route path="/" element={<Home data={data} />} />
+            <Route path="/projets" element={<Projets data={data} />} />
+            <Route path="/projet/:discipline/:slug" element={<ProjetDetail data={data} />} />
+            {/* Anciennes routes : /inspirations et /univers ont fusionné en /projets. */}
+            <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
+            <Route path="/univers" element={<Navigate to="/projets" replace />} />
+            <Route path="/univers/:slug" element={<LegacyUnivers />} />
+            <Route path="/notes" element={<NotesList data={data} />} />
+            <Route path="/note/*" element={<NoteView data={data} />} />
+            <Route path="/tags" element={<TagsList data={data} />} />
+            <Route path="/tags/:tag" element={<TagView data={data} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </Layout>
-      {search && <Search data={data} onClose={() => setSearch(false)} />}
+      {search && (
+        <Suspense fallback={null}>
+          <Search data={data} onClose={() => setSearch(false)} />
+        </Suspense>
+      )}
     </BrowserRouter>
   )
 }

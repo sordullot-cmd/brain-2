@@ -3,6 +3,8 @@
  * scripts/index-vault.mjs) et petits helpers de lecture.
  */
 
+import { useEffect, useState } from 'react'
+
 export type MediaKind = 'image' | 'video' | 'audio' | 'doc' | 'other'
 
 export interface Media {
@@ -20,13 +22,17 @@ export interface Media {
   w?: number
   h?: number
   /**
-   * Dérivés WebP produits à l'indexation (`scripts/derivatives.mjs`). `thumb`
-   * pour les grilles, `view` pour la visionneuse. Absents pour les SVG (déjà
-   * légers) ; une vidéo n'a qu'un `thumb`, son image d'affiche.
+   * Dérivés WebP produits à l'indexation (`scripts/derivatives.mjs`). `mini`
+   * pour les tuiles de grille, `thumb` pour les planches, `view` pour la
+   * visionneuse. Absents pour les petits SVG (déjà légers) ; une vidéo a un
+   * `thumb` (son image d'affiche) et un `preview` (le MP4 recompressé).
    * `url` reste l'original, à ne charger que sur demande explicite.
    */
+  mini?: string
   thumb?: string
   view?: string
+  /** MP4 web (960 px, CRF 30, faststart) — ce qui est réellement lu dans la page. */
+  preview?: string
   /** Dimensions du `thumb`, pour réserver la place et éviter les sauts. */
   dw?: number
   dh?: number
@@ -45,9 +51,13 @@ export interface Note {
   isMeta: boolean
   frontmatter: Record<string, unknown>
   type: string | null
-  html: string
+  /**
+   * Rendus lourds : servis à part dans `/vault-notes.json`, chargés en tâche de
+   * fond (voir `loadNotesText`). Toujours absents de l'index principal.
+   */
+  html?: string
   excerpt: string
-  search: string
+  search?: string
   mtime: number
   size: number
   tags: string[]
@@ -135,6 +145,54 @@ export async function loadVault(): Promise<VaultData> {
   return cache
 }
 
+/* -------------------------------------------------- texte des notes (différé)
+
+   Le HTML rendu et le texte de recherche pèsent plus que tout le reste de
+   l'index. Deux pages seulement en ont besoin : on les charge à part, en tâche
+   de fond dès que la première page est peinte, si bien que la navigation les
+   trouve presque toujours déjà là.
+   -------------------------------------------------------------------------- */
+
+export type NotesText = Record<string, { html: string; search: string }>
+
+let textCache: NotesText | null = null
+let textPromise: Promise<NotesText> | null = null
+
+export function loadNotesText(): Promise<NotesText> {
+  textPromise ??= fetch('/vault-notes.json')
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then((j: NotesText) => {
+      textCache = j
+      return j
+    })
+    .catch(() => {
+      // Pas de texte : les listes et les grilles restent utilisables.
+      textPromise = null
+      return {}
+    })
+  return textPromise
+}
+
+/** Déclenche le chargement sans attendre le résultat (appelé au repos). */
+export const prefetchNotesText = () => void loadNotesText()
+
+/** Le texte déjà en mémoire, ou `null` s'il n'est pas encore arrivé. */
+export const notesTextNow = () => textCache
+
+/** Rend le texte des notes disponible dans un composant, en le chargeant au besoin. */
+export function useNotesText(): NotesText | null {
+  const [text, setText] = useState<NotesText | null>(textCache)
+  useEffect(() => {
+    if (textCache) return setText(textCache)
+    let vivant = true
+    loadNotesText().then((t) => vivant && setText(t))
+    return () => {
+      vivant = false
+    }
+  }, [])
+  return text
+}
+
 /** Index par identifiant, pour résoudre médias et notes référencés. */
 export function indexById(data: VaultData) {
   return {
@@ -160,8 +218,28 @@ export const norm = (s: string) =>
  * Source d'affichage d'un média : le dérivé s'il existe, l'original sinon (SVG,
  * ou dérivé qui a échoué). Jamais l'original quand un dérivé est disponible.
  */
-export const displaySrc = (m: Media, size: 'thumb' | 'view' = 'thumb') =>
-  m[size] ?? m.thumb ?? m.url
+export const displaySrc = (m: Media, size: 'mini' | 'thumb' | 'view' = 'thumb') =>
+  m[size] ?? m.thumb ?? m.mini ?? m.url
+
+/** Largeurs réelles des dérivés (miroir de `SIZES` dans derivatives.mjs). */
+export const DERIVED_W = { mini: 400, thumb: 640, view: 1800 } as const
+
+/**
+ * `srcset` d'une tuile : le navigateur prend `mini` sur une petite tuile et
+ * `thumb` sur un écran retina ou une tuile large, au lieu de charger 640 px
+ * partout. `sizes` décrit la largeur d'affichage, pas celle du fichier.
+ */
+export function tileSrcSet(m: Media, sizes = '(max-width: 640px) 45vw, 200px') {
+  if (!m.mini || !m.thumb) return { src: displaySrc(m, 'thumb'), srcSet: undefined, sizes: undefined }
+  return {
+    src: m.mini,
+    srcSet: `${m.mini} ${DERIVED_W.mini}w, ${m.thumb} ${DERIVED_W.thumb}w`,
+    sizes,
+  }
+}
+
+/** La source à LIRE pour une vidéo : le dérivé web, jamais le master du vault. */
+export const playSrc = (m: Media) => m.preview ?? m.url
 
 /** Lien vers la fiche d'un projet. */
 export const projectUrl = (p: Project) => `/projet/${p.discipline}/${p.slug}`
