@@ -86,21 +86,26 @@ export function ProjetDetail({ data }: { data: VaultData }) {
   const active = useScrollSpy(ids)
 
   /**
-   * Projet précédent / suivant, dans l'ordre de la liste des univers. On boucle
+   * Projet précédent / suivant, dans l'ordre de l'index des projets. On boucle
    * (le dernier renvoie au premier) pour pouvoir tourner indéfiniment entre les
    * projets sans jamais tomber sur une flèche morte.
+   *
+   * La boucle passe par TOUS les projets, sans distinction : un univers de
+   * référence et un dossier d'inspiration sont la même chose (un dossier, une
+   * fiche, des médias rangés par aspect), et les flèches ne doivent pas
+   * enfermer la navigation dans une discipline.
    */
   const { prev, next } = useMemo(() => {
-    // On tourne d'abord entre les projets de la même discipline ; s'il n'y en a
-    // qu'un, on ouvre la boucle à tout le vault plutôt que d'afficher des
-    // flèches mortes.
-    const same = data.projects.filter((x) => x.discipline === discipline)
-    const list = same.length > 1 ? same : data.projects
+    const list = data.projects
     const i = list.findIndex((x) => x.discipline === discipline && x.slug === slug)
     if (i < 0 || list.length < 2) return { prev: null, next: null }
     const at = (n: number) => {
       const x = list[(n + list.length) % list.length]
-      return { to: projectUrl(x), title: x.title }
+      // Deux projets peuvent porter le même nom dans deux disciplines (Kraken
+      // en univers et en UI design) : on précise laquelle, sinon les deux
+      // flèches affichent le même mot.
+      const homonyme = list.some((y) => y !== x && y.title === x.title)
+      return { to: projectUrl(x), title: homonyme ? `${x.title} · ${x.disciplineLabel}` : x.title }
     }
     return { prev: at(i - 1), next: at(i + 1) }
   }, [data.projects, discipline, slug])

@@ -170,7 +170,7 @@ function PagerLink({ item, direction }: { item?: PagerItem | null; direction: 'p
       aria-label={`${isPrev ? 'Projet précédent' : 'Projet suivant'} : ${item.title}`}
     >
       {isPrev && <span aria-hidden="true">{arrow}</span>}
-      <span className="hidden max-w-[16ch] truncate sm:inline">{item.title}</span>
+      <span className="hidden max-w-[22ch] truncate sm:inline">{item.title}</span>
       {!isPrev && <span aria-hidden="true">{arrow}</span>}
     </Link>
   )

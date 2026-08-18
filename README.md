@@ -129,7 +129,7 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 | --- | --- |
 | `/` | Vue d'ensemble : compteurs, univers, notes récentes, tags |
 | `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline et par tag. Les disciplines encore vides sont listées à part |
-| `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète |
+| `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète. Les flèches en haut tournent en boucle sur **tous** les projets, dans l'ordre de `/projets` — un univers de référence et un dossier d'inspiration ne sont pas deux choses différentes |
 | `/notes` · `/note/*` | Toutes les notes ; lecture avec propriétés, tags, liens sortants et backlinks |
 | `/tags` · `/tags/:tag` | Navigation par étiquette |
 
