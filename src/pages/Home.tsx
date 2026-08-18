@@ -63,7 +63,9 @@ export function Home({ data }: { data: VaultData }) {
 
                   <div className="mt-5 px-2 flex items-baseline gap-3">
                     <h3 className="display-md group-hover:text-brand transition-colors">{u.title}</h3>
-                    <span className="caption text-subtle tabular-nums ml-auto shrink-0">{u.count}</span>
+                    <span className="caption text-subtle tabular-nums ml-auto shrink-0">
+                      {u.count} · {fmtBytes(u.bytes)}
+                    </span>
                   </div>
 
                   <div className="mt-2 px-2 caption uppercase text-subtle truncate">{u.disciplineLabel}</div>

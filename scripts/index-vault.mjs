@@ -451,6 +451,9 @@ function buildProject(discipline, slug) {
     title: fm.univers || note?.title || slug,
     noteId: note?.id || null,
     count: own.filter((m) => !isPlanche(m.folder)).length,
+    // Poids des originaux, sur le meme perimetre que `count` (planches
+    // exclues) : le chiffre et le poids doivent parler des memes fichiers.
+    bytes: own.filter((m) => !isPlanche(m.folder)).reduce((a, m) => a + m.size, 0),
     aspects,
     cover: pickCover(own, fm),
     couleurs: Array.isArray(fm.couleurs) ? fm.couleurs : [],

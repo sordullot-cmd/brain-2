@@ -87,6 +87,8 @@ export interface Project {
   title: string
   noteId: string | null
   count: number
+  /** Poids des originaux du projet, planches exclues — comme `count`. */
+  bytes: number
   aspects: Aspect[]
   cover: string | null
   couleurs: string[]
