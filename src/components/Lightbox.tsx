@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Media } from '../lib/vault'
-import { fmtBytes } from '../lib/vault'
+import { fmtBytes, displaySrc } from '../lib/vault'
 
 /**
  * Visionneuse plein ecran, partagee par la grille simple et la composition.
@@ -64,7 +64,18 @@ export function Lightbox({
           {item.ext.toUpperCase()} · {item.w && item.h ? `${item.w}×${item.h} · ` : ''}
           {fmtBytes(item.size)}
         </span>
-        <span className="caption text-subtle mono ml-auto shrink-0">
+        {item.view && (
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="caption text-subtle hover:text-foreground transition-colors shrink-0 ml-auto"
+            title={`Ouvrir le fichier d'origine (${fmtBytes(item.size)})`}
+          >
+            original ↗
+          </a>
+        )}
+        <span className={`caption text-subtle mono shrink-0 ${item.view ? '' : 'ml-auto'}`}>
           {index + 1} / {total}
         </span>
         <button
@@ -89,9 +100,23 @@ export function Lightbox({
 
         <div className="checker flex-1 h-full rounded-2xl border border-border flex items-center justify-center p-4 sm:p-10 min-w-0">
           {item.kind === 'video' ? (
-            <video src={item.url} controls autoPlay loop className="max-w-full max-h-full rounded-lg" />
+            <video
+              src={item.url}
+              poster={item.thumb}
+              controls
+              autoPlay
+              loop
+              preload="metadata"
+              className="max-w-full max-h-full rounded-lg"
+            />
           ) : (
-            <img src={item.url} alt={item.stem} className="max-w-full max-h-full object-contain" />
+            /* Le dérivé « view » suffit à l'écran ; l'original reste à un clic,
+               via le lien de l'en-tête. */
+            <img
+              src={displaySrc(item, 'view')}
+              alt={item.stem}
+              className="max-w-full max-h-full object-contain"
+            />
           )}
         </div>
 

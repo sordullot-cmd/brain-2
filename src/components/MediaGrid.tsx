@@ -1,5 +1,6 @@
 import type { Media } from '../lib/vault'
 import { useLightbox } from './Lightbox'
+import { Thumb } from './Thumb'
 
 /**
  * Grille de médias + visionneuse plein écran.
@@ -39,27 +40,10 @@ export function MediaGrid({
                 tile === 'card' ? 'bg-background p-4' : 'checker p-3'
               }`}
             >
-              {m.kind === 'video' ? (
-                <video
-                  src={m.url}
-                  muted
-                  loop
-                  playsInline
-                  onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.pause()
-                    e.currentTarget.currentTime = 0
-                  }}
-                  className="max-w-full max-h-full object-contain"
-                />
-              ) : (
-                <img
-                  src={m.url}
-                  alt={m.stem}
-                  loading="lazy"
-                  className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-                />
-              )}
+              <Thumb
+                m={m}
+                className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+              />
             </div>
             <p className="caption mt-2 truncate text-subtle group-hover:text-foreground transition-colors">
               {m.stem.replace(/[-_]/g, ' ')}

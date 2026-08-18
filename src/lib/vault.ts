@@ -19,6 +19,17 @@ export interface Media {
   /** Dimensions natives, quand l'indexeur a su les lire (images seulement). */
   w?: number
   h?: number
+  /**
+   * Dérivés WebP produits à l'indexation (`scripts/derivatives.mjs`). `thumb`
+   * pour les grilles, `view` pour la visionneuse. Absents pour les SVG (déjà
+   * légers) ; une vidéo n'a qu'un `thumb`, son image d'affiche.
+   * `url` reste l'original, à ne charger que sur demande explicite.
+   */
+  thumb?: string
+  view?: string
+  /** Dimensions du `thumb`, pour réserver la place et éviter les sauts. */
+  dw?: number
+  dh?: number
 }
 
 export interface Note {
@@ -144,6 +155,13 @@ export const fmtDate = (ms: number) =>
 /** Retire les accents et la casse, pour une recherche tolérante. */
 export const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+
+/**
+ * Source d'affichage d'un média : le dérivé s'il existe, l'original sinon (SVG,
+ * ou dérivé qui a échoué). Jamais l'original quand un dérivé est disponible.
+ */
+export const displaySrc = (m: Media, size: 'thumb' | 'view' = 'thumb') =>
+  m[size] ?? m.thumb ?? m.url
 
 /** Lien vers la fiche d'un projet. */
 export const projectUrl = (p: Project) => `/projet/${p.discipline}/${p.slug}`

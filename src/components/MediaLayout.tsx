@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Thumb } from './Thumb'
 import type { Media } from '../lib/vault'
 import { layoutMedia, previewRows, type Row } from '../lib/layout'
 import { useLightbox } from './Lightbox'
@@ -111,22 +112,7 @@ function Tile({
           pad ? 'p-6 sm:p-10' : padded ? 'p-2 sm:p-3' : ''
         }`}
       >
-        {m.kind === 'video' ? (
-          <video
-            src={m.url}
-            muted
-            loop
-            playsInline
-            onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
-            onMouseLeave={(e) => {
-              e.currentTarget.pause()
-              e.currentTarget.currentTime = 0
-            }}
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <img src={m.url} alt={m.stem} loading="lazy" className="h-full w-full object-contain" />
-        )}
+        <Thumb m={m} className="h-full w-full object-contain" />
       </span>
 
       {/* Le nom du fichier ne s'affiche qu'au survol : la planche reste lisible. */}

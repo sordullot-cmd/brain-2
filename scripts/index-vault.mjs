@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url'
 import matter from 'gray-matter'
 import { marked } from 'marked'
 import { imageSize } from './image-size.mjs'
+import { buildDerivatives, SIZES } from './derivatives.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -113,8 +114,12 @@ const mediaFiles = entries
 
 // -------------------------------------------------------------- medias (copie)
 
-fs.rmSync(MEDIA_DIR, { recursive: true, force: true })
+// Copie INCREMENTALE. On effacait tout puis on recopiait 600 Mo a chaque
+// indexation : lent, et `rmSync` echouait en ENOTEMPTY des que le serveur de dev
+// lisait dans le dossier au meme moment. On ne copie donc que ce qui a change,
+// et on supprime les orphelins a la fin.
 fs.mkdirSync(MEDIA_DIR, { recursive: true })
+let copies = 0
 
 const media = []
 /** basename (avec et sans extension, NFC) -> media, pour resoudre les embeds. */
@@ -123,10 +128,19 @@ const mediaByName = new Map()
 for (const full of mediaFiles) {
   const rel = path.relative(VAULT, full)
   const dest = path.join(MEDIA_DIR, rel)
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.copyFileSync(full, dest)
-
   const stat = fs.statSync(full)
+  let cur = null
+  try {
+    cur = fs.statSync(dest)
+  } catch {
+    /* pas encore copie */
+  }
+  if (!cur || cur.size !== stat.size || cur.mtimeMs < stat.mtimeMs) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    fs.copyFileSync(full, dest)
+    copies++
+  }
+
   const ext = path.extname(full).toLowerCase()
   const name = path.basename(full)
   // Dimensions : la mise en page du site compose les visuels selon leur format.
@@ -144,12 +158,40 @@ for (const full of mediaFiles) {
     mtime: stat.mtimeMs,
     ...(dim ? { w: dim.w, h: dim.h } : {}),
   }
+  // Non serialise : sert seulement a produire les derives (voir plus bas).
+  Object.defineProperty(item, 'absPath', { value: full, enumerable: false })
   media.push(item)
   for (const key of [name, item.stem]) {
     const k = key.normalize('NFC')
     if (!mediaByName.has(k)) mediaByName.set(k, item)
   }
 }
+
+// Ce qui n'est plus dans le vault n'a plus a etre servi.
+const gardes = new Set(media.map((m) => path.join(MEDIA_DIR, m.path.split('/').join(path.sep))))
+let orphelins = 0
+;(function purge(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, e.name)
+    if (e.isDirectory()) {
+      purge(full)
+      try {
+        if (!fs.readdirSync(full).length) fs.rmdirSync(full)
+      } catch {
+        /* dossier non vide entre-temps */
+      }
+    } else if (!gardes.has(full)) {
+      fs.rmSync(full, { force: true })
+      orphelins++
+    }
+  }
+})(MEDIA_DIR)
+
+// ------------------------------------------------------------ derives (web)
+
+// Les grilles et la visionneuse consomment des WebP redimensionnes, pas les
+// originaux : sans ca la page charge des centaines de Mo et l'onglet se bloque.
+const deriv = await buildDerivatives({ outDir: OUT_DIR, items: media, log: (m) => console.log(m) })
 
 // --------------------------------------------------------------- notes (parse)
 
@@ -241,9 +283,18 @@ function resolveLinks(note) {
     if (bang === '!' && m) {
       if (!note.media.includes(m.id)) note.media.push(m.id)
       if (m.kind === 'video') {
-        return `<video src="${m.url}" controls loop muted playsinline class="vault-embed"></video>`
+        // `preload="none"` : une note peut embarquer dix videos de 20 Mo, on ne
+        // telecharge que celles qu'on lance. L'affiche vient du derive.
+        const poster = m.thumb ? ` poster="${m.thumb}"` : ''
+        return `<video src="${m.url}"${poster} controls loop muted playsinline preload="none" class="vault-embed"></video>`
       }
-      return `<img src="${m.url}" alt="${alias || m.stem}" loading="lazy" class="vault-embed" />`
+      // Le corps d'une note fait ~700 px de large : le derive suffit largement,
+      // et l'original (jusqu'a 11 Mo) n'est plus jamais charge pour rien.
+      const dim = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : ''
+      if (m.thumb && m.view) {
+        return `<img src="${m.thumb}" srcset="${m.thumb} ${SIZES.thumb.w}w, ${m.view} ${SIZES.view.w}w" sizes="(max-width: 768px) 100vw, 720px" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
+      }
+      return `<img src="${m.url}" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
     }
     if (n && n !== note) {
       if (!note.links.includes(n.id)) note.links.push(n.id)
@@ -292,8 +343,12 @@ for (const note of notes) {
 
 /**
  * Choisit l'image qui represente le mieux un univers.
- * Priorite : `cover:` dans le frontmatter de la fiche > un visuel d'identite
- * (logo, wordmark, key art) > la premiere image du dossier.
+ * Priorite : `cover:` dans le frontmatter de la fiche > **le logo** (lockup,
+ * logotype, wordmark, icone d'app) > key art / poster > la premiere image.
+ *
+ * Le logo passe avant le key art : c'est lui qui identifie une app ou une marque
+ * d'un coup d'oeil, et le bandeau de la page projet l'affiche en `object-contain`,
+ * donc un logotype y est net. Un key art, lui, dit l'ambiance mais pas le nom.
  */
 function pickCover(own, fm) {
   const images = own.filter((m) => m.kind === 'image')
@@ -306,24 +361,41 @@ function pickCover(own, fm) {
   }
 
   const PREFER = [
-    /(^|[-_])(cover|key-?art|poster|hero)([-_]|$)/i,
+    // Le lockup d'abord : logo + nom ensemble, et son format large remplit le bandeau.
+    /(^|[-_])lockup([-_]|$)/i,
+    // Puis le nom dessine, plus precis que « logo » tout court.
     /(^|[-_])(logotype|wordmark)([-_]|$)/i,
-    /(^|[-_])(logo|lockup)([-_]|$)/i,
+    /(^|[-_])(logo|logomark|marque)([-_]|$)/i,
+    // Pour une app, son icone EST son logo.
+    /(^|[-_])(app-?icon|icone?|icon)([-_]|$)/i,
+    /(^|[-_])(primary|primaire|principal)([-_]|$)/i,
+    /(^|[-_])(cover|key-?art|poster|hero)([-_]|$)/i,
     /(^|[-_])(mascotte|mascot)([-_]|$)/i,
   ]
-  // Un visuel de construction ou un interdit ne represente pas la marque.
-  const AVOID = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space)/i
+  // Un visuel de construction, un interdit, une planche de contact ou une
+  // sous-marque ne representent pas la marque.
+  const AVOID =
+    /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|planche|sous-marque)/i
   // Ni un visuel d'archive : un projet se presente par son etat actuel.
   const isArchive = (m) => m.folder.split('/').some((seg) => /^archive/i.test(seg))
+  // Un logo range dans `branding/` vaut mieux qu'un homonyme trouve ailleurs.
+  const BRANDING = /(^|\/)(branding|logos?|identite|identity)(\/|$)/i
 
   const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m))
   const pool = good.length ? good : images
+  // A motif egal, dans l'ordre : le vectoriel (net dans le bandeau), le format
+  // paysage (le bandeau est large, un logo vertical y flotte), puis `branding/`.
+  // Sans ce classement, c'est l'ordre du dossier qui decidait — donc le hasard.
+  const paysage = (m) => (m.w && m.h ? m.w / m.h >= 1.2 : false)
+  const rang = (m) =>
+    (/\.svg$/i.test(m.name) ? 0 : 4) + (paysage(m) ? 0 : 2) + (BRANDING.test(m.folder) ? 0 : 1)
 
   for (const re of PREFER) {
-    const hit = pool.find((m) => re.test(m.stem))
-    if (hit) return hit.id
+    const hits = pool.filter((m) => re.test(m.stem)).sort((a, b) => rang(a) - rang(b))
+    if (hits.length) return hits[0].id
   }
-  return pool[0].id
+  // Rien de nomme : au moins un visuel d'identite plutot que le premier venu.
+  return (pool.find((m) => BRANDING.test(m.folder)) ?? pool[0]).id
 }
 
 /**
@@ -504,4 +576,10 @@ const jsonKb = (fs.statSync(OUT_JSON).size / 1024).toFixed(0)
 console.log(`\n  Vault indexe : ${VAULT}`)
 console.log(`  ${payload.stats.notesTotal} notes · ${payload.stats.media} medias (${mb} Mo) · ${payload.stats.tags} tags`)
 console.log(`  ${payload.stats.projects} projets · ${payload.stats.disciplines} disciplines`)
+console.log(`  ${copies} medias copies · ${orphelins} orphelins supprimes`)
+console.log(
+  `  ${deriv.made} derives crees · ${deriv.reused} reutilises` +
+    (deriv.removed ? ` · ${deriv.removed} obsoletes supprimes` : '') +
+    ` -> public/derived/ (${(deriv.bytes / 1024 / 1024).toFixed(1)} Mo generes)`
+)
 console.log(`  -> public/vault.json (${jsonKb} Ko) + public/media/\n`)
