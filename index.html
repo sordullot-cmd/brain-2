@@ -11,8 +11,11 @@
     <!-- L'index est demandé dès l'analyse du HTML, sans attendre que le bundle
          soit téléchargé puis exécuté : ~200 ms de gagnés au premier écran. -->
     <link rel="preload" as="fetch" href="/vault.json" type="application/json" crossorigin />
-    <link rel="icon" type="image/svg+xml" href="/lofo.svg" />
-    <link rel="apple-touch-icon" href="/lofo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <!-- DM Sans est embarquée via src/index.css (@fontsource) : rien à charger en ligne. -->
   </head>
   <body>
