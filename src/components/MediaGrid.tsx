@@ -41,7 +41,7 @@ export function MediaGrid({
           >
             <div
               className={`aspect-square rounded-xl border border-border overflow-hidden flex items-center justify-center transition-all group-hover:border-brand/35 group-hover:shadow-[0_6px_24px_-12px_rgba(0,8,46,0.35)] ${
-                tile === 'card' ? 'bg-background p-4' : 'checker p-3'
+                tile === 'card' ? 'bg-background p-4' : 'bg-background p-3'
               }`}
             >
               <Thumb

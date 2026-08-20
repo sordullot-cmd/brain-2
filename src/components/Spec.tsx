@@ -376,7 +376,7 @@ export function SwatchCard({ hex, rank }: { hex: string; rank: number }) {
   return (
     <div className="rounded-lg border border-border bg-background p-3">
       <div
-        className="checker h-24 rounded-md border border-border sm:h-28"
+        className="h-24 rounded-md border border-border sm:h-28"
         style={{ background: hex }}
         title={hex}
       />

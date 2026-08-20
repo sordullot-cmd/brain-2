@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import type { Media } from '../lib/vault'
-import { fmtBytes, displaySrc, playSrc } from '../lib/vault'
+import { fmtBytes, displaySrc, playSrc, viewPixels, trancheH } from '../lib/vault'
 
 /**
  * Visionneuse plein ecran, partagee par la grille simple et la composition.
@@ -38,6 +39,113 @@ export function useLightbox(items: Media[]) {
   return { openAt: setOpen, node }
 }
 
+/**
+ * Zone reellement offerte au visuel : l'ecran moins l'en-tete (64), le pied de
+ * page (~44), les marges verticales (32) et les deux fleches sur les cotes.
+ * Elle sert a decider du mode d'affichage, pas a poser des tailles : le rendu
+ * reste en pourcentages, donc une estimation a quelques pixels pres suffit.
+ */
+function zoneEcran() {
+  const large = window.innerWidth >= 640
+  return {
+    w: Math.max(160, window.innerWidth - (large ? 32 : 16) - 112),
+    h: Math.max(160, window.innerHeight - 64 - 44 - 32),
+  }
+}
+
+function useZone() {
+  const [zone, setZone] = useState(zoneEcran)
+  useEffect(() => {
+    const onResize = () => setZone(zoneEcran())
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+  return zone
+}
+
+/**
+ * Comment montrer un visuel.
+ *
+ * `contain` — tout le visuel dans la zone — est le bon mode pour les formats
+ * courants, ecrans de telephone compris : une capture 1125x2436 posee sur la
+ * hauteur fait 390 px de large, soit la taille du telephone d'origine, et se
+ * lit tres bien.
+ *
+ * Ce qui ne se lit plus, c'est le format EXTREME : une page marketing exportee
+ * d'un seul tenant (1170x41016, 35 fois plus haute que large) contenue dans la
+ * hauteur tombe a 25 px de large. On cesse alors de tout faire tenir : le
+ * visuel prend la dimension qui le rend lisible — sa largeur s'il est haut, sa
+ * hauteur si c'est une bande — et on defile dans l'autre.
+ */
+export type Mode = 'contain' | 'scroll-y' | 'scroll-x'
+
+/** Au-dela de ce rapport (3 fois plus haut que large, ou l'inverse), contenir n'a plus de sens. */
+const FORMAT_EXTREME = 3
+/**
+ * Reduction en dessous de laquelle le contenu n'est plus lisible. Un visuel tres
+ * haut mais petit tient deja a sa taille reelle : c'est la REDUCTION qui gene,
+ * pas le format, et il n'y a rien a defiler.
+ */
+const NET_MIN = 0.5
+
+function modeAffichage(m: Media, zone: { w: number; h: number }): Mode {
+  // Un visuel decoupe en tranches n'a de sens qu'empile : c'est deja le constat
+  // fait a l'indexation, on ne le refait pas ici.
+  if (m.bande?.length) return 'scroll-y'
+  const px = viewPixels(m)
+  if (!px || m.kind === 'video') return 'contain'
+  const r = px.w / px.h
+  if (r > 1 / FORMAT_EXTREME && r < FORMAT_EXTREME) return 'contain'
+  if (Math.min(zone.w / px.w, zone.h / px.h) >= NET_MIN) return 'contain'
+  return r < 1 ? 'scroll-y' : 'scroll-x'
+}
+
+/**
+ * Combien de place un visuel a le droit de prendre dans la visionneuse.
+ *
+ * Remplir l'ecran est le bon reglage pour la grande majorite des visuels, mais
+ * deux cas se voient tout de suite, et ce sont eux qu'on borne :
+ *
+ *   1. **un bitmap plus petit que l'ecran** : etire, il n'apporte aucun detail,
+ *      il ne fait que grossir ses pixels. On ne depasse donc pas ZOOM_MAX fois
+ *      les pixels REELLEMENT presents dans le fichier affiche (le derive `view`,
+ *      plafonne a 1800 px, ou l'original). Un SVG servi tel quel est vectoriel :
+ *      il est net a n'importe quelle taille, aucune limite ne s'applique.
+ *   2. **un visuel carre** — le format des logos : bord a bord il colle a
+ *      l'en-tete et aux fleches. Il s'arrete a CARRE_MAX de la zone, ce qui lui
+ *      rend la marge qu'un logo demande.
+ */
+const ZOOM_MAX = 2
+const CARRE_MAX = '80%'
+/**
+ * Largeur de LECTURE d'un visuel qui defile. Une page exportee d'un seul tenant
+ * l'a ete en 2x ou 3x : posee sur toute la largeur de l'ecran, elle est deux
+ * fois plus grande que la page d'origine — on lit un titre par ecran. A cette
+ * largeur elle se lit comme la page, un peu agrandie, et il reste de la marge
+ * autour.
+ */
+const LECTURE_MAX = 700
+const estCarre = (r: number) => r > 0.85 && r < 1.18
+
+function limites(m: Media, mode: Mode): CSSProperties | undefined {
+  const px = viewPixels(m)
+  // Un SVG passe tel quel quand il est leger ; au-dela il est rasterise en
+  // `view`, et redevient donc un bitmap a menager.
+  const vectoriel = m.ext === 'svg' && !m.view
+  const zoom = vectoriel || !px ? null : { w: px.w * ZOOM_MAX, h: px.h * ZOOM_MAX }
+
+  // En defilement, une seule dimension conduit le visuel : c'est la seule a
+  // borner. L'autre suit le format, aussi loin qu'il faut.
+  if (mode === 'scroll-y') return { maxWidth: `${Math.min(zoom?.w ?? LECTURE_MAX, LECTURE_MAX)}px` }
+  if (mode === 'scroll-x') return zoom ? { maxHeight: `${zoom.h}px` } : undefined
+
+  const carre = estCarre(px ? px.w / px.h : 1)
+  if (!carre) return zoom ? { maxWidth: `${zoom.w}px`, maxHeight: `${zoom.h}px` } : undefined
+  return zoom
+    ? { maxWidth: `min(${CARRE_MAX}, ${zoom.w}px)`, maxHeight: `min(${CARRE_MAX}, ${zoom.h}px)` }
+    : { maxWidth: CARRE_MAX, maxHeight: CARRE_MAX }
+}
+
 export function Lightbox({
   item,
   index,
@@ -51,6 +159,20 @@ export function Lightbox({
   onClose: () => void
   onMove: (d: number) => void
 }) {
+  const zone = useZone()
+  const mode = useMemo(() => modeAffichage(item, zone), [item, zone])
+
+  // Repartir en haut du visuel a chaque changement d'image : on lit une capture
+  // a rallonge depuis son debut, pas depuis la position de la precedente.
+  const [defilant, setDefilant] = useState<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!defilant) return
+    defilant.scrollTo(0, 0)
+    // Sans le focus, les fleches haut/bas et Page suivante ne defilent pas :
+    // le clavier parlerait a la page, qui elle ne bouge pas.
+    if (mode !== 'contain') defilant.focus({ preventScroll: true })
+  }, [defilant, item, mode])
+
   return (
     <div
       className="fixed inset-0 z-50 bg-white/97 backdrop-blur-sm flex flex-col"
@@ -87,7 +209,7 @@ export function Lightbox({
         </button>
       </div>
 
-      <div className="flex-1 min-h-0 flex items-center gap-2 px-2 sm:px-6 py-6">
+      <div className="flex-1 min-h-0 flex items-center gap-2 px-2 sm:px-4 py-4">
         <button
           onClick={() => onMove(-1)}
           className="h-12 w-12 rounded-full hover:bg-surface transition-colors flex items-center justify-center shrink-0"
@@ -98,8 +220,38 @@ export function Lightbox({
           </svg>
         </button>
 
-        <div className="checker flex-1 h-full rounded-2xl border border-border flex items-center justify-center p-4 sm:p-10 min-w-0">
-          {item.kind === 'video' ? (
+        <div
+          ref={setDefilant}
+          tabIndex={mode === 'contain' ? undefined : 0}
+          className={`flex-1 h-full min-w-0 focus:outline-none ${
+            mode === 'contain'
+              ? 'flex items-center justify-center'
+              : mode === 'scroll-y'
+                ? // Pas de centrage flex ici : un contenu plus grand que sa boite
+                  // centree se fait rogner en haut, et le debut du visuel — le
+                  // plus utile — devient inatteignable.
+                  'overflow-y-auto overflow-x-hidden'
+                : 'overflow-x-auto overflow-y-hidden flex items-center'
+          }`}
+        >
+          {item.bande?.length ? (
+            /* Les tranches, bout a bout : le navigateur ne decode que celles
+               qui approchent de l'ecran, d'ou `lazy` et les dimensions posees. */
+            <div className="mx-auto w-full" style={{ maxWidth: `${Math.min(item.bw ?? LECTURE_MAX, LECTURE_MAX)}px` }}>
+              {item.bande.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={i === 0 ? item.stem : ''}
+                  width={item.bw}
+                  height={trancheH(item, i)}
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  className="block w-full h-auto"
+                />
+              ))}
+            </div>
+          ) : item.kind === 'video' ? (
             /* Le `preview` (960 px, CRF 30) suffit à l'écran ; le master du
                vault, jusqu'à 21 Mo, reste derrière le lien « original ». */
             <video
@@ -109,7 +261,7 @@ export function Lightbox({
               autoPlay
               loop
               preload="metadata"
-              className="max-w-full max-h-full rounded-lg"
+              className="w-full h-full object-contain"
             />
           ) : (
             /* Le dérivé « view » suffit à l'écran ; l'original reste à un clic,
@@ -117,7 +269,14 @@ export function Lightbox({
             <img
               src={displaySrc(item, 'view')}
               alt={item.stem}
-              className="max-w-full max-h-full object-contain"
+              className={
+                mode === 'contain'
+                  ? 'w-full h-full object-contain'
+                  : mode === 'scroll-y'
+                    ? 'block mx-auto w-full h-auto'
+                    : 'block h-full w-auto max-w-none'
+              }
+              style={limites(item, mode)}
             />
           )}
         </div>
@@ -133,8 +292,17 @@ export function Lightbox({
         </button>
       </div>
 
-      <div className="px-5 sm:px-8 pb-5 shrink-0">
+      <div className="px-5 sm:px-8 pb-5 shrink-0 flex items-baseline gap-4">
         <p className="caption text-subtle mono truncate">{item.path}</p>
+        {mode !== 'contain' && (
+          <span className="caption text-subtle/70 shrink-0 ml-auto">
+            {mode === 'scroll-x'
+              ? 'bande très large · défiler pour lire'
+              : item.bande?.length
+                ? `page entière · ${item.bande.length} écrans · défiler pour lire`
+                : 'visuel très haut · défiler pour lire'}
+          </span>
+        )}
       </div>
     </div>
   )

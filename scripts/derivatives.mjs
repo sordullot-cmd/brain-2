@@ -46,6 +46,22 @@ export const VIDEO = { w: 960, crf: 30, audio: '96k', preset: 'slow' }
 /** Au-dela de ce poids, un SVG est rasterise comme une image. */
 export const SVG_RASTER_MIN = 40 * 1024
 
+/**
+ * Les visuels A RALLONGE : une page marketing exportee d'un seul tenant monte a
+ * 1170x60000. La boite `view` les borne par la HAUTEUR, donc leur derive fait
+ * 70 px de large — on ne voit rien. Et il n'existe pas de derive unique qui
+ * sauve le cas : un WebP ne depasse pas 16383 px de cote.
+ *
+ * On produit donc, pour ces seuls visuels, une suite de TRANCHES a largeur
+ * utile, que la visionneuse empile et fait defiler. Le navigateur ne decode que
+ * les tranches visibles : lire une page de 46000 px de haut coute une poignee de
+ * WebP, pas un bitmap de 200 Mo.
+ */
+export const BANDE = { ratio: 5, w: 1000, tranche: 4000, quality: 72, max: 24 }
+
+/** Nom de fichier d'une tranche : `<cle>-00.webp`, `<cle>-01.webp`… */
+const bandeSuffixe = (i) => `-${String(i).padStart(2, '0')}.webp`
+
 const RASTER = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.tif', '.tiff', '.bmp'])
 
 let sharp = null
@@ -101,6 +117,8 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
   }
 
   const next = {}
+  /** Tranches a conserver, listees pendant la production : la purge s'y refere. */
+  const tranchesGardees = new Set()
   let made = 0
   let reused = 0
   let bytes = 0
@@ -112,6 +130,10 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
     const isRaster = m.kind === 'image' && (RASTER.has(ext) || (isSvg && m.size >= SVG_RASTER_MIN))
     const isVideo = m.kind === 'video'
     if (!isRaster && !isVideo) continue
+
+    // Trop haut pour tenir dans `view` sans devenir un fil : il passera en
+    // tranches, EN PLUS des derives habituels (les tuiles en ont besoin).
+    const isBande = isRaster && !isVideo && !isSvg && m.w > 0 && m.h / m.w >= BANDE.ratio
 
     const key = m.path
     const stamp = `${m.mtime}:${m.size}`
@@ -129,7 +151,13 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
           ['view', '.webp'],
         ]
     const paths = Object.fromEntries(outs.map(([v, e]) => [v, path.join(dir, v, key + e)]))
-    const allThere = outs.every(([v]) => fs.existsSync(paths[v]))
+    const bandePath = (i) => path.join(dir, 'bande', key + bandeSuffixe(i))
+    // Un visuel a rallonge n'est a jour que si ses tranches sont la : une entree
+    // de cache d'avant les tranches doit etre refaite, pas reutilisee.
+    const allThere =
+      outs.every(([v]) => fs.existsSync(paths[v])) &&
+      (!isBande ||
+        (hit?.bande > 0 && Array.from({ length: hit.bande }, (_, i) => bandePath(i)).every(fs.existsSync)))
 
     if (hit && hit.stamp === stamp && allThere) {
       next[key] = hit
@@ -137,6 +165,12 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
       if (hit.dw && hit.dh) {
         m.dw = hit.dw
         m.dh = hit.dh
+      }
+      if (hit.bande) {
+        m.bande = Array.from({ length: hit.bande }, (_, i) => derivedUrl('bande', key, bandeSuffixe(i)))
+        m.bw = hit.bw
+        m.bh = hit.bh
+        for (let i = 0; i < hit.bande; i++) tranchesGardees.add(bandePath(i))
       }
       reused++
       continue
@@ -200,6 +234,46 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
             }
           }
 
+          if (isBande) {
+            // Un TIFF TUILE en intermediaire : libvips y lit une tranche sans
+            // redecoder tout le fichier. Avec un PNG, chacune des ~18 tranches
+            // rouvrait une image de 46 millions de pixels.
+            const tmpBande = path.join(dir, '.bande-' + Math.abs(hashCode(key)) + '.tif')
+            const pleine = await S(source, { failOn: 'none', limitInputPixels: false })
+              .rotate()
+              .resize({ width: BANDE.w, withoutEnlargement: true })
+              .tiff({ compression: 'deflate', tile: true, tileWidth: 256, tileHeight: 256 })
+              .toFile(tmpBande)
+
+            const n = Math.min(BANDE.max, Math.ceil(pleine.height / BANDE.tranche))
+            const urls = []
+            for (let i = 0; i < n; i++) {
+              const top = i * BANDE.tranche
+              const out = bandePath(i)
+              fs.mkdirSync(path.dirname(out), { recursive: true })
+              const info = await S(tmpBande, { limitInputPixels: false })
+                .extract({
+                  left: 0,
+                  top,
+                  width: pleine.width,
+                  height: Math.min(BANDE.tranche, pleine.height - top),
+                })
+                .webp({ quality: BANDE.quality, effort: 4 })
+                .toFile(out)
+              bytes += info.size
+              urls.push(derivedUrl('bande', key, bandeSuffixe(i)))
+              tranchesGardees.add(out)
+            }
+            fs.rmSync(tmpBande, { force: true })
+
+            m.bande = urls
+            m.bw = pleine.width
+            m.bh = Math.min(pleine.height, n * BANDE.tranche)
+            rec.bande = n
+            rec.bw = m.bw
+            rec.bh = m.bh
+          }
+
           if (isVideo) {
             // Le master reste dans /media ; ce qui est LU dans la page est ce
             // derive. `-map 0:a?` : certaines animations n'ont pas de piste son,
@@ -250,6 +324,17 @@ export async function buildDerivatives({ outDir, items, log = () => {} }) {
     for (const f of walkFiles(root)) {
       const key = path.relative(root, f).replace(/\.(webp|mp4)$/, '').split(path.sep).join('/')
       if (!next[key]) {
+        fs.rmSync(f, { force: true })
+        removed++
+      }
+    }
+  }
+  // Les tranches portent un suffixe (`-00`, `-01`…) : on ne peut pas remonter a
+  // la cle par le nom, on compare a ce qui vient d'etre produit ou reutilise.
+  const rootBande = path.join(dir, 'bande')
+  if (fs.existsSync(rootBande)) {
+    for (const f of walkFiles(rootBande)) {
+      if (!tranchesGardees.has(f)) {
         fs.rmSync(f, { force: true })
         removed++
       }

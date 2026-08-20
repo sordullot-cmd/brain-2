@@ -36,6 +36,15 @@ export interface Media {
   /** Dimensions du `thumb`, pour réserver la place et éviter les sauts. */
   dw?: number
   dh?: number
+  /**
+   * Visuel « à rallonge » (page exportée d'un seul tenant) : ses tranches, dans
+   * l'ordre, à empiler pour le lire. Voir `BANDE` dans derivatives.mjs — un seul
+   * fichier ne peut ni rester lisible ni dépasser 16383 px de côté.
+   */
+  bande?: string[]
+  /** Dimensions de la bande entière, tranches empilées. */
+  bw?: number
+  bh?: number
 }
 
 export interface Note {
@@ -225,6 +234,31 @@ export const displaySrc = (m: Media, size: 'mini' | 'thumb' | 'view' = 'thumb') 
 
 /** Largeurs réelles des dérivés (miroir de `SIZES` dans derivatives.mjs). */
 export const DERIVED_W = { mini: 400, thumb: 640, view: 1800 } as const
+
+/**
+ * Boîte du dérivé `view` (miroir de `SIZES.view`). Le dérivé est calculé en
+ * `fit: inside` + `withoutEnlargement`, donc ces deux nombres suffisent à
+ * retrouver combien de pixels le fichier affiché contient vraiment.
+ */
+export const VIEW_BOX = { w: 1800, h: 3600 } as const
+
+/** Hauteur d'une tranche de bande (miroir de `BANDE.tranche` dans derivatives.mjs). */
+export const BANDE_TRANCHE = 4000
+
+/** Hauteur de la tranche `i` d'une bande : la dernière est plus courte. */
+export const trancheH = (m: Media, i: number) =>
+  Math.min(BANDE_TRANCHE, Math.max(1, (m.bh ?? 0) - i * BANDE_TRANCHE))
+
+/**
+ * Pixels réellement disponibles dans le visuel affiché par la visionneuse : le
+ * dérivé `view` s'il existe (donc borné par `VIEW_BOX`), l'original sinon.
+ * `null` quand les dimensions sont inconnues.
+ */
+export function viewPixels(m: Media): { w: number; h: number } | null {
+  if (!m.w || !m.h) return null
+  const k = m.view ? Math.min(1, VIEW_BOX.w / m.w, VIEW_BOX.h / m.h) : 1
+  return { w: Math.round(m.w * k), h: Math.round(m.h * k) }
+}
 
 /**
  * `srcset` d'une tuile : le navigateur prend `mini` sur une petite tuile et
