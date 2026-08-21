@@ -296,10 +296,13 @@ function resolveLinks(note) {
       // Le corps d'une note fait ~700 px de large : le derive suffit largement,
       // et l'original (jusqu'a 11 Mo) n'est plus jamais charge pour rien.
       const dim = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : ''
+      // `data-media` : de quoi retrouver le fichier cote site pour l'ouvrir en
+      // grand au clic. Aucun chemin du vault ne contient de caractere a echapper.
+      const ref = ` data-media="${m.id}"`
       if (m.thumb && m.view) {
-        return `<img src="${m.thumb}" srcset="${m.mini ? `${m.mini} ${SIZES.mini.w}w, ` : ''}${m.thumb} ${SIZES.thumb.w}w, ${m.view} ${SIZES.view.w}w" sizes="(max-width: 768px) 100vw, 720px" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
+        return `<img src="${m.thumb}" srcset="${m.mini ? `${m.mini} ${SIZES.mini.w}w, ` : ''}${m.thumb} ${SIZES.thumb.w}w, ${m.view} ${SIZES.view.w}w" sizes="(max-width: 768px) 100vw, 720px" alt="${alias || m.stem}"${dim}${ref} loading="lazy" decoding="async" class="vault-embed" />`
       }
-      return `<img src="${m.url}" alt="${alias || m.stem}"${dim} loading="lazy" decoding="async" class="vault-embed" />`
+      return `<img src="${m.url}" alt="${alias || m.stem}"${dim}${ref} loading="lazy" decoding="async" class="vault-embed" />`
     }
     if (n && n !== note) {
       if (!note.links.includes(n.id)) note.links.push(n.id)
@@ -354,8 +357,14 @@ for (const note of notes) {
  * Le logo passe avant le key art : c'est lui qui identifie une app ou une marque
  * d'un coup d'oeil, et le bandeau de la page projet l'affiche en `object-contain`,
  * donc un logotype y est net. Un key art, lui, dit l'ambiance mais pas le nom.
+ *
+ * Mais avant tout ca : une image posee A LA RACINE du dossier de projet — celle
+ * qui se retrouve dans l'aspect « divers », rangee nulle part ailleurs — est un
+ * choix DELIBERE du vault, pas une trouvaille. C'est l'icone de l'app dans la
+ * quasi-totalite des dossiers. Elle passe donc devant, et la recherche par nom
+ * ne sert plus que pour les dossiers qui n'en ont pas.
  */
-function pickCover(own, fm) {
+function pickCover(own, fm, prefix) {
   const images = own.filter((m) => m.kind === 'image')
   if (!images.length) return null
 
@@ -365,6 +374,12 @@ function pickCover(own, fm) {
     if (hit) return hit.id
   }
 
+  const racine = images.filter((m) => m.folder === prefix)
+  return meilleurVisuel(racine.length ? racine : images)
+}
+
+/** Le visuel le plus « identitaire » d'un lot, par motif de nom puis par forme. */
+function meilleurVisuel(images) {
   const PREFER = [
     // Le lockup d'abord : logo + nom ensemble, et son format large remplit le bandeau.
     /(^|[-_])lockup([-_]|$)/i,
@@ -433,7 +448,9 @@ function buildProject(discipline, slug) {
   const aspectMap = new Map()
   for (const m of own) {
     if (isPlanche(m.folder)) continue
-    const aspect = m.folder === prefix ? 'divers' : m.folder.slice(prefix.length + 1).split('/')[0]
+    // Ce qui est pose a la racine du dossier n'est pas un fourre-tout : c'est
+    // l'identite du projet, son icone d'app (voir `pickCover`). D'ou le nom.
+    const aspect = m.folder === prefix ? 'logo-app' : m.folder.slice(prefix.length + 1).split('/')[0]
     if (!aspectMap.has(aspect)) aspectMap.set(aspect, [])
     aspectMap.get(aspect).push(m.id)
   }
@@ -455,7 +472,7 @@ function buildProject(discipline, slug) {
     // exclues) : le chiffre et le poids doivent parler des memes fichiers.
     bytes: own.filter((m) => !isPlanche(m.folder)).reduce((a, m) => a + m.size, 0),
     aspects,
-    cover: pickCover(own, fm),
+    cover: pickCover(own, fm, prefix),
     couleurs: Array.isArray(fm.couleurs) ? fm.couleurs : [],
     couleurPrincipale: fm.couleur_principale || null,
     categorie: fm.categorie || fm.type_app || fm.type_site || null,

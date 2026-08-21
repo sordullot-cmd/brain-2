@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Media } from '../lib/vault'
 import { fmtBytes, displaySrc, playSrc, viewPixels, trancheH } from '../lib/vault'
+import { LoupeControls, useLoupe } from './Loupe'
 
 /**
  * Visionneuse plein ecran, partagee par la grille simple et la composition.
@@ -127,7 +128,14 @@ const CARRE_MAX = '80%'
 const LECTURE_MAX = 700
 const estCarre = (r: number) => r > 0.85 && r < 1.18
 
-function limites(m: Media, mode: Mode): CSSProperties | undefined {
+/**
+ * `echelle` est le facteur de la loupe. En mode contenu, la loupe transforme le
+ * visuel elle-meme et l'echelle ne touche pas a ces bornes — elles decrivent la
+ * taille de DEPART. En defilement il n'y a rien a transformer : l'echelle
+ * multiplie la dimension qui conduit le visuel, et le navigateur defile plus
+ * loin.
+ */
+function limites(m: Media, mode: Mode, echelle = 1): CSSProperties | undefined {
   const px = viewPixels(m)
   // Un SVG passe tel quel quand il est leger ; au-dela il est rasterise en
   // `view`, et redevient donc un bitmap a menager.
@@ -136,8 +144,13 @@ function limites(m: Media, mode: Mode): CSSProperties | undefined {
 
   // En defilement, une seule dimension conduit le visuel : c'est la seule a
   // borner. L'autre suit le format, aussi loin qu'il faut.
-  if (mode === 'scroll-y') return { maxWidth: `${Math.min(zoom?.w ?? LECTURE_MAX, LECTURE_MAX)}px` }
-  if (mode === 'scroll-x') return zoom ? { maxHeight: `${zoom.h}px` } : undefined
+  if (mode === 'scroll-y')
+    return {
+      width: `${echelle * 100}%`,
+      maxWidth: `${Math.min(zoom?.w ?? LECTURE_MAX, LECTURE_MAX) * echelle}px`,
+    }
+  if (mode === 'scroll-x')
+    return { height: `${echelle * 100}%`, maxHeight: zoom ? `${zoom.h * echelle}px` : undefined }
 
   const carre = estCarre(px ? px.w / px.h : 1)
   if (!carre) return zoom ? { maxWidth: `${zoom.w}px`, maxHeight: `${zoom.h}px` } : undefined
@@ -145,6 +158,16 @@ function limites(m: Media, mode: Mode): CSSProperties | undefined {
     ? { maxWidth: `min(${CARRE_MAX}, ${zoom.w}px)`, maxHeight: `min(${CARRE_MAX}, ${zoom.h}px)` }
     : { maxWidth: CARRE_MAX, maxHeight: CARRE_MAX }
 }
+
+/**
+ * Zoomer dans le derive `view` (1800 px au plus) finit par montrer les pixels du
+ * derive, pas ceux du visuel. Passe ce facteur, la visionneuse va donc chercher
+ * l'ORIGINAL, une fois, en tache de fond — et seulement s'il reste raisonnable a
+ * charger : au-dela, le lien « original » de l'en-tete reste la.
+ */
+const HD_DES = 1.6
+const HD_POIDS_MAX = 30 * 1024 * 1024
+const peutHD = (m: Media) => !!m.view && m.kind === 'image' && !m.bande?.length && m.size <= HD_POIDS_MAX
 
 export function Lightbox({
   item,
@@ -162,6 +185,31 @@ export function Lightbox({
   const zone = useZone()
   const mode = useMemo(() => modeAffichage(item, zone), [item, zone])
 
+  // La loupe : molette, pincement, double-clic, glisser. En mode contenu elle
+  // transforme le visuel elle-meme ; en defilement elle n'agit que sur l'echelle
+  // et laisse le navigateur defiler.
+  const loupe = useLoupe({ cle: item.id, deplacable: mode === 'contain', actif: item.kind !== 'video' })
+
+  // Zoome assez loin, le derive `view` montre ses propres pixels : on charge
+  // alors l'original en tache de fond et on l'echange une fois pret, sans faire
+  // sauter l'affichage (meme boite, meme format).
+  const [hd, setHd] = useState<'non' | 'charge' | 'oui'>('non')
+  useEffect(() => setHd('non'), [item.id])
+  useEffect(() => {
+    if (hd === 'non' && loupe.echelle >= HD_DES && peutHD(item)) setHd('charge')
+  }, [hd, loupe.echelle, item])
+  useEffect(() => {
+    if (hd !== 'charge') return
+    let vivant = true
+    const image = new Image()
+    image.onload = () => vivant && setHd('oui')
+    image.onerror = () => vivant && setHd('non')
+    image.src = item.url
+    return () => {
+      vivant = false
+    }
+  }, [hd, item.url])
+
   // Repartir en haut du visuel a chaque changement d'image : on lit une capture
   // a rallonge depuis son debut, pas depuis la position de la precedente.
   const [defilant, setDefilant] = useState<HTMLDivElement | null>(null)
@@ -172,6 +220,25 @@ export function Lightbox({
     // le clavier parlerait a la page, qui elle ne bouge pas.
     if (mode !== 'contain') defilant.focus({ preventScroll: true })
   }, [defilant, item, mode])
+
+  /* Le derive « view » suffit a l'ecran ; l'original arrive quand on zoome
+     dedans, et reste sinon a un clic via le lien de l'en-tete. */
+  const visuel = (
+    <img
+      ref={loupe.refVisuel}
+      src={hd === 'oui' ? item.url : displaySrc(item, 'view')}
+      alt={item.stem}
+      draggable={false}
+      className={
+        mode === 'contain'
+          ? 'w-full h-full object-contain'
+          : mode === 'scroll-y'
+            ? 'block mx-auto h-auto'
+            : 'block w-auto max-w-none'
+      }
+      style={limites(item, mode, loupe.echelle)}
+    />
+  )
 
   return (
     <div
@@ -209,7 +276,7 @@ export function Lightbox({
         </button>
       </div>
 
-      <div className="flex-1 min-h-0 flex items-center gap-2 px-2 sm:px-4 py-4">
+      <div className="relative flex-1 min-h-0 flex items-center gap-2 px-2 sm:px-4 py-4">
         <button
           onClick={() => onMove(-1)}
           className="h-12 w-12 rounded-full hover:bg-surface transition-colors flex items-center justify-center shrink-0"
@@ -221,23 +288,36 @@ export function Lightbox({
         </button>
 
         <div
-          ref={setDefilant}
+          ref={(el) => {
+            setDefilant(el)
+            loupe.refZone(el)
+          }}
           tabIndex={mode === 'contain' ? undefined : 0}
-          className={`flex-1 h-full min-w-0 focus:outline-none ${
+          {...loupe.gestes}
+          className={`flex-1 h-full min-w-0 focus:outline-none ${loupe.gestes.className} ${
             mode === 'contain'
-              ? 'flex items-center justify-center'
+              ? // `relative` + `overflow-hidden` : le visuel agrandi est deplace
+                // dans cette fenetre, et ne deborde pas sur les fleches.
+                'relative overflow-hidden'
               : mode === 'scroll-y'
                 ? // Pas de centrage flex ici : un contenu plus grand que sa boite
                   // centree se fait rogner en haut, et le debut du visuel — le
                   // plus utile — devient inatteignable.
-                  'overflow-y-auto overflow-x-hidden'
-                : 'overflow-x-auto overflow-y-hidden flex items-center'
+                  `overflow-y-auto ${loupe.zoome ? 'overflow-x-auto' : 'overflow-x-hidden'}`
+                : `overflow-x-auto flex ${loupe.zoome ? 'overflow-y-auto items-start' : 'overflow-y-hidden items-center'}`
           }`}
         >
           {item.bande?.length ? (
             /* Les tranches, bout a bout : le navigateur ne decode que celles
                qui approchent de l'ecran, d'ou `lazy` et les dimensions posees. */
-            <div className="mx-auto w-full" style={{ maxWidth: `${Math.min(item.bw ?? LECTURE_MAX, LECTURE_MAX)}px` }}>
+            <div
+              ref={loupe.refVisuel}
+              className="mx-auto"
+              style={{
+                width: `${loupe.echelle * 100}%`,
+                maxWidth: `${Math.min(item.bw ?? LECTURE_MAX, LECTURE_MAX) * loupe.echelle}px`,
+              }}
+            >
               {item.bande.map((src, i) => (
                 <img
                   key={src}
@@ -263,23 +343,18 @@ export function Lightbox({
               preload="metadata"
               className="w-full h-full object-contain"
             />
+          ) : mode === 'contain' ? (
+            /* La boite de la loupe : elle couvre la zone, donc les pourcentages
+               de `limites` et l'ancrage du zoom parlent bien de la meme surface. */
+            <div className="absolute inset-0 flex items-center justify-center" style={loupe.transform}>
+              {visuel}
+            </div>
           ) : (
-            /* Le dérivé « view » suffit à l'écran ; l'original reste à un clic,
-               via le lien de l'en-tête. */
-            <img
-              src={displaySrc(item, 'view')}
-              alt={item.stem}
-              className={
-                mode === 'contain'
-                  ? 'w-full h-full object-contain'
-                  : mode === 'scroll-y'
-                    ? 'block mx-auto w-full h-auto'
-                    : 'block h-full w-auto max-w-none'
-              }
-              style={limites(item, mode)}
-            />
+            visuel
           )}
         </div>
+
+        <LoupeControls loupe={loupe} className="absolute bottom-1 right-4 sm:right-6 z-10" />
 
         <button
           onClick={() => onMove(1)}
@@ -294,15 +369,23 @@ export function Lightbox({
 
       <div className="px-5 sm:px-8 pb-5 shrink-0 flex items-baseline gap-4">
         <p className="caption text-subtle mono truncate">{item.path}</p>
-        {mode !== 'contain' && (
-          <span className="caption text-subtle/70 shrink-0 ml-auto">
-            {mode === 'scroll-x'
-              ? 'bande très large · défiler pour lire'
-              : item.bande?.length
-                ? `page entière · ${item.bande.length} écrans · défiler pour lire`
-                : 'visuel très haut · défiler pour lire'}
-          </span>
-        )}
+        <span className="caption text-subtle/70 shrink-0 ml-auto flex items-baseline gap-3">
+          {hd !== 'non' && (
+            <span title={`Fichier d'origine (${fmtBytes(item.size)})`}>
+              {hd === 'oui' ? "pixels d'origine" : 'original en cours…'}
+            </span>
+          )}
+          {loupe.zoome && mode === 'contain' && <span>glisser pour déplacer · 0 pour revenir</span>}
+          {mode !== 'contain' && (
+            <span>
+              {mode === 'scroll-x'
+                ? 'bande très large · défiler pour lire'
+                : item.bande?.length
+                  ? `page entière · ${item.bande.length} écrans · défiler pour lire`
+                  : 'visuel très haut · défiler pour lire'}
+            </span>
+          )}
+        </span>
       </div>
     </div>
   )

@@ -234,6 +234,10 @@ body {
   background: var(--color-surface);
   display: block;
 }
+/* Un visuel de note s'ouvre en grand : le curseur l'annonce. */
+.prose-vault img.vault-embed {
+  cursor: zoom-in;
+}
 .prose-vault td .vault-embed {
   max-height: 190px;
   width: auto;

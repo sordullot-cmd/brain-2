@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Empty } from '../components/Layout'
 import { MediaLayout } from '../components/MediaLayout'
+import { useLightbox } from '../components/Lightbox'
 import {
   SpecCanvas,
   SpecHero,
@@ -14,7 +15,7 @@ import {
   useScrollSpy,
   type SpecSection,
 } from '../components/Spec'
-import { indexById, projectUrl, useNotesText, type Media, type VaultData } from '../lib/vault'
+import { displaySrc, indexById, projectUrl, useNotesText, type Media, type VaultData } from '../lib/vault'
 
 /* --------------------------------------------------------------------------
    Fiche projet — mise en page « charte de marque » :
@@ -42,9 +43,18 @@ const ASPECT_NOTES: Record<string, string> = {
   composants: "Des blocs d'interface isolés, sortis de leur page.",
   gameplay: "Le produit en action, capté tel qu'il se joue ou s'utilise.",
   typographie: "Les polices de la marque et leur mise en œuvre.",
+  'logo-app': "L’icône de l’app, telle qu’elle apparaît sur l’écran d’accueil : le logo réduit à ce qui tient dans un carré.",
 }
 
-const aspectLabel = (name: string) => name.replace(/-/g, ' ')
+/**
+ * Libellés qu'un simple remplacement de tirets ne rendrait pas : « logo-app »
+ * donnerait « logo app ». Le nom de l'aspect reste le slug (il sert d'ancre).
+ */
+const ASPECT_LABELS: Record<string, string> = {
+  'logo-app': 'logo de l’app',
+}
+
+const aspectLabel = (name: string) => ASPECT_LABELS[name] ?? name.replace(/-/g, ' ')
 
 /** Résumé factuel d'un lot de médias : nombre de fichiers et formats présents. */
 function mediaMeta(items: Media[]) {
@@ -132,7 +142,9 @@ export function ProjetDetail({ data }: { data: VaultData }) {
             : undefined
         }
         tint={tint}
-        art={cover?.kind === 'image' ? cover.url : null}
+        // Le derive suffit pour un visuel pose dans le bandeau : les icones de
+        // projet montent a 780 Ko en original, pour 300 px a l'ecran.
+        art={cover?.kind === 'image' ? displaySrc(cover, 'view') : null}
         pager={<SpecPager prev={prev} next={next} />}
         right={
           <div className="flex flex-wrap items-center gap-2.5">
@@ -207,7 +219,7 @@ export function ProjetDetail({ data }: { data: VaultData }) {
                 notes={['La note du vault : sources, crédits, mots-clés et tout ce qui a été noté à la main.']}
               >
                 <div className="max-w-3xl">
-                  <NoteBody id={note.id} />
+                  <NoteBody id={note.id} media={idx.media} />
                 </div>
               </SpecRow>
             )}
@@ -228,8 +240,9 @@ export function ProjetDetail({ data }: { data: VaultData }) {
  *
  * Le HTML vient de notre propre indexeur (contenu local), pas d'une source tierce.
  */
-export function NoteBody({ id }: { id: string }) {
+export function NoteBody({ id, media }: { id: string; media?: Map<string, Media> }) {
   const text = useNotesText()
+  const { onClick, node } = useProseLightbox(media)
   const html = text?.[id]?.html
   if (html === undefined)
     return (
@@ -239,5 +252,49 @@ export function NoteBody({ id }: { id: string }) {
         <div className="h-4 w-5/6 rounded bg-surface" />
       </div>
     )
-  return <div className="prose-vault" dangerouslySetInnerHTML={{ __html: html }} />
+  return (
+    <>
+      <div className="prose-vault" onClick={onClick} dangerouslySetInnerHTML={{ __html: html }} />
+      {node}
+    </>
+  )
+}
+
+/**
+ * Les visuels posés DANS le texte d'une note s'ouvrent en grand, comme ceux
+ * d'une planche : c'est le même geste, et rien ne justifiait que le visuel d'une
+ * fiche soit le seul du site à ne pas répondre au clic.
+ *
+ * L'ordre des flèches vient du DOM, pas de `note.media` : cette liste contient
+ * aussi les fichiers seulement CITÉS (liens), donc les rangs ne correspondraient
+ * pas à ce qui est affiché. Les visuels sont marqués `data-media` par
+ * l'indexeur, ce qui suffit à retrouver le média complet.
+ */
+function useProseLightbox(media?: Map<string, Media>) {
+  const [visuels, setVisuels] = useState<Media[]>([])
+  const { openAt, node } = useLightbox(visuels)
+
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!media) return
+    const cible = (e.target as HTMLElement).closest('[data-media]')
+    if (!cible || !e.currentTarget.contains(cible)) return
+
+    // On reconstruit la liste au clic : le HTML de la note arrive après coup, et
+    // ses images peuvent encore être en cours de chargement au premier rendu.
+    const items: Media[] = []
+    let rang = -1
+    for (const el of e.currentTarget.querySelectorAll('[data-media]')) {
+      const m = media.get(el.getAttribute('data-media') ?? '')
+      if (!m) continue
+      if (el === cible) rang = items.length
+      items.push(m)
+    }
+    if (rang < 0) return
+
+    e.preventDefault()
+    setVisuels(items)
+    openAt(rang)
+  }
+
+  return { onClick, node }
 }
