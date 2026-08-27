@@ -109,6 +109,8 @@ export interface Project {
   tags: string[]
   /** Les 2-3 tags les plus distinctifs, calculés à l'indexation. */
   topTags: string[]
+  /** Date de dernière modification (fiche ou média), en ms — tri par fraîcheur. */
+  mtime: number
 }
 
 export interface Discipline {

@@ -480,6 +480,9 @@ function buildProject(discipline, slug) {
     annee: annee(fm),
     source: fm.source || null,
     tags: note?.tags || [],
+    // Derniere trace du projet dans le vault (fiche ou media) : c'est ce qui
+    // fait sa fraicheur, et c'est ce que l'accueil met en avant.
+    mtime: Math.max(note?.mtime || 0, ...own.map((m) => m.mtime), 0),
   }
 }
 
@@ -527,8 +530,9 @@ if (fs.existsSync(inspiRoot)) {
   }
 }
 
-// Les plus fournis d'abord : l'index de projets s'ouvre sur ce qui a de la matiere.
-projects.sort((a, b) => b.count - a.count || a.title.localeCompare(b.title, 'fr'))
+// Ordre alphabetique : l'index de projets se parcourt comme une liste, on y
+// cherche un nom. La fraicheur, elle, est le tri de l'accueil (voir `mtime`).
+projects.sort((a, b) => a.title.localeCompare(b.title, 'fr'))
 
 /**
  * Les 2-3 tags qui resument le mieux un projet, pour la vignette de l'index.

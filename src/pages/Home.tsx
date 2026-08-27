@@ -1,8 +1,18 @@
 import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
 import { displaySrc, fmtBytes, indexById, projectUrl, type VaultData } from '../lib/vault'
 
 export function Home({ data }: { data: VaultData }) {
   const idx = indexById(data)
+
+  /**
+   * L'accueil montre ce qui vient d'arriver dans le vault, pas l'index complet :
+   * les six projets touchés le plus récemment. L'index, lui, reste alphabétique.
+   */
+  const recents = useMemo(
+    () => [...data.projects].sort((a, b) => b.mtime - a.mtime).slice(0, 6),
+    [data.projects]
+  )
 
   const stats = [
     { n: data.stats.notesTotal, l: 'notes' },
@@ -39,9 +49,9 @@ export function Home({ data }: { data: VaultData }) {
       {/* Projets en vedette */}
       {data.projects.length > 0 && (
         <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-20">
-          <SectionTitle title="Projets" to="/projets" count={data.projects.length} />
+          <SectionTitle title="Projets récents" to="/projets" count={data.projects.length} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-            {data.projects.slice(0, 6).map((u) => {
+            {recents.map((u) => {
               const cover = u.cover ? idx.media.get(u.cover) : null
               return (
                 <Link key={u.id} to={projectUrl(u)} className="group block">
