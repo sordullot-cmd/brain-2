@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import { DockProvider } from './components/Dock'
 import { Home } from './pages/Home'
 import { loadVault, prefetchNotesText, type VaultData } from './lib/vault'
 
@@ -69,24 +70,28 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Layout data={data} onSearch={() => setSearch(true)}>
-        <Suspense fallback={<div className="caption text-subtle p-8 animate-pulse">Chargement…</div>}>
-          <Routes>
-            <Route path="/" element={<Home data={data} />} />
-            <Route path="/projets" element={<Projets data={data} />} />
-            <Route path="/projet/:discipline/:slug" element={<ProjetDetail data={data} />} />
-            {/* Anciennes routes : /inspirations et /univers ont fusionné en /projets. */}
-            <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
-            <Route path="/univers" element={<Navigate to="/projets" replace />} />
-            <Route path="/univers/:slug" element={<LegacyUnivers />} />
-            <Route path="/notes" element={<NotesList data={data} />} />
-            <Route path="/note/*" element={<NoteView data={data} />} />
-            <Route path="/tags" element={<TagsList data={data} />} />
-            <Route path="/tags/:tag" element={<TagView data={data} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-      </Layout>
+      {/* La barre flottante (flèches projet, retour en haut) est rendue par le
+          Layout ; les pages y déposent leurs flèches via `useDockPager`. */}
+      <DockProvider>
+        <Layout data={data} onSearch={() => setSearch(true)}>
+          <Suspense fallback={<div className="caption text-subtle p-8 animate-pulse">Chargement…</div>}>
+            <Routes>
+              <Route path="/" element={<Home data={data} />} />
+              <Route path="/projets" element={<Projets data={data} />} />
+              <Route path="/projet/:discipline/:slug" element={<ProjetDetail data={data} />} />
+              {/* Anciennes routes : /inspirations et /univers ont fusionné en /projets. */}
+              <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
+              <Route path="/univers" element={<Navigate to="/projets" replace />} />
+              <Route path="/univers/:slug" element={<LegacyUnivers />} />
+              <Route path="/notes" element={<NotesList data={data} />} />
+              <Route path="/note/*" element={<NoteView data={data} />} />
+              <Route path="/tags" element={<TagsList data={data} />} />
+              <Route path="/tags/:tag" element={<TagView data={data} />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </Layout>
+      </DockProvider>
       {search && (
         <Suspense fallback={null}>
           <Search data={data} onClose={() => setSearch(false)} />

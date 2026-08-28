@@ -1,5 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Dock } from './Dock'
 import type { VaultData } from '../lib/vault'
 
 // « Notes » n'est volontairement pas exposé ici : la route /notes reste
@@ -120,6 +121,9 @@ export function Layout({
           </span>
         </div>
       </footer>
+
+      {/* Flèches projet + retour en haut, une fois le premier écran passé. */}
+      <Dock />
     </div>
   )
 }

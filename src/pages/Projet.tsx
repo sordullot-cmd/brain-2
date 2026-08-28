@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { Empty } from '../components/Layout'
+import { useDockPager } from '../components/Dock'
 import { MediaLayout } from '../components/MediaLayout'
 import { useLightbox } from '../components/Lightbox'
 import {
@@ -119,6 +120,12 @@ export function ProjetDetail({ data }: { data: VaultData }) {
     }
     return { prev: at(i - 1), next: at(i + 1) }
   }, [data.projects, discipline, slug])
+
+  // Les memes fleches reprises par la barre flottante : le bandeau sort de
+  // l'ecran des le premier ecran de scroll, et une fiche fait plusieurs
+  // hauteurs d'ecran — sans ca il faut remonter tout en haut pour changer de
+  // projet. Appele avant le `return` anticipe : un hook ne se saute pas.
+  useDockPager(prev, next)
 
   if (!u)
     return (
