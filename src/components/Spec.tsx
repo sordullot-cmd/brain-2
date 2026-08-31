@@ -89,7 +89,11 @@ export function SpecHero({
           (justify-end), et le visuel de couverture occupe la droite. */}
       {pager && (
         <div className="absolute inset-x-0 top-5 z-10 sm:top-6">
-          <div className="mx-auto max-w-[1400px] px-5 sm:px-8">{pager}</div>
+          {/* `data-pager-hero` : la barre flottante guette cet élément et prend le
+              relais exactement quand il passe sous l'en-tête (voir Dock.tsx). */}
+          <div data-pager-hero className="mx-auto max-w-[1400px] px-5 sm:px-8">
+            {pager}
+          </div>
         </div>
       )}
 

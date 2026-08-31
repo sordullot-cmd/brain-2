@@ -9,8 +9,8 @@ import type { PagerItem } from './Spec'
    Le bandeau d'une fiche projet porte déjà ses flèches précédent / suivant,
    mais il sort de l'écran au premier écran de scroll : sur une fiche de 2000 px
    il faut remonter tout en haut pour passer au projet d'à côté. La barre reprend
-   ces mêmes flèches, plus un retour en haut de page, et n'apparaît qu'une fois
-   le bandeau dépassé — tant qu'il est visible, elle ferait doublon.
+   ces mêmes flèches — nom du projet compris, pour qu'on sache où l'on va sans
+   viser une flèche nue — plus un retour en haut de page.
 
    Les flèches sont déclarées par la page (`useDockPager`) et rendues ici : les
    deux boutons vivent ainsi dans le même coin, sans se marcher dessus.
@@ -46,19 +46,53 @@ export function useDockPager(prev: PagerItem | null, next: PagerItem | null) {
   }, [setPager, prev, next])
 }
 
-/** Seuil d'apparition : la hauteur du bandeau, flèches d'origine comprises. */
+/** Seuil de repli, pour les pages sans flèches en tête : la hauteur d'un écran de titre. */
 const SEUIL = 420
 
-export function Dock() {
-  const { pager } = useContext(DockCtx)
+/** Hauteur de l'en-tête collant : passer dessous, c'est déjà être hors de vue. */
+const ENTETE = 72
+
+/**
+ * Quand montrer la barre.
+ *
+ * Sur une fiche projet, le moment juste est celui où les flèches du bandeau
+ * passent sous l'en-tête : c'est l'instant précis où l'on perdrait la
+ * navigation entre projets, et il ne se devine pas à une hauteur en pixels (le
+ * bandeau change de taille avec la longueur du titre et la présence d'un
+ * visuel). On guette donc l'élément lui-même.
+ *
+ * L'effet est relancé sur `pager` et non sur l'URL : c'est la page qui déclare
+ * ses flèches, une fois son bandeau réellement dans le DOM — au changement
+ * d'URL, une fiche chargée à la volée n'est encore que son squelette.
+ *
+ * Les pages sans bandeau à flèches retombent sur un simple seuil de défilement,
+ * pour le seul retour en haut.
+ */
+function useVisible(pager: Pager) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    const cible = document.querySelector('[data-pager-hero]')
+    if (cible) {
+      const io = new IntersectionObserver(([e]) => setVisible(!e.isIntersecting), {
+        rootMargin: `-${ENTETE}px 0px 0px 0px`,
+      })
+      io.observe(cible)
+      return () => io.disconnect()
+    }
+
     const onScroll = () => setVisible(window.scrollY > SEUIL)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [pager])
+
+  return visible
+}
+
+export function Dock() {
+  const { pager } = useContext(DockCtx)
+  const visible = useVisible(pager)
 
   // Le retour en haut est un déplacement, pas une animation : qui a coupé les
   // animations dans son système veut y être, pas y glisser pendant 800 ms.
@@ -69,16 +103,19 @@ export function Dock() {
 
   return (
     <div
-      className={`fixed bottom-5 right-5 z-40 flex items-center gap-2 transition-all duration-300 sm:bottom-6 sm:right-6 ${
+      className={`fixed bottom-5 right-5 z-40 flex max-w-[calc(100vw-2.5rem)] items-center gap-2 transition-all duration-300 sm:bottom-6 sm:right-6 ${
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
       }`}
       aria-hidden={!visible}
     >
       {(pager.prev || pager.next) && (
-        <div className="flex items-center gap-1 rounded-full border border-border bg-background/85 p-1 backdrop-blur-md">
-          <DockPagerLink item={pager.prev} direction="prev" />
-          <DockPagerLink item={pager.next} direction="next" />
-        </div>
+        <nav
+          aria-label="Navigation entre projets"
+          className="flex min-w-0 items-center gap-1 rounded-full border border-border bg-background/85 p-1 shadow-[0_12px_40px_-16px_rgba(0,8,46,0.45)] backdrop-blur-md"
+        >
+          <DockPagerLink item={pager.prev} direction="prev" visible={visible} />
+          <DockPagerLink item={pager.next} direction="next" visible={visible} />
+        </nav>
       )}
 
       <button
@@ -86,7 +123,7 @@ export function Dock() {
         tabIndex={visible ? 0 : -1}
         aria-label="Remonter en haut de la page"
         title="Remonter en haut"
-        className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/85 text-subtle backdrop-blur-md transition-colors hover:border-brand/40 hover:text-foreground"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border bg-background/85 text-subtle shadow-[0_12px_40px_-16px_rgba(0,8,46,0.45)] backdrop-blur-md transition-colors hover:border-brand/40 hover:text-foreground"
       >
         <span aria-hidden="true" className="text-[15px] leading-none">
           ↑
@@ -96,10 +133,18 @@ export function Dock() {
   )
 }
 
-function DockPagerLink({ item, direction }: { item: PagerItem | null; direction: 'prev' | 'next' }) {
+function DockPagerLink({
+  item,
+  direction,
+  visible,
+}: {
+  item: PagerItem | null
+  direction: 'prev' | 'next'
+  visible: boolean
+}) {
   const isPrev = direction === 'prev'
   const arrow = isPrev ? '←' : '→'
-  const shell = 'flex h-9 w-9 items-center justify-center rounded-full text-[15px] leading-none transition-colors'
+  const shell = 'label flex h-9 min-w-9 items-center justify-center gap-2 rounded-full px-2.5 transition-colors'
 
   // Une flèche morte plutôt qu'un trou : les deux boutons gardent leur place,
   // la barre ne change pas de largeur d'un projet à l'autre.
@@ -110,14 +155,21 @@ function DockPagerLink({ item, direction }: { item: PagerItem | null; direction:
       </span>
     )
 
+  const role = isPrev ? 'Projet précédent' : 'Projet suivant'
+
   return (
     <Link
       to={item.to}
-      className={`${shell} text-subtle hover:bg-surface hover:text-foreground`}
-      title={`${isPrev ? 'Projet précédent' : 'Projet suivant'} : ${item.title}`}
-      aria-label={`${isPrev ? 'Projet précédent' : 'Projet suivant'} : ${item.title}`}
+      tabIndex={visible ? 0 : -1}
+      className={`${shell} min-w-0 text-subtle hover:bg-surface hover:text-foreground`}
+      title={`${role} : ${item.title}`}
+      aria-label={`${role} : ${item.title}`}
     >
-      <span aria-hidden="true">{arrow}</span>
+      {isPrev && <span aria-hidden="true">{arrow}</span>}
+      {/* Le nom cède la place aux flèches seules sur petit écran : la barre
+          flotte au-dessus du contenu, elle n'a pas à le recouvrir. */}
+      <span className="hidden max-w-[14ch] truncate md:inline">{item.title}</span>
+      {!isPrev && <span aria-hidden="true">{arrow}</span>}
     </Link>
   )
 }
