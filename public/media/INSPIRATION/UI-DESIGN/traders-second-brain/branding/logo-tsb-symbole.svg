@@ -1,0 +1,25 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2F7C70" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#4DAB9A"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#348A7C"/>
+      <stop offset="100%" stop-color="#5FCDB8"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3C9687"/>
+      <stop offset="100%" stop-color="#7ADFC9"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#55BCA7"/>
+      <stop offset="100%" stop-color="#B3F7E8"/>
+    </linearGradient>
+  </defs>
+  <!-- Thicker 4-bar mark for stronger small-size recognition -->
+  <rect x="2"  y="18" width="6" height="10" rx="2" fill="url(#g1)"/>
+  <rect x="9"  y="11" width="6" height="17" rx="2" fill="url(#g2)"/>
+  <rect x="16" y="15" width="6" height="13" rx="2" fill="url(#g3)"/>
+  <rect x="23" y="3"  width="6" height="25" rx="2" fill="url(#g4)"/>
+</svg>
