@@ -4,6 +4,35 @@ import { PageHead, Empty } from '../components/Layout'
 import { displaySrc, indexById, projectUrl, type Media, type Project, type VaultData } from '../lib/vault'
 
 /**
+ * Ordres de tri proposés. La clé vit dans l'URL (`?tri=`) comme les filtres,
+ * `az` étant l'implicite — c'est déjà l'ordre dans lequel l'indexeur écrit les
+ * projets, donc l'absence de paramètre n'a rien à réordonner.
+ *
+ * Les tris par date et par volume départagent les ex æquo par titre, sinon deux
+ * projets de même fraîcheur s'échangeraient de place d'un rendu à l'autre.
+ */
+const TRIS = {
+  az: { label: 'A → Z', cmp: (a: Project, b: Project) => a.title.localeCompare(b.title, 'fr') },
+  za: { label: 'Z → A', cmp: (a: Project, b: Project) => b.title.localeCompare(a.title, 'fr') },
+  recent: {
+    label: 'récent',
+    cmp: (a: Project, b: Project) => b.mtime - a.mtime || a.title.localeCompare(b.title, 'fr'),
+  },
+  ancien: {
+    label: 'ancien',
+    cmp: (a: Project, b: Project) => a.mtime - b.mtime || a.title.localeCompare(b.title, 'fr'),
+  },
+  medias: {
+    label: 'médias',
+    cmp: (a: Project, b: Project) => b.count - a.count || a.title.localeCompare(b.title, 'fr'),
+  },
+} as const
+
+type Tri = keyof typeof TRIS
+
+const DEFAUT: Tri = 'az'
+
+/**
  * Index unique des projets — les inspirations rangées par discipline et les
  * univers de référence sont la même chose (un dossier, une fiche, des médias
  * par aspect), donc une seule page les liste.
@@ -16,6 +45,9 @@ export function Projets({ data }: { data: VaultData }) {
   const [params, setParams] = useSearchParams()
 
   const discipline = params.get('discipline') ?? ''
+  const triParam = params.get('tri') ?? ''
+  /** Une valeur inconnue dans l'URL retombe sur l'implicite plutôt que de casser la page. */
+  const tri: Tri = triParam in TRIS ? (triParam as Tri) : DEFAUT
   const activeTags = useMemo(() => new Set((params.get('tags') ?? '').split(',').filter(Boolean)), [params])
 
   /** Disciplines qui ont au moins un projet, dans l'ordre du plus fourni. */
@@ -50,17 +82,22 @@ export function Projets({ data }: { data: VaultData }) {
   }, [byDiscipline, activeTags])
 
   /** Un projet doit porter TOUS les tags cochés — on affine, on n'élargit pas. */
-  const shown = useMemo(
+  const retenus = useMemo(
     () => (activeTags.size ? byDiscipline.filter((p) => [...activeTags].every((t) => p.tags.includes(t))) : byDiscipline),
     [byDiscipline, activeTags]
   )
 
-  const setFilter = (next: { discipline?: string; tags?: Set<string> }) => {
+  /** Copie avant `sort` : `data.projects` est partagé avec le reste du site. */
+  const shown = useMemo(() => [...retenus].sort(TRIS[tri].cmp), [retenus, tri])
+
+  const setFilter = (next: { discipline?: string; tags?: Set<string>; tri?: Tri }) => {
     const p = new URLSearchParams()
     const d = next.discipline ?? discipline
     const t = next.tags ?? activeTags
+    const o = next.tri ?? tri
     if (d) p.set('discipline', d)
     if (t.size) p.set('tags', [...t].join(','))
+    if (o !== DEFAUT) p.set('tri', o)
     setParams(p, { replace: true })
   }
 
@@ -71,6 +108,8 @@ export function Projets({ data }: { data: VaultData }) {
   }
 
   const filtered = Boolean(discipline) || activeTags.size > 0
+  /** Le tri n'enlève aucun projet : il n'entre pas dans `filtered`, mais « tout effacer » le remet à zéro. */
+  const modifie = filtered || tri !== DEFAUT
   const emptyDisciplines = data.disciplines.filter((d) => d.projectCount === 0 && d.mediaCount === 0)
 
   return (
@@ -78,7 +117,7 @@ export function Projets({ data }: { data: VaultData }) {
       <PageHead
         eyebrow="Projets"
         title="Tout ce qui est rangé"
-        desc="Les inspirations et les univers de référence, dans un seul index. Chaque projet est un dossier du vault : une fiche, des médias en pleine qualité rangés par aspect. Trier par discipline ou par tag."
+        desc="Les inspirations et les univers de référence, dans un seul index. Chaque projet est un dossier du vault : une fiche, des médias en pleine qualité rangés par aspect. Trier par discipline, par tag, et ranger par ordre alphabétique, par fraîcheur ou par nombre de médias."
         right={
           <div className="text-right">
             <div className="display-md tabular-nums">{shown.length}</div>
@@ -120,7 +159,16 @@ export function Projets({ data }: { data: VaultData }) {
             </div>
           )}
 
-          {filtered && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="caption uppercase text-subtle w-24 shrink-0">Trier</span>
+            {(Object.keys(TRIS) as Tri[]).map((k) => (
+              <FilterButton key={k} active={tri === k} onClick={() => setFilter({ tri: k })}>
+                {TRIS[k].label}
+              </FilterButton>
+            ))}
+          </div>
+
+          {modifie && (
             <div className="flex flex-wrap items-center gap-2">
               <span className="caption uppercase text-subtle w-24 shrink-0" />
               <button
