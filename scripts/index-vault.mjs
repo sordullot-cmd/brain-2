@@ -18,6 +18,7 @@ import matter from 'gray-matter'
 import { marked } from 'marked'
 import { imageSize } from './image-size.mjs'
 import { buildDerivatives, SIZES } from './derivatives.mjs'
+import { configureMarked, slug as slugAncre } from './markdown.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -277,7 +278,14 @@ function resolveLinks(note) {
   return note.body.replace(WIKILINK, (full, bang, inner) => {
     const [targetRaw, aliasRaw] = inner.split('|')
     const target = (targetRaw || '').split('#')[0].trim().replace(/\\$/, '')
+    // L'ancre etait jetee : chaque question du bloc Controle d'une fiche pointe
+    // vers la section qui repond, et ces liens disparaissaient de la page.
+    const ancre = (targetRaw || '').split('#').slice(1).join('#').trim().replace(/\\$/, '')
     const alias = (aliasRaw || '').trim()
+
+    // [[#Une section]] : lien vers un titre de la note elle-meme.
+    if (!target && ancre)
+      return `<a href="#${slugAncre(ancre)}" class="vault-link vault-ancre">${alias || ancre}</a>`
     if (!target) return alias || ''
 
     const key = target.split('/').pop().normalize('NFC')
@@ -306,7 +314,8 @@ function resolveLinks(note) {
     }
     if (n && n !== note) {
       if (!note.links.includes(n.id)) note.links.push(n.id)
-      return `<a href="/note/${n.id.split('/').map(encodeURIComponent).join('/')}" class="vault-link" data-internal="1">${alias || n.title}</a>`
+      const cible = `/note/${n.id.split('/').map(encodeURIComponent).join('/')}${ancre ? '#' + slugAncre(ancre) : ''}`
+      return `<a href="${cible}" class="vault-link" data-internal="1">${alias || (ancre ? `${n.title} › ${ancre}` : n.title)}</a>`
     }
     if (m) {
       if (!note.media.includes(m.id)) note.media.push(m.id)
@@ -317,7 +326,9 @@ function resolveLinks(note) {
   })
 }
 
-marked.setOptions({ gfm: true, breaks: false })
+// Callouts Obsidian, maths KaTeX, ancres sur les titres : sans ca les fiches
+// de cours sont illisibles sur le site (voir scripts/markdown.mjs).
+configureMarked()
 
 for (const note of notes) {
   const withLinks = resolveLinks(note)

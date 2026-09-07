@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 /* DM Sans embarquée (pas de Google Fonts) : l'app desktop doit marcher hors ligne. */
 @import '@fontsource-variable/dm-sans/opsz.css';
+/* Formules des fiches de cours, rendues en HTML a l'indexation. */
+@import 'katex/dist/katex.min.css';
 
 /* --------------------------------------------------------------------------
    Design system — repris des tokens de sordulo-gallery
@@ -252,4 +254,150 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* --------------------------------------------------------------------------
+   Fiches de cours — callouts, formules, ancres
+
+   Les fiches d'eco gestion reposent entierement sur les callouts Obsidian :
+   « L'essentiel », « A ne pas confondre », « Controle » (question visible,
+   reponse repliee), « A verifier ». L'indexeur les rend en HTML (voir
+   scripts/markdown.mjs), il ne reste ici que l'apparence.
+   -------------------------------------------------------------------------- */
+
+.prose-vault {
+  /* Quatre teintes fonctionnelles, en plus de la charte night/green : un
+     callout doit se reconnaitre sans lire son titre. */
+  --cal-alerte: #d92d5e;
+  --cal-prudence: #c2761a;
+  --cal-test: var(--c-green);
+  --cal-astuce: #0e8ba8;
+}
+
+.prose-vault .callout {
+  margin: 1.35em 0;
+  padding: 0.85em 1.05em;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+
+.prose-vault .callout-title {
+  margin: 0;
+  font-weight: 650;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+  color: var(--color-foreground);
+}
+
+.prose-vault .callout-body > :first-child { margin-top: 0.5em; }
+.prose-vault .callout-body > :last-child { margin-bottom: 0; }
+.prose-vault .callout-body > * + * { margin-top: 0.7em; }
+
+/* Familles */
+.prose-vault .callout-alerte { border-left-color: var(--cal-alerte); }
+.prose-vault .callout-alerte .callout-title { color: var(--cal-alerte); }
+.prose-vault .callout-prudence { border-left-color: var(--cal-prudence); }
+.prose-vault .callout-prudence .callout-title { color: var(--cal-prudence); }
+.prose-vault .callout-test { border-left-color: var(--cal-test); }
+.prose-vault .callout-astuce { border-left-color: var(--cal-astuce); }
+.prose-vault .callout-astuce .callout-title { color: var(--cal-astuce); }
+.prose-vault .callout-resume { border-left-color: var(--c-night); }
+.prose-vault .callout-citation,
+.prose-vault .callout-exemple { background: transparent; }
+
+/* Le complement ajoute hors notes de cours reste en retrait : il ne doit
+   jamais se confondre avec le cours du prof. */
+.prose-vault .callout--info .callout-title { color: var(--color-muted); font-weight: 600; }
+
+/* ----- Le bloc Controle : question visible, reponse repliee ----- */
+
+.prose-vault .callout--pliable > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  user-select: none;
+}
+
+.prose-vault .callout--pliable > summary::-webkit-details-marker { display: none; }
+
+/* Chevron : le seul signe qui dit « il y a une reponse dessous ». */
+.prose-vault .callout--pliable > summary::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 0.44em;
+  height: 0.44em;
+  margin-top: 0.42em;
+  border-right: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.16s ease;
+  opacity: 0.75;
+}
+
+.prose-vault .callout--pliable[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.prose-vault .callout--pliable:not([open]):hover {
+  background: var(--color-surface-strong);
+  border-left-color: var(--cal-test);
+}
+
+/* ----- Formules ----- */
+
+/* Une formule large scrolle dans sa boite : la page ne part jamais de travers. */
+.prose-vault .math-bloc {
+  margin: 1.1em 0;
+  padding: 0.2em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose-vault .katex { font-size: 1.04em; }
+
+/* Formule invalide : on montre le source plutot qu'une page cassee. */
+.prose-vault .math-brute {
+  color: var(--cal-alerte);
+  background: color-mix(in srgb, var(--cal-alerte) 8%, transparent);
+}
+
+/* ----- Ancres internes (« -> la section qui repond ») ----- */
+
+.prose-vault .vault-ancre {
+  font-size: 0.94em;
+  color: var(--color-muted);
+  text-decoration-color: var(--color-border);
+}
+
+.prose-vault .vault-ancre:hover { color: var(--color-accent); }
+
+/* La cible d'une ancre s'annonce : sans ca, on arrive sur la page sans savoir
+   quel titre on cherchait. */
+.prose-vault :target {
+  scroll-margin-top: 90px;
+  animation: cible 1.6s ease-out;
+}
+
+@keyframes cible {
+  0%, 40% { background: color-mix(in srgb, var(--c-green) 18%, transparent); }
+  100% { background: transparent; }
+}
+
+/* ----- Tableaux larges (paires a ne pas confondre, seuils, grilles) ----- */
+
+.prose-vault table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  .prose-vault .callout { padding: 0.75em 0.85em; }
+  .prose-vault .callout-title { font-size: 14.5px; }
 }

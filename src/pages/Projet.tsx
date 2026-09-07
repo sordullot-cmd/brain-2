@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
-import { useMemo, useState } from 'react'
+import { useParams, useLocation } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
 import { Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
 import { MediaLayout } from '../components/MediaLayout'
@@ -251,6 +251,33 @@ export function NoteBody({ id, media }: { id: string; media?: Map<string, Media>
   const text = useNotesText()
   const { onClick, node } = useProseLightbox(media)
   const html = text?.[id]?.html
+  const { hash } = useLocation()
+
+  /**
+   * Aller au titre visé par l'ancre.
+   *
+   * Chaque question du bloc « Contrôle » d'une fiche de cours pointe vers la
+   * section qui répond (`[[#…]]`), et un lien vers une autre note peut porter
+   * son ancre. Le router change l'URL mais ne scrolle pas, et le corps de la
+   * note arrive **après** le premier rendu : d'où l'effet, qui dépend de `html`.
+   */
+  useEffect(() => {
+    if (!html || !hash) return
+    let annule = false
+    const aller = () => {
+      if (annule) return
+      const cible = document.getElementById(decodeURIComponent(hash.slice(1)))
+      cible?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    // Une frame d'attente : le HTML vient d'être injecté, les id n'existent
+    // pas encore au moment où l'effet part.
+    const f = requestAnimationFrame(aller)
+    return () => {
+      annule = true
+      cancelAnimationFrame(f)
+    }
+  }, [html, hash])
+
   if (html === undefined)
     return (
       <div className="space-y-3 animate-pulse" aria-hidden>
