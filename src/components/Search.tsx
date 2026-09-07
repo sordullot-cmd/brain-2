@@ -1,18 +1,60 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { norm, useNotesText, type VaultData } from '../lib/vault'
+import { COURS_DOMAIN, contentNotes, norm, type VaultData } from '../lib/vault'
 
-type Hit = { kind: 'Note' | 'Projet' | 'Média' | 'Tag'; title: string; sub: string; to: string; score: number }
+type Hit = { kind: 'Projet' | 'Dossier'; title: string; sub: string; to: string; score: number }
 
-/** Palette de recherche (⌘K) sur l'ensemble du vault : notes, univers, médias, tags. */
+/**
+ * Les dossiers de notes du vault, agrégés depuis le chemin des .md : chaque
+ * segment compte les notes qu'il contient, sous-dossiers compris (« eco
+ * gestion » vaut donc « eco gestion » + « eco gestion/_brut »).
+ *
+ * Le chemin d'un projet n'en devient pas une : le projet est déjà listé comme
+ * tel. Les autres mènent là où leurs notes se lisent vraiment — l'index des
+ * projets filtré pour une discipline, la page des cours pour « eco gestion »,
+ * la liste des notes filtrée pour le reste.
+ */
+function folders(data: VaultData) {
+  const projet = new Set(data.projects.map((p) => `INSPIRATION/${p.discipline}/${p.slug}`))
+  const discipline = new Map(data.disciplines.map((d) => [d.path, d.name]))
+
+  const count = new Map<string, number>()
+  for (const n of contentNotes(data)) {
+    const parts = n.folder.split('/').filter(Boolean)
+    for (let i = 1; i <= parts.length; i++) {
+      const path = parts.slice(0, i).join('/')
+      count.set(path, (count.get(path) ?? 0) + 1)
+    }
+  }
+
+  return [...count.entries()]
+    .filter(([path]) => !projet.has(path))
+    .map(([path, n]) => ({
+      path,
+      name: path.split('/').pop()!,
+      n,
+      to: discipline.has(path)
+        ? `/projets?discipline=${encodeURIComponent(discipline.get(path)!)}`
+        : path === COURS_DOMAIN || path.startsWith(`${COURS_DOMAIN}/`)
+          ? '/cours'
+          : // Le filtre de /notes porte sur le titre ET le chemin : le slug final
+            // vise le chemin seul, sinon « notes » ramènerait toute note dont le
+            // titre contient ce mot.
+            `/notes?q=${encodeURIComponent(`${path}/`)}`,
+    }))
+}
+
+/**
+ * Palette de recherche (⌘K). Elle ne vise que les deux entrées où l'on range
+ * quelque chose — les projets et les dossiers de notes ; les notes, médias et
+ * tags se trouvent depuis leur propre page.
+ */
 export function Search({ data, onClose }: { data: VaultData; onClose: () => void }) {
   const [q, setQ] = useState('')
   const [sel, setSel] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
-  // Le corps des notes arrive dans un second fichier. Tant qu'il n'est pas là on
-  // cherche dans les titres ; la liste se complète toute seule à son arrivée.
-  const text = useNotesText()
+  const dossiers = useMemo(() => folders(data), [data])
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -37,28 +79,22 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
           score: 0,
         })
     }
-    for (const n of data.notes) {
-      const inTitle = norm(n.title).includes(term)
-      if (!inTitle && !(text?.[n.id]?.search ?? '').includes(term)) continue
+    for (const d of dossiers) {
+      // Le nom du dossier d'abord, son chemin ensuite : taper « notes » remonte
+      // « notes » avant « notes/conflicts ».
+      const inName = norm(d.name).includes(term)
+      if (!inName && !norm(d.path).includes(term)) continue
       out.push({
-        kind: 'Note',
-        title: n.title,
-        sub: n.folder || 'racine',
-        to: `/note/${n.id.split('/').map(encodeURIComponent).join('/')}`,
-        score: inTitle ? 1 : 3,
+        kind: 'Dossier',
+        title: d.name,
+        sub: `${d.path} · ${d.n} note${d.n > 1 ? 's' : ''}`,
+        to: d.to,
+        score: inName ? 1 : 2,
       })
     }
-    for (const t of data.tags) {
-      if (norm(t.name).includes(term))
-        out.push({ kind: 'Tag', title: `#${t.name}`, sub: `${t.count} notes`, to: `/tags/${encodeURIComponent(t.name)}`, score: 2 })
-    }
-    for (const m of data.media) {
-      if (norm(m.stem).includes(term))
-        out.push({ kind: 'Média', title: m.stem.replace(/[-_]/g, ' '), sub: m.folder, to: `/media?q=${encodeURIComponent(m.stem)}`, score: 4 })
-    }
 
-    return out.sort((a, b) => a.score - b.score || a.title.localeCompare(b.title)).slice(0, 40)
-  }, [q, data, text])
+    return out.sort((a, b) => a.score - b.score || a.title.localeCompare(b.title, 'fr')).slice(0, 40)
+  }, [q, data, dossiers])
 
   useEffect(() => setSel(0), [q])
 
@@ -93,7 +129,7 @@ export function Search({ data, onClose }: { data: VaultData; onClose: () => void
               }
               if (e.key === 'Enter' && hits[sel]) go(hits[sel])
             }}
-            placeholder="Chercher une note, un univers, un média, un tag…"
+            placeholder="Chercher un projet ou un dossier…"
             className="flex-1 bg-transparent outline-none text-[15px] placeholder:text-subtle/60"
           />
           <kbd className="caption px-1.5 py-1 rounded bg-surface-strong text-subtle mono shrink-0">esc</kbd>

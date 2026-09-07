@@ -1,4 +1,4 @@
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { MediaGrid } from '../components/MediaGrid'
@@ -6,7 +6,19 @@ import { NoteBody } from './Projet'
 import { fmtDate, indexById, norm, type Note, type VaultData } from '../lib/vault'
 
 export function NotesList({ data }: { data: VaultData }) {
-  const [q, setQ] = useState('')
+  // Le filtre vit dans l'URL : la palette de recherche ouvre un dossier en
+  // pointant `/notes?q=eco gestion`, et le bouton retour le défait.
+  const [params, setParams] = useSearchParams()
+  const q = params.get('q') ?? ''
+  const setQ = (v: string) =>
+    setParams(
+      (p) => {
+        if (v) p.set('q', v)
+        else p.delete('q')
+        return p
+      },
+      { replace: true }
+    )
   const [showMeta, setShowMeta] = useState(false)
 
   const groups = useMemo(() => {

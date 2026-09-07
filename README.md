@@ -130,11 +130,15 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 | `/` | Vue d'ensemble : compteurs, univers, notes récentes, tags |
 | `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline et par tag. Les disciplines encore vides sont listées à part |
 | `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète. Les flèches en haut tournent en boucle sur **tous** les projets, dans l'ordre de `/projets` — un univers de référence et un dossier d'inspiration ne sont pas deux choses différentes |
+| `/cours` · `/cours/*` | **Les cours** : le dossier `eco gestion` du vault, lu comme un semestre — fiches d'UE groupées par période, avec coefficient, statut, points de cours à récupérer, cartes à créer et date de dernière revue (tout vient du frontmatter, comme les tableaux Dataview dans Obsidian). La lecture d'une fiche a son sommaire collant et ses flèches entre UE |
 | `/notes` · `/note/*` | Toutes les notes ; lecture avec propriétés, tags, liens sortants et backlinks |
 | `/tags` · `/tags/:tag` | Navigation par étiquette |
 
 `/inspirations` et `/univers` redirigent vers `/projets` ; les liens `/univers/<slug>`
 déjà partagés tombent sur la fiche correspondante.
+
+Le dossier de cours est nommé une seule fois, dans `COURS_DOMAIN` (`src/lib/vault.ts`) :
+s'il est renommé dans le vault, c'est la seule ligne à changer.
 
 Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=crypto,dark`) :
 un tri se partage et le bouton retour le défait.

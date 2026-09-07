@@ -284,3 +284,99 @@ export const projectUrl = (p: Project) => `/projet/${p.discipline}/${p.slug}`
 
 /** Notes réellement rédigées par Sacha (hors templates et doc technique). */
 export const contentNotes = (d: VaultData) => d.notes.filter((n) => !n.isMeta)
+
+/* -------------------------------------------------------------------- cours
+
+   Le vault a un dossier de cours — les fiches d'UE de la licence — que rien ne
+   distingue d'une note ordinaire dans /notes, alors qu'on n'y cherche pas la
+   même chose : où j'en suis, ce qui tombe en premier, ce qu'il reste à
+   récupérer. D'où /cours, et d'où ces lecteurs de frontmatter : chaque fiche
+   porte ses métadonnées scolaires là (c'est ce qui alimente les tableaux
+   Dataview dans Obsidian), l'indexeur les recopie telles quelles.
+   -------------------------------------------------------------------------- */
+
+/** Le dossier du vault qui tient les cours. */
+export const COURS_DOMAIN = 'eco gestion'
+
+/** Les notes d'amphi pas encore mises en fiche vivent dans ce sous-dossier. */
+const BRUT = '_brut'
+
+export interface Fiche {
+  /** Code de l'unité d'enseignement, ex. `12A`. Une note sans `ue` n'est pas une fiche de cours. */
+  ue: string | null
+  notion: string | null
+  coef: number | null
+  periode: number | null
+  statut: string | null
+  /** Points listés dans le bloc « À vérifier / à récupérer » : du cours qui manque. */
+  aVerifier: number
+  cartes: number
+  /** Dernier passage de revue, en ms. */
+  revu: number | null
+}
+
+const nombre = (v: unknown): number | null => {
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isFinite(n) ? n : null
+}
+
+const texte = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null)
+
+/** Les métadonnées scolaires d'une note, lues dans son frontmatter. */
+export function fiche(n: Note): Fiche {
+  const f = n.frontmatter
+  const revu = Date.parse(String(f.revu ?? ''))
+  return {
+    ue: texte(f.ue),
+    notion: texte(f.notion),
+    coef: nombre(f.coef),
+    periode: nombre(f.periode),
+    statut: texte(f.statut),
+    aVerifier: nombre(f.a_verifier) ?? 0,
+    cartes: nombre(f.cartes) ?? 0,
+    revu: Number.isFinite(revu) ? revu : null,
+  }
+}
+
+/**
+ * Le dossier de cours, rangé en trois familles : les fiches d'UE (celles qui
+ * portent un `ue`), les pages qui les entourent (plan, ressources, accueil) et
+ * les notes d'amphi encore brutes.
+ *
+ * Les fiches sortent dans l'ordre où elles tombent — période, puis poids —
+ * parce que c'est l'ordre dans lequel on les révise.
+ */
+export function coursSections(d: VaultData) {
+  const toutes = d.notes.filter((n) => n.domain === COURS_DOMAIN)
+  const brut = toutes.filter((n) => n.folder.split('/').includes(BRUT))
+  const rangees = toutes.filter((n) => !n.folder.split('/').includes(BRUT))
+
+  const fiches = rangees
+    .filter((n) => fiche(n).ue)
+    .sort((a, b) => {
+      const x = fiche(a)
+      const y = fiche(b)
+      return (
+        (x.periode ?? 99) - (y.periode ?? 99) ||
+        (y.coef ?? 0) - (x.coef ?? 0) ||
+        a.title.localeCompare(b.title)
+      )
+    })
+
+  const pages = rangees
+    .filter((n) => !fiche(n).ue)
+    .sort((a, b) => Number(b.isIndex) - Number(a.isIndex) || a.title.localeCompare(b.title))
+
+  return {
+    toutes,
+    fiches,
+    pages,
+    brut: [...brut].sort((a, b) => b.mtime - a.mtime),
+  }
+}
+
+/** Lien vers une note lue dans la section cours. */
+export const coursUrl = (n: Note) => `/cours/${n.id.split('/').map(encodeURIComponent).join('/')}`
+
+/** Lien vers une note lue dans la section notes. */
+export const noteUrl = (n: Note) => `/note/${n.id.split('/').map(encodeURIComponent).join('/')}`

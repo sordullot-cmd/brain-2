@@ -8,6 +8,7 @@ import type { VaultData } from '../lib/vault'
 const NAV = [
   { to: '/', label: 'Accueil', end: true },
   { to: '/projets', label: 'Projets' },
+  { to: '/cours', label: 'Cours' },
   { to: '/tags', label: 'Tags' },
 ]
 

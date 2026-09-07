@@ -401,3 +401,16 @@ body {
   .prose-vault .callout { padding: 0.75em 0.85em; }
   .prose-vault .callout-title { font-size: 14.5px; }
 }
+
+/* --------------------------------------------------------------------------
+   Fiche de cours (/cours/…)
+
+   Le titre de la fiche est deja porte par l'en-tete de la page, avec l'UE, le
+   coefficient et l'etat de revision : le H1 du markdown ferait doublon a deux
+   centimetres de lui. Il reste dans le HTML — les liens `[[#…]]` et le sommaire
+   s'appuient sur son ancre — mais il n'est pas peint.
+   -------------------------------------------------------------------------- */
+
+.fiche-cours .prose-vault > h1:first-child {
+  display: none;
+}

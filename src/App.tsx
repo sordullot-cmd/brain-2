@@ -13,6 +13,8 @@ import { loadVault, prefetchNotesText, type VaultData } from './lib/vault'
  */
 const Projets = lazy(() => import('./pages/Projets').then((m) => ({ default: m.Projets })))
 const ProjetDetail = lazy(() => import('./pages/Projet').then((m) => ({ default: m.ProjetDetail })))
+const CoursList = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursList })))
+const CoursView = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursView })))
 const NotesList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NotesList })))
 const NoteView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NoteView })))
 const TagsList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagsList })))
@@ -83,6 +85,8 @@ export default function App() {
               <Route path="/inspirations" element={<Navigate to="/projets" replace />} />
               <Route path="/univers" element={<Navigate to="/projets" replace />} />
               <Route path="/univers/:slug" element={<LegacyUnivers />} />
+              <Route path="/cours" element={<CoursList data={data} />} />
+              <Route path="/cours/*" element={<CoursView data={data} />} />
               <Route path="/notes" element={<NotesList data={data} />} />
               <Route path="/note/*" element={<NoteView data={data} />} />
               <Route path="/tags" element={<TagsList data={data} />} />
