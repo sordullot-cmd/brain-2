@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="960" height="460" role="img" aria-label="L axe des systemes economiques, de l economie planifiee a l economie de marche">
+  <title>Les systèmes économiques — de la planification au marché</title>
+  <rect width="960" height="460" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .ttl { font-size: 18px; font-weight: 700; }
+    .it  { font-size: 13px; fill: #46506b; }
+    .key { font-size: 13.5px; font-weight: 700; fill: #12203f; }
+    .ax  { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; fill: #8a93a8; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">§ I.3 c) · le système économique</text>
+
+  <!-- axe -->
+  <line x1="60" y1="86" x2="900" y2="86" stroke="#12203f" stroke-opacity="0.3" stroke-width="2"/>
+  <circle cx="60" cy="86" r="6" fill="#1f6f9c"/>
+  <circle cx="900" cy="86" r="6" fill="#c2761a"/>
+  <text class="t ax" x="480" y="76" text-anchor="middle">un axe, pas deux cases</text>
+
+  <!-- planifiee -->
+  <rect x="30" y="110" width="430" height="272" rx="16" fill="#1f6f9c" fill-opacity="0.08" stroke="#1f6f9c" stroke-opacity="0.45"/>
+  <text class="t ttl" x="54" y="146" fill="#1f6f9c">Économie planifiée</text>
+  <text class="t key" x="54" y="176">Décisions CENTRALISÉES</text>
+  <text class="t it" x="54" y="204">Principe : la société connaît mieux les objectifs</text>
+  <text class="t it" x="54" y="224">à atteindre que chaque individu pris séparément.</text>
+  <text class="t it" x="54" y="256">· L'État détermine les besoins de tous les agents</text>
+  <text class="t it" x="54" y="278">· … comment les satisfaire par la production</text>
+  <text class="t it" x="54" y="300">· … et l'allocation des ressources</text>
+  <text class="t key" x="54" y="330">→ nécessité de planifier</text>
+  <text class="t it" x="54" y="356">L'État est au cœur de l'économie : il produit et distribue.</text>
+
+  <!-- marche -->
+  <rect x="500" y="110" width="430" height="272" rx="16" fill="#c2761a" fill-opacity="0.09" stroke="#c2761a" stroke-opacity="0.45"/>
+  <text class="t ttl" x="524" y="146" fill="#c2761a">Économie (capitaliste) de marché</text>
+  <text class="t key" x="524" y="176">Décisions DÉCENTRALISÉES</text>
+  <text class="t it" x="524" y="204">L'individu est au centre : chacun connaît mieux ses</text>
+  <text class="t it" x="524" y="224">besoins, ses goûts, ses capacités. Chacun décide.</text>
+  <text class="t it" x="524" y="256">· Propriété privée des moyens de production</text>
+  <text class="t it" x="524" y="278">· Échange sur des marchés, prix non administrés</text>
+  <text class="t it" x="524" y="300">· Production d'abord pour le profit</text>
+  <text class="t key" x="524" y="330">→ les interactions forment quantités et prix</text>
+  <text class="t it" x="524" y="356">Entreprises : quoi, comment, qui employer. Ménages : où</text>
+  <text class="t it" x="524" y="376">travailler, quoi acquérir avec leurs revenus.</text>
+
+  <!-- avertissement -->
+  <rect x="30" y="398" width="900" height="46" rx="12" fill="#d92d5e" fill-opacity="0.08" stroke="#d92d5e" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+  <text class="t key" x="54" y="427">Une économie de marché n'est pas une économie sans État : il intervient là où il y a des défaillances de marché.</text>
+</svg>

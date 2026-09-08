@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" role="img" aria-label="Des interactions sociales a l echange, par la cooperation et la specialisation">
+  <title>Interactions sociales → coopération ⇄ spécialisation → échange</title>
+  <rect width="900" height="430" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 17px; font-weight: 700; }
+    .sub { font-size: 12.5px; fill: #46506b; }
+    .key { font-size: 13.5px; font-weight: 700; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">§ I.3 a) · l'échange et la coopération</text>
+
+  <defs>
+    <marker id="fc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.45"/>
+    </marker>
+  </defs>
+
+  <!-- point de depart -->
+  <rect x="30" y="70" width="840" height="58" rx="13" fill="#d92d5e" fill-opacity="0.07" stroke="#d92d5e" stroke-opacity="0.4"/>
+  <text class="t key" x="450" y="105" text-anchor="middle" fill="#12203f">Impossibilité de subvenir à tous nos besoins SEUL</text>
+
+  <path d="M450 132 v 26" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+
+  <!-- cooperation -->
+  <rect x="250" y="166" width="400" height="66" rx="14" fill="#2f7d4f" fill-opacity="0.13" stroke="#2f7d4f" stroke-opacity="0.5"/>
+  <text class="t box" x="450" y="199" text-anchor="middle">Coopération</text>
+  <text class="t sub" x="450" y="220" text-anchor="middle">les efforts individuels sont mis en commun</text>
+
+  <!-- double fleche -->
+  <path d="M420 240 v 30" stroke="#2f7d4f" stroke-opacity="0.6" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+  <path d="M480 270 v -30" stroke="#2f7d4f" stroke-opacity="0.6" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+
+  <!-- specialisation -->
+  <rect x="250" y="278" width="400" height="66" rx="14" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+  <text class="t box" x="450" y="311" text-anchor="middle">Spécialisation</text>
+  <text class="t sub" x="450" y="332" text-anchor="middle">tout le monde ne fait pas tout</text>
+
+  <!-- echange -->
+  <path d="M654 311 h 16" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+  <rect x="676" y="166" width="194" height="66" rx="14" fill="#c2761a" fill-opacity="0.16" stroke="#c2761a" stroke-opacity="0.55"/>
+  <text class="t box" x="773" y="207" text-anchor="middle">Échange</text>
+  <path d="M650 199 h 20" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+  <path d="M773 278 v -40" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fc)"/>
+  <rect x="676" y="278" width="194" height="66" rx="14" fill="#12203f" fill-opacity="0.05" stroke="#12203f" stroke-opacity="0.25"/>
+  <text class="t sub" x="773" y="305" text-anchor="middle">chacun fournit les biens</text>
+  <text class="t sub" x="773" y="326" text-anchor="middle">et services qu'il produit</text>
+
+  <!-- gain -->
+  <rect x="30" y="166" width="194" height="178" rx="14" fill="#2f7d4f" fill-opacity="0.07" stroke="#2f7d4f" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+  <text class="t key" x="127" y="212" text-anchor="middle" fill="#2f7d4f">Ce que ça change</text>
+  <text class="t sub" x="127" y="244" text-anchor="middle">cela accroît l'ensemble</text>
+  <text class="t sub" x="127" y="266" text-anchor="middle">des possibilités de</text>
+  <text class="t sub" x="127" y="288" text-anchor="middle">production et de</text>
+  <text class="t sub" x="127" y="310" text-anchor="middle">consommation, face à</text>
+  <text class="t sub" x="127" y="332" text-anchor="middle">l'individu seul</text>
+
+  <text class="t note" x="30" y="386">Chacun fait profiter les autres de ses connaissances et de son savoir-faire, et profite des leurs.</text>
+  <text class="t key" x="30" y="410" fill="#12203f">L'échange est profitable : il permet à chacun d'avoir plus.</text>
+</svg>

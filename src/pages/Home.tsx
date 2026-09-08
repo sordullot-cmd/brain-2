@@ -1,17 +1,38 @@
 import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
-import { displaySrc, fmtBytes, indexById, projectUrl, type VaultData } from '../lib/vault'
+import {
+  coursSections,
+  coursUrl,
+  displaySrc,
+  fiche,
+  fmtBytes,
+  fmtDate,
+  indexById,
+  projectUrl,
+  type Note,
+  type VaultData,
+} from '../lib/vault'
 
 export function Home({ data }: { data: VaultData }) {
   const idx = indexById(data)
 
   /**
    * L'accueil montre ce qui vient d'arriver dans le vault, pas l'index complet :
-   * les six projets touchés le plus récemment. L'index, lui, reste alphabétique.
+   * les trois projets touchés le plus récemment. L'index, lui, reste alphabétique.
    */
   const recents = useMemo(
-    () => [...data.projects].sort((a, b) => b.mtime - a.mtime).slice(0, 6),
+    () => [...data.projects].sort((a, b) => b.mtime - a.mtime).slice(0, 3),
     [data.projects]
+  )
+
+  /**
+   * Même principe pour les cours : ce qui a bougé en dernier dans le dossier
+   * d'éco gestion, fiches d'UE comme notes d'amphi, sur une seule ligne de trois.
+   */
+  const cours = useMemo(() => coursSections(data), [data])
+  const coursRecents = useMemo(
+    () => [...cours.toutes].sort((a, b) => b.mtime - a.mtime).slice(0, 3),
+    [cours.toutes]
   )
 
   const stats = [
@@ -96,6 +117,18 @@ export function Home({ data }: { data: VaultData }) {
         </section>
       )}
 
+      {/* Cours récents */}
+      {coursRecents.length > 0 && (
+        <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-20">
+          <SectionTitle title="Cours récents" to="/cours" count={cours.toutes.length} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {coursRecents.map((n) => (
+              <CarteCours key={n.id} note={n} />
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
         <p className="caption text-subtle mono">
           Source : {data.vaultPath} · {fmtBytes(data.stats.bytes)} de médias
@@ -113,5 +146,28 @@ function SectionTitle({ title, to, count }: { title: string; to: string; count: 
         voir les {count} →
       </Link>
     </div>
+  )
+}
+
+/**
+ * Une note de cours vue depuis l'accueil : son UE quand elle en a une, sa
+ * notion, et la date de sa dernière retouche — c'est ce qui la fait remonter ici.
+ */
+function CarteCours({ note }: { note: Note }) {
+  const f = fiche(note)
+  return (
+    <Link
+      to={coursUrl(note)}
+      className="rounded-xl border border-border p-5 hover:border-brand/30 transition-colors flex flex-col"
+    >
+      <div className="flex items-center gap-3 mb-3.5">
+        <span className="caption uppercase text-subtle">{f.ue ? `UE ${f.ue}` : 'Cours'}</span>
+        {f.coef !== null && <span className="caption text-subtle tabular-nums">coef {f.coef}</span>}
+        <span className="caption text-subtle/60 mono ml-auto shrink-0">{fmtDate(note.mtime)}</span>
+      </div>
+
+      <div className="label mb-2.5">{note.title}</div>
+      <p className="caption text-subtle line-clamp-2 leading-[1.6]">{f.notion ?? note.excerpt ?? '—'}</p>
+    </Link>
   )
 }

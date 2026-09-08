@@ -34,10 +34,11 @@ Le site s'ouvre sur <http://localhost:5180>.
 - **frontmatter** YAML de chaque note (propriétés affichées dans la colonne de droite) ;
 - **markdown rendu en HTML**, avec les `[[wikilinks]]` transformés en liens cliquables et les `![[embeds]]` en images/vidéos ;
 - **backlinks** calculés dans les deux sens ;
-- **tags**, ceux du frontmatter et ceux posés dans le corps du texte ;
+- **tags de note**, ceux du frontmatter et ceux posés dans le corps du texte — bruts, tels
+  que le vault les écrit (`cours`, `cycle-3`…), pour la page `/tags` ;
 - **projets** — tout dossier `INSPIRATION/<DISCIPLINE>/<slug>/`, `UNIVERS` compris : découpé
-  par aspect, avec sa palette, ses tags et les **2-3 tags les plus distinctifs** (`topTags`,
-  calculés en écartant les tags de structure et de discipline, puis en gardant les plus rares) ;
+  par aspect, avec sa palette, ses **tags à facettes** et les **2-3 tags les plus distinctifs**
+  affichés sur la vignette (`topTags`, un par facette en descendant : sujet, procédé, domaine) ;
 - **disciplines** (`INSPIRATION/<DISCIPLINE>/`), y compris les vides — elles font partie de l'architecture ;
 - **médias** copiés dans `public/media/` en conservant l'arborescence — **copie
   incrémentale** : seuls les fichiers dont la taille ou la date ont changé sont
@@ -157,7 +158,7 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 | Route | Contenu |
 | --- | --- |
 | `/` | Vue d'ensemble : compteurs, univers, notes récentes, tags |
-| `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline et par tag. Les disciplines encore vides sont listées à part |
+| `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline puis par facette de tag (domaine, sujet, procédé, style). Les disciplines encore vides sont listées à part |
 | `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète. Les flèches en haut tournent en boucle sur **tous** les projets, dans l'ordre de `/projets` — un univers de référence et un dossier d'inspiration ne sont pas deux choses différentes |
 | `/cours` · `/cours/*` | **Les cours** : le dossier `eco gestion` du vault, lu comme un semestre — fiches d'UE groupées par période, avec coefficient, statut, points de cours à récupérer, cartes à créer et date de dernière revue (tout vient du frontmatter, comme les tableaux Dataview dans Obsidian). La lecture d'une fiche a son sommaire collant et ses flèches entre UE |
 | `/notes` · `/note/*` | Toutes les notes ; lecture avec propriétés, tags, liens sortants et backlinks |
@@ -169,8 +170,36 @@ déjà partagés tombent sur la fiche correspondante.
 Le dossier de cours est nommé une seule fois, dans `COURS_DOMAIN` (`src/lib/vault.ts`) :
 s'il est renommé dans le vault, c'est la seule ligne à changer.
 
-Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=crypto,dark`) :
+Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=trading,dark`) :
 un tri se partage et le bouton retour le défait.
+
+### Les tags de projet sont à facettes
+
+`scripts/tags-projets.mjs` tient le **vocabulaire contrôlé** — hors de cette liste, pas de
+tag de projet. Chaque tag appartient à une facette et à une seule, et chaque facette répond
+à une question différente :
+
+| Facette | La question | Écrite où | Exemples |
+| --- | --- | --- | --- |
+| `domaine` | de quoi ça parle | déduite de `type_app` / `categorie` / `secteur` | `finance` `santé` `productivité` `éducation` |
+| `sujet` | ce que le produit fait | à la main dans `tags:` | `trading` `journal` `playbook` `banque` `habitudes` |
+| `procede` | le parti pris de design qu'on vient étudier | à la main dans `tags:` | `gamification` `mascotte` `data-viz` `design-system` `refonte` |
+| `style` | à quoi ça ressemble | déduit de `mood:` | `dark` `minimal` `playful` `bold` |
+
+Deux facettes sur quatre se déduisent du frontmatter déjà structuré : un projet ne peut plus
+se retrouver sans domaine ni sans style, quel que soit le soin apporté à sa ligne `tags:`.
+La fiche n'a donc que le sujet et le procédé à écrire — et les écrit dans le vocabulaire,
+sans quoi le tag est **écarté** plutôt que d'ajouter un doublon à la barre de filtres.
+
+Ce qui n'y entre plus : la structure (`inspiration`, `univers`, `app`) et la discipline
+(`ui`, `ux`, `brand`) — déjà portées par `type` et par la puce de discipline ; le workflow
+personnel (`a-tester`, `pour-sordulo`) — qui n'a rien à faire dans un index public ; et les
+`#tag` attrapés dans le corps d'une fiche, d'où venait un `#20`. Les variantes sans accent
+(`sante`, `productivite`, `isometrique`) sont repliées sur leur forme canonique : elles
+faisaient deux boutons pour la même chose, chacun ne montrant qu'une moitié des projets.
+
+Les tags de **note** ne passent pas par là : `/tags` continue de montrer le vault tel qu'il
+est écrit.
 
 `⌘K` ouvre la recherche (notes, projets, médias, tags). Dans la galerie : clic pour agrandir, flèches pour naviguer, `échap` pour fermer.
 

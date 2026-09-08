@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-label="De la rarete des ressources au comportement global de l economie">
+  <title>Rareté → contrainte → choix → comportement global de l'économie</title>
+  <rect width="960" height="420" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 16px; font-weight: 700; }
+    .sub { font-size: 12.5px; fill: #46506b; }
+    .key { font-size: 13.5px; font-weight: 700; fill: #12203f; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">§ I.2 a) · pourquoi les choix sont nécessaires</text>
+
+  <defs>
+    <marker id="fe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.45"/>
+    </marker>
+  </defs>
+
+  <!-- chaine -->
+  <g>
+    <rect x="30" y="92" width="180" height="72" rx="13" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+    <text class="t box" x="120" y="126" text-anchor="middle">Ressources rares</text>
+    <text class="t sub" x="120" y="148" text-anchor="middle">travail · capital · temps</text>
+  </g>
+  <path d="M216 128 h26" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="250" y="92" width="150" height="72" rx="13" fill="#12203f" fill-opacity="0.06" stroke="#12203f" stroke-opacity="0.3"/>
+    <text class="t box" x="325" y="134" text-anchor="middle">Contrainte</text>
+  </g>
+  <path d="M406 128 h26" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="440" y="92" width="190" height="72" rx="13" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+    <text class="t box" x="535" y="126" text-anchor="middle">Nécessité</text>
+    <text class="t box" x="535" y="148" text-anchor="middle">de choix</text>
+  </g>
+  <path d="M636 128 h26" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="670" y="92" width="260" height="72" rx="13" fill="#12203f" fill-opacity="0.06" stroke="#12203f" stroke-opacity="0.3"/>
+    <text class="t box" x="800" y="126" text-anchor="middle">Décisions individuelles</text>
+    <text class="t sub" x="800" y="148" text-anchor="middle">une par agent, chacun pour soi</text>
+  </g>
+
+  <!-- descente vers le global -->
+  <path d="M800 170 v 34" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+  <g>
+    <rect x="610" y="212" width="320" height="66" rx="13" fill="#2f7d4f" fill-opacity="0.13" stroke="#2f7d4f" stroke-opacity="0.5"/>
+    <text class="t box" x="770" y="252" text-anchor="middle">Comportement global de l'économie</text>
+  </g>
+
+  <!-- encart economie de marche -->
+  <rect x="30" y="212" width="540" height="66" rx="13" fill="#1f6f9c" fill-opacity="0.07" stroke="#1f6f9c" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+  <text class="t key" x="54" y="240">Économie de marché</text>
+  <text class="t sub" x="54" y="262">l'économie laisse les agents faire leurs propres choix</text>
+
+  <!-- externalites -->
+  <rect x="30" y="300" width="900" height="76" rx="13" fill="#d92d5e" fill-opacity="0.07" stroke="#d92d5e" stroke-opacity="0.4"/>
+  <text class="t key" x="54" y="330">Externalités — ce qui échappe au calcul individuel</text>
+  <text class="t sub" x="54" y="354">Les choix individuels ont des répercussions sur la société, <tspan class="key">non prises en compte</tspan> dans la décision : négatives (pollution, fumer) ou positives.</text>
+
+  <text class="t note" x="30" y="404">La contrainte s'ajoute à une autre : la rivalité des biens — le nombre de gens qui consomment le même bien.</text>
+</svg>

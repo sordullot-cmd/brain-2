@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 490" width="940" height="490" role="img" aria-label="L equilibre illustre par les files des caisses de supermarche">
+  <title>L'équilibre — l'exemple des caisses de supermarché</title>
+  <rect width="940" height="490" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .def { font-size: 14px; fill: #12203f; }
+    .lbl { font-size: 13px; font-weight: 700; }
+    .sub { font-size: 12.5px; fill: #46506b; }
+    .q   { font-size: 15px; font-weight: 700; }
+    .verdict { font-size: 14px; font-weight: 700; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">§ I.3 b) · la notion d'équilibre</text>
+
+  <!-- definition -->
+  <rect x="30" y="60" width="880" height="58" rx="13" fill="#1f6f9c" fill-opacity="0.09" stroke="#1f6f9c" stroke-opacity="0.45"/>
+  <text class="t def" x="54" y="95">Équilibre : une situation où <tspan class="lbl">aucun individu ne peut améliorer sa situation en faisant quelque chose de différent</tspan>.</text>
+
+  <defs>
+    <marker id="fq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#d92d5e" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- caisse 1 -->
+  <rect x="30" y="150" width="490" height="78" rx="12" fill="#12203f" fill-opacity="0.04" stroke="#12203f" stroke-opacity="0.2"/>
+  <rect x="52" y="170" width="54" height="38" rx="7" fill="#12203f" fill-opacity="0.16" stroke="#12203f" stroke-opacity="0.45"/>
+  <text class="t sub" x="79" y="194" text-anchor="middle">caisse 1</text>
+  <g fill="#2f7d4f" fill-opacity="0.55">
+    <circle cx="146" cy="178" r="8"/><rect x="139" y="189" width="14" height="20" rx="6"/>
+    <circle cx="182" cy="178" r="8"/><rect x="175" y="189" width="14" height="20" rx="6"/>
+  </g>
+  <text class="t sub" x="226" y="195">2 personnes — la plus courte</text>
+
+  <!-- caisse 2 -->
+  <rect x="30" y="240" width="490" height="78" rx="12" fill="#12203f" fill-opacity="0.04" stroke="#12203f" stroke-opacity="0.2"/>
+  <rect x="52" y="260" width="54" height="38" rx="7" fill="#12203f" fill-opacity="0.16" stroke="#12203f" stroke-opacity="0.45"/>
+  <text class="t sub" x="79" y="284" text-anchor="middle">caisse 2</text>
+  <g fill="#c2761a" fill-opacity="0.55">
+    <circle cx="146" cy="268" r="8"/><rect x="139" y="279" width="14" height="20" rx="6"/>
+    <circle cx="182" cy="268" r="8"/><rect x="175" y="279" width="14" height="20" rx="6"/>
+    <circle cx="218" cy="268" r="8"/><rect x="211" y="279" width="14" height="20" rx="6"/>
+  </g>
+  <text class="t sub" x="262" y="285">3 personnes</text>
+
+  <!-- caisse 3 -->
+  <rect x="30" y="330" width="490" height="78" rx="12" fill="#12203f" fill-opacity="0.04" stroke="#12203f" stroke-opacity="0.2"/>
+  <rect x="52" y="350" width="54" height="38" rx="7" fill="#12203f" fill-opacity="0.16" stroke="#12203f" stroke-opacity="0.45"/>
+  <text class="t sub" x="79" y="374" text-anchor="middle">caisse 3</text>
+  <g fill="#d92d5e" fill-opacity="0.5">
+    <circle cx="146" cy="358" r="8"/><rect x="139" y="369" width="14" height="20" rx="6"/>
+    <circle cx="182" cy="358" r="8"/><rect x="175" y="369" width="14" height="20" rx="6"/>
+    <circle cx="218" cy="358" r="8"/><rect x="211" y="369" width="14" height="20" rx="6"/>
+    <circle cx="254" cy="358" r="8"/><rect x="247" y="369" width="14" height="20" rx="6"/>
+    <circle cx="290" cy="358" r="8"/><rect x="283" y="369" width="14" height="20" rx="6"/>
+  </g>
+  <text class="t sub" x="334" y="375">5 personnes — la plus longue</text>
+
+  <!-- report de file -->
+  <path d="M470 348 C 500 300, 500 240, 470 196" stroke="#d92d5e" stroke-opacity="0.6" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#fq)"/>
+  <text class="t sub" x="506" y="278" fill="#d92d5e">on change</text>
+  <text class="t sub" x="506" y="296" fill="#d92d5e">de file</text>
+
+  <!-- le test -->
+  <rect x="590" y="150" width="320" height="258" rx="14" fill="#2f7d4f" fill-opacity="0.09" stroke="#2f7d4f" stroke-opacity="0.45"/>
+  <text class="t q" x="614" y="190">Le test, en une question</text>
+  <text class="t def" x="614" y="226">« Quelqu'un est-il <tspan class="lbl">incité</tspan></text>
+  <text class="t def" x="614" y="248">à changer de comportement ? »</text>
+
+  <text class="t verdict" x="614" y="300" fill="#2f7d4f">NON → on est à l'équilibre</text>
+  <text class="t sub" x="614" y="322">les files se sont égalisées</text>
+
+  <text class="t verdict" x="614" y="364" fill="#d92d5e">OUI → ce n'est pas un équilibre</text>
+  <text class="t sub" x="614" y="386">quelqu'un a intérêt à bouger</text>
+
+  <text class="t note" x="30" y="452">Principe de l'économie : les agents répondent aux incitations — donc les marchés tendent naturellement vers l'équilibre.</text>
+  <text class="t note" x="30" y="472">Ex : dans un secteur en tension où la main-d'œuvre manque, les salaires s'élèvent, ce qui attire des travailleurs.</text>
+</svg>

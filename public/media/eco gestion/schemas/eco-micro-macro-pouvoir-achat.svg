@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" width="940" height="480" role="img" aria-label="Micro et macro : pourquoi augmenter tous les revenus n enrichit pas tout le monde">
+  <title>Le tout n'est pas la somme des parties — revenus, prix et pouvoir d'achat</title>
+  <rect width="940" height="480" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .ttl { font-size: 16px; font-weight: 700; }
+    .st  { font-size: 13.5px; fill: #46506b; }
+    .res { font-size: 15px; font-weight: 700; }
+    .f   { font-size: 15px; font-weight: 700; fill: #12203f; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">§ I.3 d) · le tout n'est pas la somme des parties</text>
+
+  <defs>
+    <marker id="fp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.45"/>
+    </marker>
+  </defs>
+
+  <!-- micro -->
+  <rect x="30" y="66" width="400" height="150" rx="15" fill="#2f7d4f" fill-opacity="0.10" stroke="#2f7d4f" stroke-opacity="0.45"/>
+  <text class="t ttl" x="54" y="100" fill="#2f7d4f">Niveau micro — un individu</text>
+  <text class="t st" x="54" y="130">Son revenu nominal (en €) augmente…</text>
+  <text class="t st" x="54" y="154">…les prix, eux, ne bougent pas.</text>
+  <text class="t res" x="54" y="190" fill="#2f7d4f">↑ il est vraiment plus riche</text>
+
+  <!-- macro -->
+  <rect x="30" y="236" width="400" height="150" rx="15" fill="#d92d5e" fill-opacity="0.08" stroke="#d92d5e" stroke-opacity="0.45"/>
+  <text class="t ttl" x="54" y="270" fill="#d92d5e">Niveau macro — tout le monde</text>
+  <text class="t st" x="54" y="300">Tous les revenus nominaux augmentent…</text>
+  <text class="t st" x="54" y="324">…et c'est là que la chaîne de droite s'enclenche.</text>
+  <text class="t res" x="54" y="360" fill="#d92d5e">↓ globalement, pas plus riche</text>
+
+  <!-- chaine macro -->
+  <g>
+    <rect x="470" y="66" width="440" height="46" rx="11" fill="#12203f" fill-opacity="0.05" stroke="#12203f" stroke-opacity="0.25"/>
+    <text class="t st" x="690" y="95" text-anchor="middle">↑ revenus pour tout le monde</text>
+    <path d="M690 116 v 18" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fp)"/>
+
+    <rect x="470" y="140" width="440" height="46" rx="11" fill="#12203f" fill-opacity="0.05" stroke="#12203f" stroke-opacity="0.25"/>
+    <text class="t st" x="690" y="169" text-anchor="middle">↑ achats de biens et services = ↑ demande</text>
+    <path d="M690 190 v 18" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fp)"/>
+
+    <rect x="470" y="214" width="440" height="46" rx="11" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+    <text class="t st" x="690" y="243" text-anchor="middle">↑ prix des biens</text>
+    <path d="M690 264 v 18" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fp)"/>
+
+    <rect x="470" y="288" width="440" height="46" rx="11" fill="#d92d5e" fill-opacity="0.12" stroke="#d92d5e" stroke-opacity="0.5"/>
+    <text class="t st" x="690" y="317" text-anchor="middle">↓ pouvoir d'achat</text>
+  </g>
+
+  <!-- formule -->
+  <rect x="470" y="352" width="440" height="72" rx="12" fill="#1f6f9c" fill-opacity="0.10" stroke="#1f6f9c" stroke-opacity="0.45"/>
+  <text class="t f" x="690" y="382" text-anchor="middle">pouvoir d'achat = W / P, en nombre de biens</text>
+  <text class="t note" x="690" y="406" text-anchor="middle">W = 100 €, P = 10 €/bien → 10 biens. Si W et P montent pareil, rien ne change.</text>
+
+  <text class="t note" x="30" y="458">Résultat global de millions de comportements ≠ somme des résultats de ces millions de comportements.</text>
+</svg>

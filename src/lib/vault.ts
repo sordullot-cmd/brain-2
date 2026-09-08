@@ -106,11 +106,28 @@ export interface Project {
   secteur: string | null
   annee: string | null
   source: string | null
+  /** Les tags du vocabulaire contrôlé, à plat et rangés par ordre de facette. */
   tags: string[]
+  /** Les mêmes, séparés par facette — c'est ce que la barre de filtres déroule. */
+  facettes: Record<Facette, string[]>
   /** Les 2-3 tags les plus distinctifs, calculés à l'indexation. */
   topTags: string[]
   /** Date de dernière modification (fiche ou média), en ms — tri par fraîcheur. */
   mtime: number
+}
+
+/**
+ * Les quatre facettes du vocabulaire de tags des projets — voir
+ * `scripts/tags-projets.mjs`, qui en est la source. Chaque tag appartient à une
+ * facette et à une seule : de quoi ça parle, ce que le produit fait, le parti
+ * pris de design qu'on vient y étudier, à quoi ça ressemble.
+ */
+export type Facette = 'domaine' | 'sujet' | 'procede' | 'style'
+
+export interface FacetteProjets {
+  cle: Facette
+  label: string
+  tags: { name: string; count: number }[]
 }
 
 export interface Discipline {
@@ -144,6 +161,8 @@ export interface VaultData {
   notes: Note[]
   media: Media[]
   projects: Project[]
+  /** Les tags portés par les projets, une entrée par facette (voir `Facette`). */
+  facettesProjets: FacetteProjets[]
   disciplines: Discipline[]
   tags: { name: string; count: number }[]
 }

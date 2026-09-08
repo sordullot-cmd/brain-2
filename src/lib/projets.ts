@@ -9,7 +9,7 @@
  * chose vraie après un rechargement, un partage de lien ou un retour arrière.
  */
 
-import type { Project, VaultData } from './vault'
+import type { Facette, Project, VaultData } from './vault'
 
 /**
  * Ordres de tri proposés. La clé vit dans l'URL (`?tri=`) comme les filtres,
@@ -79,4 +79,36 @@ export function listeProjets(data: VaultData, f: Filtres): Project[] {
   const base = parDiscipline(data, f.discipline)
   const retenus = f.tags.size ? base.filter((p) => [...f.tags].every((t) => p.tags.includes(t))) : base
   return [...retenus].sort(TRIS[f.tri].cmp)
+}
+
+/**
+ * Les tags proposés en filtre, une liste par facette.
+ *
+ * Le décompte est refait sur les projets visibles plutôt que repris de
+ * `data.facettesProjets` : choisir une discipline change ce que chaque tag
+ * ramène, et un bouton qui annonce 12 pour n'en ouvrir que 3 ment.
+ *
+ * Deux tags sont écartés : ceux que PERSONNE ne porte dans la vue courante, et
+ * ceux que TOUT LE MONDE y porte — cliquer sur `#finance` dans la discipline
+ * qui n'a que de la finance ne retire rien. Un tag déjà coché reste affiché
+ * quoi qu'il arrive, sinon on ne pourrait plus le décocher.
+ */
+export function facettesVisibles(
+  data: VaultData,
+  visibles: Project[],
+  actifs: Set<string>
+): { cle: Facette; label: string; tags: { name: string; n: number }[] }[] {
+  const compte = new Map<string, number>()
+  for (const p of visibles) for (const t of new Set(p.tags)) compte.set(t, (compte.get(t) ?? 0) + 1)
+
+  return data.facettesProjets
+    .map(({ cle, label, tags }) => ({
+      cle,
+      label,
+      tags: tags
+        .map(({ name }) => ({ name, n: compte.get(name) ?? 0 }))
+        .filter((t) => (t.n > 0 && t.n < visibles.length) || actifs.has(t.name))
+        .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'fr')),
+    }))
+    .filter((f) => f.tags.length)
 }

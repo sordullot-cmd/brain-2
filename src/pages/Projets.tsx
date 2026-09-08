@@ -6,6 +6,7 @@ import {
   TRIS,
   TRI_DEFAUT,
   ecrireFiltres,
+  facettesVisibles,
   lireFiltres,
   listeProjets,
   parDiscipline,
@@ -43,19 +44,16 @@ export function Projets({ data }: { data: VaultData }) {
   const byDiscipline = useMemo(() => parDiscipline(data, discipline), [data, discipline])
 
   /**
-   * Les tags proposés sont ceux réellement portés par les projets visibles, et
-   * seulement ceux qui trient quelque chose : un tag présent sur TOUS les
-   * projets (`#inspiration`, `#ui`…) est du bruit, cliquer dessus ne retire
-   * rien. On le masque tant qu'il ne discrimine pas.
+   * Une ligne de filtres par facette — domaine, sujet, procédé, style. Les
+   * tags s'empilaient avant sur une seule ligne d'une trentaine de boutons où
+   * `#finance`, `#mascotte` et `#dark` se ressemblaient : trois questions
+   * différentes posées dans le même souffle. Une ligne par question, chacune
+   * courte, se lit d'un coup d'œil.
    */
-  const tags = useMemo(() => {
-    const count = new Map<string, number>()
-    for (const p of byDiscipline) for (const t of new Set(p.tags)) count.set(t, (count.get(t) ?? 0) + 1)
-    return [...count.entries()]
-      .map(([name, n]) => ({ name, n }))
-      .filter((t) => t.n < byDiscipline.length || activeTags.has(t.name))
-      .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'fr'))
-  }, [byDiscipline, activeTags])
+  const facettes = useMemo(
+    () => facettesVisibles(data, byDiscipline, activeTags),
+    [data, byDiscipline, activeTags]
+  )
 
   const shown = useMemo(
     () => listeProjets(data, { discipline, tags: activeTags, tri }),
@@ -88,7 +86,7 @@ export function Projets({ data }: { data: VaultData }) {
       <PageHead
         eyebrow="Projets"
         title="Tout ce qui est rangé"
-        desc="Les inspirations et les univers de référence, dans un seul index. Chaque projet est un dossier du vault : une fiche, des médias en pleine qualité rangés par aspect. Trier par discipline, par tag, et ranger par ordre alphabétique, par fraîcheur ou par nombre de médias."
+        desc="Les inspirations et les univers de référence, dans un seul index. Chaque projet est un dossier du vault : une fiche, des médias en pleine qualité rangés par aspect. Filtrer par discipline puis par facette — le domaine, le sujet, le procédé de design qu'on vient y étudier, le style — et ranger par ordre alphabétique, par fraîcheur ou par nombre de médias."
         right={
           <div className="text-right">
             <div className="display-md tabular-nums">{shown.length}</div>
@@ -119,16 +117,16 @@ export function Projets({ data }: { data: VaultData }) {
             ))}
           </div>
 
-          {tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="caption uppercase text-subtle w-24 shrink-0">Tags</span>
-              {tags.map((t) => (
+          {facettes.map((f) => (
+            <div key={f.cle} className="flex flex-wrap items-center gap-2">
+              <span className="caption uppercase text-subtle w-24 shrink-0">{f.label}</span>
+              {f.tags.map((t) => (
                 <FilterButton key={t.name} active={activeTags.has(t.name)} onClick={() => toggleTag(t.name)}>
                   #{t.name} <Count n={t.n} />
                 </FilterButton>
               ))}
             </div>
-          )}
+          ))}
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="caption uppercase text-subtle w-24 shrink-0">Trier</span>

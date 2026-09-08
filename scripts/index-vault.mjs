@@ -19,6 +19,7 @@ import { marked } from 'marked'
 import { imageSize } from './image-size.mjs'
 import { buildDerivatives, SIZES } from './derivatives.mjs'
 import { configureMarked, slug as slugAncre } from './markdown.mjs'
+import { FACETTES, tagsProjet, tagsVignette } from './tags-projets.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -496,7 +497,10 @@ function buildProject(discipline, slug) {
     secteur: fm.secteur || null,
     annee: annee(fm),
     source: fm.source || null,
-    tags: note?.tags || [],
+    // Les tags de projet passent par le vocabulaire controle (voir
+    // scripts/tags-projets.mjs) : la fiche propose, la facette dispose. Les
+    // tags bruts de la note restent intacts pour la page /tags.
+    ...tagsProjet(fm, note?.tags || []),
     // Derniere trace du projet dans le vault (fiche ou media) : c'est ce qui
     // fait sa fraicheur, et c'est ce que l'accueil met en avant.
     mtime: Math.max(note?.mtime || 0, ...own.map((m) => m.mtime), 0),
@@ -551,37 +555,27 @@ if (fs.existsSync(inspiRoot)) {
 // cherche un nom. La fraicheur, elle, est le tri de l'accueil (voir `mtime`).
 projects.sort((a, b) => a.title.localeCompare(b.title, 'fr'))
 
+// La vignette n'affiche que 2-3 tags : le choix est fait par facette, pas par
+// rarete (voir `tagsVignette`).
+for (const p of projects) p.topTags = tagsVignette(p.facettes)
+
 /**
- * Les 2-3 tags qui resument le mieux un projet, pour la vignette de l'index.
- *
- * Deux exclusions, puis un tri :
- *  - les tags de structure (`inspiration`, `univers`) sont sur tout le monde,
- *    donc ne distinguent rien ;
- *  - les tags de discipline (`ui`, `brand`, `web`...) repetent la puce de
- *    discipline deja affichee sur la vignette ;
- *  - le reste est trie du plus RARE au plus commun — un tag porte par un seul
- *    projet le caracterise mieux qu'un tag porte par tous. A frequence egale on
- *    garde l'ordre du frontmatter, qui est celui choisi a la main.
+ * Les tags reellement portes par les projets, ranges par facette — c'est ce que
+ * la barre de filtres de `/projets` deroule, une ligne par facette. Un tag du
+ * vocabulaire que personne ne porte n'a pas de bouton : la liste sort de
+ * l'index, pas du vocabulaire.
  */
-const TAGS_STRUCTURE = new Set(['inspiration', 'univers', 'moc', 'note', 'app', 'site', 'post'])
-const TAGS_DISCIPLINE = new Set(['ui', 'ux', 'brand', 'web', 'motion', 'typo', '3d', 'print', 'graphisme'])
-
-const tagFreq = new Map()
-for (const p of projects) {
-  for (const t of new Set(p.tags)) tagFreq.set(t, (tagFreq.get(t) || 0) + 1)
-}
-
-for (const p of projects) {
-  const ranked = p.tags
-    .map((t, i) => ({ t, i, f: tagFreq.get(t) || 0 }))
-    .filter((x) => !TAGS_STRUCTURE.has(x.t))
-    .filter((x) => !TAGS_DISCIPLINE.has(x.t))
-    .sort((a, b) => a.f - b.f || a.i - b.i)
-  // Si le projet n'a que des tags de structure/discipline, on retombe dessus
-  // plutot que d'afficher une vignette muette.
-  const fallback = p.tags.filter((t) => !TAGS_STRUCTURE.has(t))
-  p.topTags = (ranked.length ? ranked.map((x) => x.t) : fallback).slice(0, 3)
-}
+const facettesProjets = FACETTES.map(({ cle, label }) => {
+  const compte = new Map()
+  for (const p of projects) for (const t of p.facettes[cle]) compte.set(t, (compte.get(t) || 0) + 1)
+  return {
+    cle,
+    label,
+    tags: [...compte.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'fr')),
+  }
+}).filter((f) => f.tags.length)
 
 // ------------------------------------------------------------------- sortie
 
@@ -610,6 +604,7 @@ const payload = {
   notes: notesOut,
   media,
   projects,
+  facettesProjets,
   disciplines,
   tags: [...tagCounts.entries()]
     .map(([name, count]) => ({ name, count }))
