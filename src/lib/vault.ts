@@ -174,6 +174,7 @@ export async function loadVault(): Promise<VaultData> {
   const res = await fetch('/vault.json')
   if (!res.ok) throw new Error(`Index du vault introuvable (${res.status}). Lance "npm run index".`)
   cache = (await res.json()) as VaultData
+  titrerLesCours(cache)
   return cache
 }
 
@@ -319,6 +320,31 @@ export const COURS_DOMAIN = 'eco gestion'
 
 /** Les notes d'amphi pas encore mises en fiche vivent dans ce sous-dossier. */
 const BRUT = '_brut'
+
+/**
+ * Une note de cours s'appelle comme son fichier.
+ *
+ * L'indexeur titre une note par son H1 (le nom de fichier n'est que son dernier
+ * recours), ce qui va bien partout ailleurs. Dans `eco gestion`, non : les H1
+ * sont des titres de lecture, décorés et longs — « 📘 Cours — Qu'est-ce que la
+ * science économique ? Objet et méthode (UE 11A) » — quand le nom de fichier est
+ * le nom court, stable et triable qui sert à ranger le semestre et à s'y
+ * retrouver dans Obsidian, où c'est lui la vraie identité d'une note. Le pire
+ * cas décidait à lui seul : `gestion.md` s'affichait « deployer des ressorces
+ * pour atteindre ses objectifs », sa première ligne de titre.
+ *
+ * On réécrit donc le titre à la lecture de l'index plutôt que dans l'indexeur :
+ * le dossier de cours reste nommé une seule fois, dans `COURS_DOMAIN`. Un
+ * `title:` posé à la main dans le frontmatter reste prioritaire — c'est un choix
+ * explicite, pas un H1 de mise en page.
+ */
+function titrerLesCours(d: VaultData) {
+  for (const n of d.notes) {
+    if (n.domain !== COURS_DOMAIN) continue
+    if (typeof n.frontmatter.title === 'string' && n.frontmatter.title.trim()) continue
+    n.title = n.stem
+  }
+}
 
 export interface Fiche {
   /** Code de l'unité d'enseignement, ex. `12A`. Une note sans `ue` n'est pas une fiche de cours. */

@@ -170,6 +170,13 @@ déjà partagés tombent sur la fiche correspondante.
 Le dossier de cours est nommé une seule fois, dans `COURS_DOMAIN` (`src/lib/vault.ts`) :
 s'il est renommé dans le vault, c'est la seule ligne à changer.
 
+Une note de cours s'appelle comme **son fichier**, pas comme son H1 : les H1 y sont des
+titres de lecture, décorés et longs, quand le nom de fichier est le nom court, stable et
+triable qui range le semestre — et c'est lui l'identité d'une note dans Obsidian. Le titre
+est réécrit à la lecture de l'index (`titrerLesCours`), pas dans l'indexeur, pour que le
+dossier de cours reste nommé à un seul endroit ; un `title:` posé à la main dans le
+frontmatter reste prioritaire.
+
 Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=trading,dark`) :
 un tri se partage et le bouton retour le défait.
 

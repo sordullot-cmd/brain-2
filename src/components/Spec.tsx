@@ -6,7 +6,7 @@
  * Sert à présenter un projet (un univers, un produit) aspect par aspect plutôt
  * qu'en une seule grille indifférenciée.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 /* --------------------------------------------------------------------------
@@ -188,7 +188,21 @@ export interface SpecSection {
   id: string
   label: string
   count?: number
+  /**
+   * Sous-sections (les H3 d'une partie). Le sommaire ne les déplie que sous la
+   * partie où l'on se trouve : sur une fiche longue, tout ouvrir d'un coup
+   * donnerait une colonne de trente lignes où l'on ne repère plus rien.
+   */
+  children?: SpecSection[]
 }
+
+/** Tous les identifiants d'un sommaire, parties et sous-parties, dans l'ordre. */
+export const specIds = (sections: SpecSection[]): string[] =>
+  sections.flatMap((s) => [s.id, ...(s.children ?? []).map((c) => c.id)])
+
+/** La partie qui contient la section active — elle-même, ou son parent. */
+const partieActive = (sections: SpecSection[], active: string | null): string | null =>
+  sections.find((s) => s.id === active || (s.children ?? []).some((c) => c.id === active))?.id ?? null
 
 /** Section actuellement sous la ligne de flottaison, pour surligner le sommaire. */
 export function useScrollSpy(ids: string[], offset = 140): string | null {
@@ -232,25 +246,31 @@ export function SpecNav({
   tint?: string | null
 }) {
   const accent = tint && hexToRgb(tint) && !isLight(tint) ? tint : undefined
+  const ouverte = partieActive(sections, active)
 
   return (
     // self-start est indispensable : sans lui, la grille parente étire le <nav> sur
     // toute la hauteur de la page et `sticky` n'a plus rien à faire glisser — le
     // sommaire disparaissait dès qu'on descendait.
-    <nav className="sticky top-24 self-start hidden lg:block" aria-label="Sommaire">
+    <nav
+      className="sticky top-24 self-start hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto"
+      aria-label="Sommaire"
+    >
       <div className="overflow-hidden rounded-xl border border-border">
         <div className="label border-b border-border px-4 py-3.5">{title}</div>
         <ul className="py-1.5">
           {sections.map((s) => {
             const on = s.id === active
+            const sous = s.children ?? []
+            const depliee = s.id === ouverte
             return (
               <li key={s.id}>
                 <a
                   href={`#${s.id}`}
                   className={`label flex items-baseline gap-2 px-4 py-2.5 transition-colors ${
-                    on ? 'text-foreground' : 'text-subtle hover:text-foreground'
+                    on || depliee ? 'text-foreground' : 'text-subtle hover:text-foreground'
                   }`}
-                  style={on && accent ? { color: accent } : undefined}
+                  style={(on || depliee) && accent ? { color: accent } : undefined}
                   aria-current={on ? 'true' : undefined}
                 >
                   <span className="truncate">{s.label}</span>
@@ -258,6 +278,30 @@ export function SpecNav({
                     <span className="caption tabular-nums ml-auto shrink-0 opacity-55">{s.count}</span>
                   )}
                 </a>
+
+                {depliee && sous.length > 0 && (
+                  <ul className="mb-1.5 ml-4 border-l border-border">
+                    {sous.map((c) => {
+                      const ici = c.id === active
+                      return (
+                        <li key={c.id}>
+                          <a
+                            href={`#${c.id}`}
+                            className={`caption block truncate py-1.5 pl-3.5 pr-4 -ml-px border-l transition-colors ${
+                              ici
+                                ? 'border-current text-foreground'
+                                : 'border-transparent text-subtle/70 hover:text-foreground'
+                            }`}
+                            style={ici && accent ? { color: accent } : undefined}
+                            aria-current={ici ? 'true' : undefined}
+                          >
+                            {c.label}
+                          </a>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
               </li>
             )
           })}
@@ -269,20 +313,38 @@ export function SpecNav({
 
 /** Sommaire horizontal défilant, pour les petits écrans. */
 export function SpecNavMobile({ sections, active }: { sections: SpecSection[]; active: string | null }) {
+  const ouverte = partieActive(sections, active)
+
   return (
     <div className="lg:hidden -mx-5 sm:-mx-8 mb-10 overflow-x-auto border-y border-border">
       <div className="flex min-w-max gap-1 px-5 py-2.5 sm:px-8">
         {sections.map((s) => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            className={`label whitespace-nowrap rounded-full px-3 py-2 transition-colors ${
-              s.id === active ? 'bg-surface-strong text-foreground' : 'text-subtle'
-            }`}
-          >
-            {s.label}
-            {s.count !== undefined && <span className="tabular-nums opacity-55"> {s.count}</span>}
-          </a>
+          <Fragment key={s.id}>
+            <a
+              href={`#${s.id}`}
+              className={`label whitespace-nowrap rounded-full px-3 py-2 transition-colors ${
+                s.id === active ? 'bg-surface-strong text-foreground' : 'text-subtle'
+              }`}
+            >
+              {s.label}
+              {s.count !== undefined && <span className="tabular-nums opacity-55"> {s.count}</span>}
+            </a>
+
+            {/* Les sous-parties de la partie où l'on est, à la suite : sur une
+                barre qui défile, les déplier toutes rendrait le fil illisible. */}
+            {s.id === ouverte &&
+              (s.children ?? []).map((c) => (
+                <a
+                  key={c.id}
+                  href={`#${c.id}`}
+                  className={`caption whitespace-nowrap rounded-full px-3 py-2 transition-colors ${
+                    c.id === active ? 'bg-surface text-foreground' : 'text-subtle/70'
+                  }`}
+                >
+                  {c.label}
+                </a>
+              ))}
+          </Fragment>
         ))}
       </div>
     </div>

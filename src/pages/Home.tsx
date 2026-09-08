@@ -26,14 +26,16 @@ export function Home({ data }: { data: VaultData }) {
   )
 
   /**
-   * Même principe pour les cours : ce qui a bougé en dernier dans le dossier
-   * d'éco gestion, fiches d'UE comme notes d'amphi, sur une seule ligne de trois.
+   * Même principe pour les cours, mais seulement du vrai cours : les fiches
+   * d'UE et les chapitres du dossier d'éco gestion. Le plan, les pages de
+   * méthode, les exercices et les notes d'amphi encore brutes restent sur
+   * /cours — ici on ne veut que ce qui se révise.
    */
-  const cours = useMemo(() => coursSections(data), [data])
-  const coursRecents = useMemo(
-    () => [...cours.toutes].sort((a, b) => b.mtime - a.mtime).slice(0, 3),
-    [cours.toutes]
-  )
+  const cours = useMemo(() => {
+    const { fiches, chapitres } = coursSections(data)
+    return [...fiches, ...chapitres].sort((a, b) => b.mtime - a.mtime)
+  }, [data])
+  const coursRecents = useMemo(() => cours.slice(0, 3), [cours])
 
   const stats = [
     { n: data.stats.notesTotal, l: 'notes' },
@@ -120,7 +122,7 @@ export function Home({ data }: { data: VaultData }) {
       {/* Cours récents */}
       {coursRecents.length > 0 && (
         <section className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-20">
-          <SectionTitle title="Cours récents" to="/cours" count={cours.toutes.length} />
+          <SectionTitle title="Cours récents" to="/cours" count={cours.length} />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {coursRecents.map((n) => (
               <CarteCours key={n.id} note={n} />

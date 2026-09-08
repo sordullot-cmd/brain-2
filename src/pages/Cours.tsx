@@ -2,7 +2,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
-import { SpecNav, SpecNavMobile, SpecPager, useScrollSpy, type PagerItem, type SpecSection } from '../components/Spec'
+import {
+  SpecNav,
+  SpecNavMobile,
+  SpecPager,
+  specIds,
+  useScrollSpy,
+  type PagerItem,
+  type SpecSection,
+} from '../components/Spec'
 import { NoteBody } from './Projet'
 import {
   COURS_DOMAIN,
@@ -201,7 +209,7 @@ export function CoursList({ data }: { data: VaultData }) {
                   to={coursUrl(n)}
                   className="rounded-xl border border-dashed border-border p-5 hover:border-brand/30 transition-colors"
                 >
-                  <div className="label truncate mb-2.5">{n.stem}</div>
+                  <div className="label truncate mb-2.5">{n.title}</div>
                   <p className="caption text-subtle line-clamp-2 leading-[1.6] mb-3">{n.excerpt || '—'}</p>
                   <div className="flex items-center gap-3 caption text-subtle/60">
                     <span className="mono">{fmtDate(n.mtime)}</span>
@@ -308,20 +316,26 @@ export function CoursView({ data }: { data: VaultData }) {
 
   /**
    * Le sommaire vient du HTML rendu, pas du markdown : l'indexeur a déjà posé
-   * les ancres sur chaque titre (`markdown.mjs`), autant les relire. Seuls les
-   * H2 y entrent — les H3 d'une fiche découpent un point, pas le cours.
+   * les ancres sur chaque titre (`markdown.mjs`), autant les relire. Les H2
+   * font les grandes parties, les H3 les sous-parties rattachées à celle qui
+   * précède — `SpecNav` ne déplie que celles de la partie où l'on lit.
    */
   const html = note ? text?.[note.id]?.html : undefined
   const sections: SpecSection[] = useMemo(() => {
     if (!html) return []
     const doc = new DOMParser().parseFromString(html, 'text/html')
-    return [...doc.querySelectorAll('h2[id]')].map((h) => ({
-      id: h.id,
-      label: (h.textContent ?? '').trim(),
-    }))
+    const out: SpecSection[] = []
+    for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
+      const s: SpecSection = { id: h.id, label: (h.textContent ?? '').trim() }
+      const partie = out[out.length - 1]
+      // Un H3 avant le premier H2 n'a pas de parent : il tient lieu de partie.
+      if (h.tagName === 'H3' && partie) partie.children = [...(partie.children ?? []), s]
+      else out.push(s)
+    }
+    return out
   }, [html])
 
-  const active = useScrollSpy(sections.map((s) => s.id))
+  const active = useScrollSpy(useMemo(() => specIds(sections), [sections]))
 
   // Précédent / suivant : l'ordre des fiches d'UE, celui de la liste.
   const { fiches } = useMemo(() => coursSections(data), [data])
