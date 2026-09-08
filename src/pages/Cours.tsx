@@ -8,6 +8,7 @@ import {
   COURS_DOMAIN,
   coursSections,
   coursUrl,
+  cycleDe,
   fiche,
   fmtBytes,
   fmtDate,
@@ -44,7 +45,7 @@ const teinteStatut = (statut: string) => {
 }
 
 export function CoursList({ data }: { data: VaultData }) {
-  const { toutes, fiches, pages, brut } = useMemo(() => coursSections(data), [data])
+  const { toutes, fiches, chapitres, exercices, pages, brut } = useMemo(() => coursSections(data), [data])
 
   /**
    * Le plan de la formation porte son intitulé dans son frontmatter, sous la
@@ -121,6 +122,46 @@ export function CoursList({ data }: { data: VaultData }) {
               </section>
             ))}
           </div>
+        )}
+
+        {/* Les cours de méthode des cycles : pas d'UE à eux, mais c'est du cours
+            et ça se révise comme tel. */}
+        {chapitres.length > 0 && (
+          <section className="mt-20">
+            <Titre titre="Chapitres de cours" compte={chapitres.length} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {chapitres.map((n) => (
+                <Link
+                  key={n.id}
+                  to={coursUrl(n)}
+                  className="rounded-xl border border-border p-5 hover:border-brand/30 transition-colors"
+                >
+                  {cycleDe(n) && <div className="caption uppercase text-subtle mb-3">{cycleDe(n)}</div>}
+                  <div className="label mb-2.5">{n.title}</div>
+                  <p className="caption text-subtle line-clamp-2 leading-[1.6]">
+                    {String(n.frontmatter.notion ?? n.excerpt ?? '—')}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {exercices.length > 0 && (
+          <section className="mt-20">
+            <Titre titre="Exercices" compte={exercices.length} />
+            <div className="flex flex-wrap gap-2">
+              {exercices.map((n) => (
+                <Link
+                  key={n.id}
+                  to={coursUrl(n)}
+                  className="label px-4 py-2.5 rounded-full bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
+                >
+                  {n.title}
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
 
         {pages.length > 0 && (

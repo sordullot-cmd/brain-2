@@ -1,4 +1,4 @@
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import { Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
@@ -17,6 +17,7 @@ import {
   type SpecSection,
 } from '../components/Spec'
 import { displaySrc, indexById, projectUrl, useNotesText, type Media, type VaultData } from '../lib/vault'
+import { lireFiltres, listeProjets } from '../lib/projets'
 
 /* --------------------------------------------------------------------------
    Fiche projet — mise en page « charte de marque » :
@@ -68,6 +69,14 @@ const PREVIEW = 10
 
 export function ProjetDetail({ data }: { data: VaultData }) {
   const { discipline, slug } = useParams()
+  /**
+   * Les filtres et le tri de l'index voyagent dans l'URL de la fiche : la carte
+   * cliquée les emporte avec elle. La fiche s'ouvre donc en sachant dans quelle
+   * liste on l'a prise, sans état gardé en mémoire — un lien partagé ou un
+   * rechargement retrouvent le même voisinage.
+   */
+  const [params] = useSearchParams()
+  const search = params.toString()
   const idx = useMemo(() => indexById(data), [data])
   const u = data.projects.find((x) => x.discipline === discipline && x.slug === slug)
 
@@ -107,8 +116,13 @@ export function ProjetDetail({ data }: { data: VaultData }) {
    * enfermer la navigation dans une discipline.
    */
   const { prev, next } = useMemo(() => {
-    const list = data.projects
-    const i = list.findIndex((x) => x.discipline === discipline && x.slug === slug)
+    // La liste qu'on avait sous les yeux, filtres et tri compris. Un projet que
+    // ces filtres excluraient (lien direct, projet ouvert depuis ailleurs) se
+    // rabat sur l'index entier : mieux vaut des voisins que pas de flèches.
+    const filtree = listeProjets(data, lireFiltres(new URLSearchParams(search)))
+    const dans = (l: typeof filtree) => l.findIndex((x) => x.discipline === discipline && x.slug === slug)
+    const list = dans(filtree) >= 0 ? filtree : data.projects
+    const i = dans(list)
     if (i < 0 || list.length < 2) return { prev: null, next: null }
     const at = (n: number) => {
       const x = list[(n + list.length) % list.length]
@@ -116,10 +130,15 @@ export function ProjetDetail({ data }: { data: VaultData }) {
       // en univers et en UI design) : on précise laquelle, sinon les deux
       // flèches affichent le même mot.
       const homonyme = list.some((y) => y !== x && y.title === x.title)
-      return { to: projectUrl(x), title: homonyme ? `${x.title} · ${x.disciplineLabel}` : x.title }
+      // Le voisin garde le même bout d'URL : on peut enchaîner les flèches sans
+      // retomber dans l'ordre brut au deuxième saut.
+      return {
+        to: search ? `${projectUrl(x)}?${search}` : projectUrl(x),
+        title: homonyme ? `${x.title} · ${x.disciplineLabel}` : x.title,
+      }
     }
     return { prev: at(i - 1), next: at(i + 1) }
-  }, [data.projects, discipline, slug])
+  }, [data, discipline, slug, search])
 
   // Les memes fleches reprises par la barre flottante : le bandeau sort de
   // l'ecran des le premier ecran de scroll, et une fiche fait plusieurs

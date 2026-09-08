@@ -339,9 +339,15 @@ export function fiche(n: Note): Fiche {
 }
 
 /**
- * Le dossier de cours, rangé en trois familles : les fiches d'UE (celles qui
- * portent un `ue`), les pages qui les entourent (plan, ressources, accueil) et
- * les notes d'amphi encore brutes.
+ * Le dossier de cours, rangé par familles :
+ *
+ * - les **fiches d'UE** — celles qui portent un `ue`, donc un examen, un
+ *   coefficient et une période ;
+ * - les **chapitres** — taguées `cours` sans `ue` : les cours de méthode des
+ *   cycles, qui préparent les UE sans être évalués pour eux-mêmes ;
+ * - les **exercices** — taguées `exercices`, où l'on refait plutôt qu'on relit ;
+ * - les **pages** qui entourent le tout : plan, cycles, MCC, ressources ;
+ * - les **notes d'amphi** encore brutes.
  *
  * Les fiches sortent dans l'ordre où elles tombent — période, puis poids —
  * parce que c'est l'ordre dans lequel on les révise.
@@ -363,17 +369,28 @@ export function coursSections(d: VaultData) {
       )
     })
 
-  const pages = rangees
-    .filter((n) => !fiche(n).ue)
-    .sort((a, b) => Number(b.isIndex) - Number(a.isIndex) || a.title.localeCompare(b.title))
+  const parTitre = (a: Note, b: Note) =>
+    Number(b.isIndex) - Number(a.isIndex) || a.title.localeCompare(b.title)
+
+  const reste = rangees.filter((n) => !fiche(n).ue)
+  const chapitres = reste.filter((n) => n.tags.includes('cours')).sort(parTitre)
+  const exercices = reste.filter((n) => !n.tags.includes('cours') && n.tags.includes('exercices')).sort(parTitre)
+  const pages = reste
+    .filter((n) => !n.tags.includes('cours') && !n.tags.includes('exercices'))
+    .sort(parTitre)
 
   return {
     toutes,
     fiches,
+    chapitres,
+    exercices,
     pages,
     brut: [...brut].sort((a, b) => b.mtime - a.mtime),
   }
 }
+
+/** Le cycle d'une note, lu dans ses tags (`cycle-3` → « cycle 3 »). */
+export const cycleDe = (n: Note) => n.tags.find((t) => /^cycle-\d+$/.test(t))?.replace('-', ' ') ?? null
 
 /** Lien vers une note lue dans la section cours. */
 export const coursUrl = (n: Note) => `/cours/${n.id.split('/').map(encodeURIComponent).join('/')}`

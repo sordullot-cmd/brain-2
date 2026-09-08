@@ -2,35 +2,16 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { displaySrc, indexById, projectUrl, type Media, type Project, type VaultData } from '../lib/vault'
+import {
+  TRIS,
+  TRI_DEFAUT,
+  ecrireFiltres,
+  lireFiltres,
+  listeProjets,
+  parDiscipline,
+  type Tri,
+} from '../lib/projets'
 
-/**
- * Ordres de tri proposés. La clé vit dans l'URL (`?tri=`) comme les filtres,
- * `az` étant l'implicite — c'est déjà l'ordre dans lequel l'indexeur écrit les
- * projets, donc l'absence de paramètre n'a rien à réordonner.
- *
- * Les tris par date et par volume départagent les ex æquo par titre, sinon deux
- * projets de même fraîcheur s'échangeraient de place d'un rendu à l'autre.
- */
-const TRIS = {
-  az: { label: 'A → Z', cmp: (a: Project, b: Project) => a.title.localeCompare(b.title, 'fr') },
-  za: { label: 'Z → A', cmp: (a: Project, b: Project) => b.title.localeCompare(a.title, 'fr') },
-  recent: {
-    label: 'récent',
-    cmp: (a: Project, b: Project) => b.mtime - a.mtime || a.title.localeCompare(b.title, 'fr'),
-  },
-  ancien: {
-    label: 'ancien',
-    cmp: (a: Project, b: Project) => a.mtime - b.mtime || a.title.localeCompare(b.title, 'fr'),
-  },
-  medias: {
-    label: 'médias',
-    cmp: (a: Project, b: Project) => b.count - a.count || a.title.localeCompare(b.title, 'fr'),
-  },
-} as const
-
-type Tri = keyof typeof TRIS
-
-const DEFAUT: Tri = 'az'
 
 /**
  * Index unique des projets — les inspirations rangées par discipline et les
@@ -44,11 +25,9 @@ export function Projets({ data }: { data: VaultData }) {
   const idx = indexById(data)
   const [params, setParams] = useSearchParams()
 
-  const discipline = params.get('discipline') ?? ''
-  const triParam = params.get('tri') ?? ''
-  /** Une valeur inconnue dans l'URL retombe sur l'implicite plutôt que de casser la page. */
-  const tri: Tri = triParam in TRIS ? (triParam as Tri) : DEFAUT
-  const activeTags = useMemo(() => new Set((params.get('tags') ?? '').split(',').filter(Boolean)), [params])
+  /** Ce bout d'URL suit les cartes : la fiche ouverte connaîtra la liste d'où elle sort. */
+  const search = params.toString()
+  const { discipline, tags: activeTags, tri } = useMemo(() => lireFiltres(new URLSearchParams(search)), [search])
 
   /** Disciplines qui ont au moins un projet, dans l'ordre du plus fourni. */
   const disciplines = useMemo(
@@ -61,10 +40,7 @@ export function Projets({ data }: { data: VaultData }) {
   )
 
   /** Projets restants après le filtre discipline — base du comptage des tags. */
-  const byDiscipline = useMemo(
-    () => (discipline ? data.projects.filter((p) => p.discipline === discipline) : data.projects),
-    [data.projects, discipline]
-  )
+  const byDiscipline = useMemo(() => parDiscipline(data, discipline), [data, discipline])
 
   /**
    * Les tags proposés sont ceux réellement portés par les projets visibles, et
@@ -81,25 +57,20 @@ export function Projets({ data }: { data: VaultData }) {
       .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'fr'))
   }, [byDiscipline, activeTags])
 
-  /** Un projet doit porter TOUS les tags cochés — on affine, on n'élargit pas. */
-  const retenus = useMemo(
-    () => (activeTags.size ? byDiscipline.filter((p) => [...activeTags].every((t) => p.tags.includes(t))) : byDiscipline),
-    [byDiscipline, activeTags]
+  const shown = useMemo(
+    () => listeProjets(data, { discipline, tags: activeTags, tri }),
+    [data, discipline, activeTags, tri]
   )
 
-  /** Copie avant `sort` : `data.projects` est partagé avec le reste du site. */
-  const shown = useMemo(() => [...retenus].sort(TRIS[tri].cmp), [retenus, tri])
-
-  const setFilter = (next: { discipline?: string; tags?: Set<string>; tri?: Tri }) => {
-    const p = new URLSearchParams()
-    const d = next.discipline ?? discipline
-    const t = next.tags ?? activeTags
-    const o = next.tri ?? tri
-    if (d) p.set('discipline', d)
-    if (t.size) p.set('tags', [...t].join(','))
-    if (o !== DEFAUT) p.set('tri', o)
-    setParams(p, { replace: true })
-  }
+  const setFilter = (next: { discipline?: string; tags?: Set<string>; tri?: Tri }) =>
+    setParams(
+      ecrireFiltres({
+        discipline: next.discipline ?? discipline,
+        tags: next.tags ?? activeTags,
+        tri: next.tri ?? tri,
+      }),
+      { replace: true }
+    )
 
   const toggleTag = (name: string) => {
     const next = new Set(activeTags)
@@ -109,7 +80,7 @@ export function Projets({ data }: { data: VaultData }) {
 
   const filtered = Boolean(discipline) || activeTags.size > 0
   /** Le tri n'enlève aucun projet : il n'entre pas dans `filtered`, mais « tout effacer » le remet à zéro. */
-  const modifie = filtered || tri !== DEFAUT
+  const modifie = filtered || tri !== TRI_DEFAUT
   const emptyDisciplines = data.disciplines.filter((d) => d.projectCount === 0 && d.mediaCount === 0)
 
   return (
@@ -190,7 +161,7 @@ export function Projets({ data }: { data: VaultData }) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
             {shown.map((p) => (
-              <ProjectCard key={p.id} p={p} cover={p.cover ? idx.media.get(p.cover) ?? null : null} />
+              <ProjectCard key={p.id} p={p} cover={p.cover ? idx.media.get(p.cover) ?? null : null} search={search} />
             ))}
           </div>
         )}
@@ -226,9 +197,9 @@ export function Projets({ data }: { data: VaultData }) {
 }
 
 /** Vignette d'un projet : visuel, titre, discipline, et ses tags en petit. */
-function ProjectCard({ p, cover }: { p: Project; cover: Media | null }) {
+function ProjectCard({ p, cover, search }: { p: Project; cover: Media | null; search: string }) {
   return (
-    <Link to={projectUrl(p)} className="group block">
+    <Link to={{ pathname: projectUrl(p), search }} className="group block">
       <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
         {cover && cover.kind === 'image' ? (
           <img
