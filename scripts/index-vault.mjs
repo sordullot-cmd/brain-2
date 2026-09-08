@@ -32,7 +32,13 @@ const OUT_JSON = path.join(OUT_DIR, 'vault.json')
 // fichier, recupere en tache de fond (voir src/lib/vault.ts).
 const OUT_TEXT = path.join(OUT_DIR, 'vault-notes.json')
 
-const SKIP_DIRS = new Set(['.git', '.obsidian', '.claude', '.trash', 'node_modules', '__pycache__'])
+/**
+ * `fichier/` = les sources brutes que Sacha depose a cote d'une fiche : photos
+ * de son cahier, PDF de slides. C'est de la matiere premiere personnelle, pas
+ * du contenu de site — et 12 Mo de photos de cahier n'ont rien a faire en
+ * ligne. Le vault les garde, le site ne les publie pas.
+ */
+const SKIP_DIRS = new Set(['.git', '.obsidian', '.claude', '.trash', 'node_modules', '__pycache__', 'fichier'])
 
 /**
  * `planches/` = planches de vignettes generees pour la lecture dans Obsidian
