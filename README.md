@@ -109,6 +109,35 @@ npm run index      # réindexe seul
 # ou simplement relancer npm run dev
 ```
 
+### Après avoir **supprimé** dans le vault
+
+```bash
+npm run sync            # supprime partout : vault, site, app
+npm run sync -- --dry   # montre ce qui se passerait, sans rien toucher
+```
+
+`npm run index` suffit pour l'index local, mais pas pour que la suppression soit
+réelle : Vercel construit avec le seul `vite build` et sert le `public/` **commité**,
+et une suppression laissée non commitée dans le dépôt du vault revient au premier
+`pull` — ou par la synchro Supabase du vault. `npm run sync` ferme la chaîne :
+
+1. **les revenants d'abord** — un fichier déjà supprimé une fois et revenu à
+   l'identique (même chemin, même taille) est ressorti du vault vers
+   `.corbeille/<date>/` (ignoré par git, donc récupérable) avant toute
+   indexation. Si le fichier est revenu avec une **taille différente**, c'est
+   que le chemin a été repris volontairement : il est gardé et sort du journal ;
+2. **le journal** — `scripts/supprimes.json`, versionné, garde la mémoire de ce
+   qui a été supprimé et de son poids. C'est ce qui permet de reconnaître un
+   revenant au passage suivant ;
+3. **réindexation** complète, qui purge `public/media/` et `public/derived/` ;
+4. **commit + push** des suppressions dans le vault, puis du `public/` de la
+   galerie. Vercel redéploie, et l'app de bureau suit — c'est une fenêtre sur le
+   déploiement.
+
+Rien d'autre n'est commité : la commande ne met en scène que les chemins
+supprimés (côté vault) et `public/` (côté galerie), jamais les notes en cours
+d'écriture ni le code non fini.
+
 ### Navigateur ouvert au démarrage
 
 `.env` fixe `BROWSER=Arc`. Sans cette variable, Vite ne suit pas le navigateur par défaut de macOS : il cherche un Chromium de sa liste interne (Chrome, Edge, Brave, Vivaldi, Chromium) déjà lancé pour y réutiliser un onglet — Arc n'y figure pas, donc le site partait dans Chrome. Pour un autre navigateur, changer cette valeur ; `BROWSER=none` n'ouvre rien.

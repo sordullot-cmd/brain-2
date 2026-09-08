@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" height="520" role="img" aria-label="Les trois piliers du developpement durable : environnement, social, economie">
+  <title>Développement durable — les trois piliers et leurs croisements</title>
+  <rect width="760" height="520" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .pil { font-size: 19px; font-weight: 700; }
+    .cro { font-size: 16px; font-weight: 700; fill: #12203f; }
+    .cen { font-size: 20px; font-weight: 700; letter-spacing: .08em; }
+    .src { font-size: 12px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="40" y="42">Slide 24 · le principe du développement durable</text>
+
+  <!-- cercles -->
+  <circle cx="300" cy="205" r="145" fill="#2f7d4f" fill-opacity="0.16" stroke="#2f7d4f" stroke-width="2"/>
+  <circle cx="460" cy="205" r="145" fill="#1f6f9c" fill-opacity="0.16" stroke="#1f6f9c" stroke-width="2"/>
+  <circle cx="380" cy="335" r="145" fill="#c2761a" fill-opacity="0.16" stroke="#c2761a" stroke-width="2"/>
+
+  <!-- noms des piliers -->
+  <text class="t pil" x="228" y="118" text-anchor="middle" fill="#2f7d4f">Environnement</text>
+  <text class="t pil" x="536" y="118" text-anchor="middle" fill="#1f6f9c">Social</text>
+  <text class="t pil" x="380" y="452" text-anchor="middle" fill="#c2761a">Économie</text>
+
+  <!-- croisements deux a deux -->
+  <text class="t cro" x="380" y="160" text-anchor="middle">vivable</text>
+  <text class="t cro" x="248" y="322" text-anchor="middle">viable</text>
+  <text class="t cro" x="512" y="322" text-anchor="middle">équitable</text>
+
+  <!-- centre -->
+  <text class="t cen" x="380" y="258" text-anchor="middle">DURABLE</text>
+
+  <text class="t src" x="380" y="490" text-anchor="middle">« Un mode de développement qui répond aux besoins du présent sans compromettre</text>
+  <text class="t src" x="380" y="508" text-anchor="middle">la capacité des générations futures à répondre aux leurs. » — rapport Brundtland, 1987</text>
+</svg>

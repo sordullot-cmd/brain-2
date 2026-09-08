@@ -6,6 +6,7 @@
   "description": "brain^2 — le second cerveau de Sacha en site : navigation visuelle des inspirations, univers et notes.",
   "scripts": {
     "index": "node scripts/index-vault.mjs",
+    "sync": "node scripts/sync.mjs",
     "dev": "npm run index && vite",
     "build": "npm run index && vite build",
     "preview": "vite preview",

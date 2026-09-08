@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" role="img" aria-label="Structure formelle et structure informelle de l entreprise">
+  <title>Structure formelle et structure informelle</title>
+  <rect width="900" height="400" fill="#ffffff"/>
+
+  <style>
+    .t    { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap  { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .ttl  { font-size: 17px; font-weight: 700; }
+    .sub  { font-size: 12.5px; fill: #46506b; }
+    .ax   { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; fill: #8a93a8; }
+    .key  { font-size: 13px; font-weight: 700; fill: #12203f; }
+  </style>
+
+  <text class="t cap" x="30" y="38">Slide 25 · les structures de l'entreprise (1/3)</text>
+
+  <!-- formelle -->
+  <rect x="30" y="60" width="400" height="256" rx="16" fill="#1f6f9c" fill-opacity="0.07" stroke="#1f6f9c" stroke-opacity="0.45"/>
+  <text class="t ttl" x="54" y="94" fill="#1f6f9c">Structure formelle</text>
+  <text class="t sub" x="54" y="116">l'organigramme : décidé, écrit, hiérarchique</text>
+
+  <g stroke="#1f6f9c" stroke-opacity="0.6" stroke-width="1.8" fill="none">
+    <path d="M230 152 V 170 M120 170 H 340 M120 170 V 186 M230 170 V 186 M340 170 V 186"/>
+    <path d="M120 212 V 228 M78 228 H 162 M78 228 V 244 M162 228 V 244"/>
+  </g>
+  <g fill="#1f6f9c" fill-opacity="0.18" stroke="#1f6f9c" stroke-opacity="0.6">
+    <rect x="196" y="126" width="68" height="26" rx="7"/>
+    <rect x="88" y="186" width="64" height="26" rx="7"/>
+    <rect x="198" y="186" width="64" height="26" rx="7"/>
+    <rect x="308" y="186" width="64" height="26" rx="7"/>
+    <rect x="52" y="244" width="52" height="22" rx="6"/>
+    <rect x="136" y="244" width="52" height="22" rx="6"/>
+  </g>
+
+  <text class="t ax" x="414" y="146" text-anchor="end">↕ division verticale</text>
+  <text class="t ax" x="414" y="238" text-anchor="end">↔ division horizontale</text>
+  <text class="t key" x="54" y="296">Coordination et autorité : règlements, procédures</text>
+
+  <!-- informelle -->
+  <rect x="470" y="60" width="400" height="256" rx="16" fill="#2f7d4f" fill-opacity="0.08" stroke="#2f7d4f" stroke-opacity="0.45"/>
+  <text class="t ttl" x="494" y="94" fill="#2f7d4f">Structure informelle</text>
+  <text class="t sub" x="494" y="116">des liens « fluides », hors organigramme</text>
+
+  <g stroke="#2f7d4f" stroke-opacity="0.55" stroke-width="1.6" stroke-dasharray="5 4" fill="none">
+    <path d="M556 176 L 664 152 M664 152 L 772 190 M556 176 L 640 236 M640 236 L 772 190 M640 236 L 720 272 M556 176 L 772 190"/>
+  </g>
+  <g fill="#2f7d4f" fill-opacity="0.22" stroke="#2f7d4f" stroke-opacity="0.65">
+    <circle cx="556" cy="176" r="17"/>
+    <circle cx="664" cy="152" r="17"/>
+    <circle cx="772" cy="190" r="17"/>
+    <circle cx="640" cy="236" r="17"/>
+    <circle cx="720" cy="272" r="17"/>
+  </g>
+  <text class="t key" x="494" y="296">Affinités · réseaux d'entraide · circuits d'information</text>
+
+  <text class="t sub" x="30" y="352">Ce qui les sépare : l'une est <tspan class="key">décidée</tspan>, l'autre est <tspan class="key">constatée</tspan>. La culture d'entreprise, elle, est partagée par les deux.</text>
+  <text class="t sub" x="30" y="376">Exemple du cours pour l'informelle : la place que prennent les étudiants dans un amphi.</text>
+</svg>

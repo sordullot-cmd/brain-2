@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img" aria-label="La chaine de pilotage, de la reflexion strategique au budget">
+  <title>La chaîne de pilotage — de la réflexion stratégique au budget</title>
+  <rect width="960" height="400" fill="#ffffff"/>
+
+  <style>
+    .t    { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap  { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .step { font-size: 17px; font-weight: 700; }
+    .sub  { font-size: 12.5px; fill: #46506b; }
+    .lvl  { font-size: 14px; font-weight: 700; letter-spacing: .03em; }
+    .note { font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">Slide 15 · stratégique et opérationnel</text>
+
+  <!-- axe -->
+  <line x1="60" y1="300" x2="900" y2="300" stroke="#12203f" stroke-opacity="0.25" stroke-width="2"/>
+  <text class="t lvl" x="60" y="330" fill="#1f6f9c">Stratégique</text>
+  <text class="t sub" x="60" y="352">long terme · irréversible · actionnaires</text>
+  <text class="t lvl" x="900" y="330" text-anchor="end" fill="#c2761a">Opérationnel</text>
+  <text class="t sub" x="900" y="352" text-anchor="end">fréquent · réversible · proche du terrain</text>
+
+  <!-- 4 etapes en escalier -->
+  <g>
+    <rect x="40" y="96" width="200" height="86" rx="13" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+    <text class="t step" x="140" y="132" text-anchor="middle">Réflexion stratégique</text>
+    <text class="t sub" x="140" y="158" text-anchor="middle">où va-t-on, et pourquoi</text>
+    <line x1="140" y1="182" x2="140" y2="300" stroke="#1f6f9c" stroke-opacity="0.3" stroke-dasharray="4 4"/>
+    <circle cx="140" cy="300" r="5" fill="#1f6f9c"/>
+  </g>
+  <g>
+    <rect x="260" y="126" width="200" height="86" rx="13" fill="#1f6f9c" fill-opacity="0.10" stroke="#1f6f9c" stroke-opacity="0.4"/>
+    <text class="t step" x="360" y="162" text-anchor="middle">Plan LMT</text>
+    <text class="t sub" x="360" y="188" text-anchor="middle">le chemin, sur plusieurs années</text>
+    <line x1="360" y1="212" x2="360" y2="300" stroke="#12203f" stroke-opacity="0.22" stroke-dasharray="4 4"/>
+    <circle cx="360" cy="300" r="5" fill="#12203f" fill-opacity="0.5"/>
+  </g>
+  <g>
+    <rect x="480" y="156" width="200" height="86" rx="13" fill="#c2761a" fill-opacity="0.10" stroke="#c2761a" stroke-opacity="0.4"/>
+    <text class="t step" x="580" y="192" text-anchor="middle">Lettre de cadrage</text>
+    <text class="t sub" x="580" y="218" text-anchor="middle">la mission de l'année à venir</text>
+    <line x1="580" y1="242" x2="580" y2="300" stroke="#12203f" stroke-opacity="0.22" stroke-dasharray="4 4"/>
+    <circle cx="580" cy="300" r="5" fill="#12203f" fill-opacity="0.5"/>
+  </g>
+  <g>
+    <rect x="700" y="186" width="200" height="86" rx="13" fill="#c2761a" fill-opacity="0.16" stroke="#c2761a" stroke-opacity="0.55"/>
+    <text class="t step" x="800" y="222" text-anchor="middle">BUDGET</text>
+    <text class="t sub" x="800" y="248" text-anchor="middle">les moyens, chiffrés</text>
+    <line x1="800" y1="272" x2="800" y2="300" stroke="#c2761a" stroke-opacity="0.4" stroke-dasharray="4 4"/>
+    <circle cx="800" cy="300" r="5" fill="#c2761a"/>
+  </g>
+
+  <!-- fleches entre etapes -->
+  <g stroke="#12203f" stroke-opacity="0.4" stroke-width="2" fill="none">
+    <path d="M244 152 h12" marker-end="url(#fl2)"/>
+    <path d="M464 182 h12" marker-end="url(#fl2)"/>
+    <path d="M684 212 h12" marker-end="url(#fl2)"/>
+  </g>
+  <defs>
+    <marker id="fl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.4"/>
+    </marker>
+  </defs>
+
+  <text class="t note" x="30" y="384">Chandler : la stratégie, c'est déterminer les buts et objectifs à long terme, puis choisir les actions et les ressources pour les atteindre.</text>
+</svg>

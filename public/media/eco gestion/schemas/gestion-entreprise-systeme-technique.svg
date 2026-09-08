@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" role="img" aria-label="L entreprise comme systeme technique : inputs, process, outputs">
+  <title>L'entreprise comme système technique — inputs, process, outputs</title>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <style>
+    .t    { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap  { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .lbl  { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; fill: #6b7690; }
+    .in   { font-size: 15px; font-weight: 600; }
+    .proc { font-size: 22px; font-weight: 700; letter-spacing: .1em; fill: #ffffff; }
+    .out  { font-size: 16px; font-weight: 700; }
+    .note { font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="38">Slide 27 · les structures de l'entreprise (3/3) — la technologie</text>
+
+  <!-- inputs -->
+  <text class="t lbl" x="40" y="80">Inputs</text>
+  <g>
+    <rect x="40" y="96" width="230" height="52" rx="12" fill="#2f7d4f" fill-opacity="0.12" stroke="#2f7d4f" stroke-opacity="0.45"/>
+    <text class="t in" x="64" y="128">Matières premières</text>
+    <rect x="40" y="160" width="230" height="52" rx="12" fill="#2f7d4f" fill-opacity="0.12" stroke="#2f7d4f" stroke-opacity="0.45"/>
+    <text class="t in" x="64" y="192">Travail</text>
+    <rect x="40" y="224" width="230" height="52" rx="12" fill="#2f7d4f" fill-opacity="0.12" stroke="#2f7d4f" stroke-opacity="0.45"/>
+    <text class="t in" x="64" y="256">Moyens de production</text>
+  </g>
+
+  <!-- fleches entrantes -->
+  <g stroke="#12203f" stroke-opacity="0.4" stroke-width="2" fill="none">
+    <path d="M276 122 C 320 122, 320 186, 356 186" marker-end="url(#fl3)"/>
+    <path d="M276 186 h80" marker-end="url(#fl3)"/>
+    <path d="M276 250 C 320 250, 320 186, 356 186" marker-end="url(#fl3)"/>
+  </g>
+
+  <!-- process -->
+  <rect x="366" y="140" width="180" height="92" rx="16" fill="#12203f"/>
+  <text class="t proc" x="456" y="194" text-anchor="middle">PROCESS</text>
+  <text class="t lbl" x="456" y="256" text-anchor="middle">système de transformation</text>
+
+  <!-- sortie -->
+  <g stroke="#12203f" stroke-opacity="0.4" stroke-width="2" fill="none">
+    <path d="M552 186 h60" marker-end="url(#fl3)"/>
+  </g>
+  <text class="t lbl" x="626" y="152">Output</text>
+  <rect x="622" y="160" width="240" height="56" rx="12" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+  <text class="t out" x="642" y="194">Biens et services produits</text>
+
+  <defs>
+    <marker id="fl3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.4"/>
+    </marker>
+  </defs>
+
+  <text class="t note" x="40" y="318">L'entreprise est un système technique : elle transforme des inputs en outputs. Process et systèmes techniques sont les deux mots du cours.</text>
+</svg>

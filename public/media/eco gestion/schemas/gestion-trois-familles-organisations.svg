@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" width="940" height="470" role="img" aria-label="Les trois grandes familles d organisations">
+  <title>Les trois grandes familles d'organisations</title>
+  <rect width="940" height="470" fill="#ffffff"/>
+
+  <style>
+    .t    { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap  { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .fam  { font-size: 18px; font-weight: 700; }
+    .it   { font-size: 13.5px; fill: #46506b; }
+    .key  { font-size: 13.5px; font-weight: 700; fill: #12203f; }
+    .foot { font-size: 13px; fill: #46506b; }
+  </style>
+
+  <text class="t cap" x="30" y="38">Slide 9 · la notion d'organisation</text>
+
+  <!-- publiques -->
+  <rect x="30" y="62" width="285" height="272" rx="16" fill="#1f6f9c" fill-opacity="0.09" stroke="#1f6f9c" stroke-opacity="0.45"/>
+  <text class="t fam" x="54" y="100" fill="#1f6f9c">Organisations publiques</text>
+  <text class="t it" x="54" y="136">· Ministères</text>
+  <text class="t it" x="54" y="162">· Organisation territoriale</text>
+  <text class="t it" x="54" y="188">· Sécurité sociale</text>
+  <text class="t it" x="54" y="214">· Éducation nationale</text>
+  <text class="t it" x="54" y="240">· Hôpitaux</text>
+  <text class="t key" x="54" y="288">Mission de service public</text>
+  <text class="t it" x="54" y="310">sous contrainte budgétaire</text>
+
+  <!-- entreprises -->
+  <rect x="327" y="62" width="285" height="272" rx="16" fill="#12203f" fill-opacity="0.07" stroke="#12203f" stroke-opacity="0.45"/>
+  <text class="t fam" x="351" y="100">Entreprises</text>
+  <text class="t it" x="351" y="126">publiques ou privées</text>
+  <text class="t key" x="351" y="168">Publique</text>
+  <text class="t it" x="351" y="190">l'État détient &gt; 50 % du capital</text>
+  <text class="t key" x="351" y="228">Privée</text>
+  <text class="t it" x="351" y="250">la grande majorité des entreprises</text>
+  <text class="t key" x="351" y="288">Rentabilité</text>
+  <text class="t it" x="351" y="310">produire et vendre avec bénéfice</text>
+
+  <!-- ESS -->
+  <rect x="624" y="62" width="286" height="272" rx="16" fill="#2f7d4f" fill-opacity="0.10" stroke="#2f7d4f" stroke-opacity="0.45"/>
+  <text class="t fam" x="648" y="100" fill="#2f7d4f">Organisations de l'ESS</text>
+  <text class="t it" x="648" y="126">à but non lucratif</text>
+  <text class="t it" x="648" y="162">· Associations</text>
+  <text class="t it" x="648" y="188">· Coopératives</text>
+  <text class="t it" x="648" y="214">· Mutuelles</text>
+  <text class="t it" x="648" y="240">· Syndicats</text>
+  <text class="t it" x="648" y="266">· Fondations (loi du 31 juillet 2014)</text>
+  <text class="t key" x="648" y="310">Utilité sociale</text>
+
+  <!-- socle commun -->
+  <rect x="30" y="360" width="880" height="76" rx="16" fill="#c2761a" fill-opacity="0.10" stroke="#c2761a" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+  <text class="t key" x="56" y="392">Les trois réunissent toujours les mêmes éléments</text>
+  <text class="t foot" x="56" y="416">un objectif (ex. Facebook : connecter les gens) · un personnel qui s'approprie ce but · une structure qui oriente les comportements</text>
+</svg>

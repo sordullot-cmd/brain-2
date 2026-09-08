@@ -8,3 +8,7 @@ dist
 # Décommente si tu déploies sur Vercel : les médias doivent alors être commités.
 # public/vault.json
 # public/media
+
+# Quarantaine de `npm run sync` : les fichiers ressuscites par la synchro,
+# sortis du vault mais gardes le temps de verifier.
+.corbeille
