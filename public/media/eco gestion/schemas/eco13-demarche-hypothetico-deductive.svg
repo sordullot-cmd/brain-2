@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img" aria-label="La demarche hypothetico-deductive en quatre etapes">
+  <title>Questionnement → modèle théorique → hypothèses testables → confrontation au réel</title>
+  <rect width="960" height="400" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 15.5px; font-weight: 700; }
+    .sub { font-size: 12px; fill: #46506b; }
+    .key { font-size: 13.5px; font-weight: 700; fill: #12203f; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="36">§ 3 · l'économie en tant que science — une méthode scientifique</text>
+
+  <defs>
+    <marker id="fe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.45"/>
+    </marker>
+  </defs>
+
+  <g>
+    <rect x="24" y="80" width="196" height="94" rx="13" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+    <text class="t box" x="122" y="116" text-anchor="middle">Questionnement</text>
+    <text class="t sub" x="122" y="140" text-anchor="middle">la question que</text>
+    <text class="t sub" x="122" y="157" text-anchor="middle">l'on se pose</text>
+  </g>
+  <path d="M226 127 h24" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="258" y="80" width="212" height="94" rx="13" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+    <text class="t box" x="364" y="112" text-anchor="middle">Modèle théorique</text>
+    <text class="t sub" x="364" y="136" text-anchor="middle">hypothèses sur le</text>
+    <text class="t sub" x="364" y="153" text-anchor="middle">fonctionnement du réel</text>
+  </g>
+  <path d="M476 127 h24" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="508" y="80" width="212" height="94" rx="13" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+    <text class="t box" x="614" y="112" text-anchor="middle">Hypothèses testables</text>
+    <text class="t sub" x="614" y="136" text-anchor="middle">la prédiction du modèle :</text>
+    <text class="t sub" x="614" y="153" text-anchor="middle">on doit pouvoir la tester</text>
+  </g>
+  <path d="M726 127 h24" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe)"/>
+
+  <g>
+    <rect x="758" y="80" width="178" height="94" rx="13" fill="#2f7d4f" fill-opacity="0.13" stroke="#2f7d4f" stroke-opacity="0.5"/>
+    <text class="t box" x="847" y="112" text-anchor="middle">Confrontation</text>
+    <text class="t box" x="847" y="131" text-anchor="middle">au réel</text>
+    <text class="t sub" x="847" y="155" text-anchor="middle">validée ou non</text>
+  </g>
+
+  <path d="M847 178 v 26 h -725 v -26" stroke="#12203f" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#fe)"/>
+  <text class="t note" x="484" y="222" text-anchor="middle">hypothèse invalidée : on reprend le modèle</text>
+
+  <rect x="24" y="248" width="452" height="76" rx="13" fill="#12203f" fill-opacity="0.06" stroke="#12203f" stroke-opacity="0.3"/>
+  <text class="t key" x="46" y="276">La science, c'est deux choses</text>
+  <text class="t sub" x="46" y="300">un <tspan class="key">stock de connaissances</tspan> + le <tspan class="key">processus</tspan> qui les crée</text>
+
+  <rect x="500" y="248" width="436" height="76" rx="13" fill="#d92d5e" fill-opacity="0.07" stroke="#d92d5e" stroke-opacity="0.4"/>
+  <text class="t key" x="522" y="276">Le principe de la méthode : cause à effet</text>
+  <text class="t sub" x="522" y="300">on explique les causes — ce n'est <tspan class="key">pas dû au hasard</tspan></text>
+
+  <text class="t note" x="30" y="366">Le caractère scientifique d'une découverte est lié à la manière dont la découverte est effectuée, pas à son résultat.</text>
+</svg>

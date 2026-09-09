@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 452" width="960" height="452" role="img" aria-label="Du chiffre d affaires a la valeur ajoutee, au PIB, au PIB par tete, et les limites du PIB">
+  <title>Chiffre d'affaires → valeur ajoutée → PIB → PIB par tête, et ce que le PIB ne voit pas</title>
+  <rect width="960" height="452" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 15.5px; font-weight: 700; }
+    .sub { font-size: 12px; fill: #46506b; }
+    .key { font-size: 13.5px; font-weight: 700; fill: #12203f; }
+    .op  { font-size: 13px; font-weight: 700; fill: #46506b; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="36">§ 8 · mesurer la richesse créée — et § 9, ce que cette mesure ne voit pas</text>
+
+  <defs>
+    <marker id="fe5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#12203f" fill-opacity="0.45"/>
+    </marker>
+  </defs>
+
+  <g>
+    <rect x="24" y="80" width="200" height="78" rx="13" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+    <text class="t box" x="124" y="112" text-anchor="middle">Chiffre d'affaires</text>
+    <text class="t sub" x="124" y="136" text-anchor="middle">d'une entreprise</text>
+  </g>
+  <path d="M230 119 h 44" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe5)"/>
+  <text class="t op" x="252" y="108" text-anchor="middle">−  CI</text>
+
+  <g>
+    <rect x="282" y="80" width="200" height="78" rx="13" fill="#1f6f9c" fill-opacity="0.13" stroke="#1f6f9c" stroke-opacity="0.5"/>
+    <text class="t box" x="382" y="112" text-anchor="middle">Valeur ajoutée</text>
+    <text class="t sub" x="382" y="136" text-anchor="middle">la richesse réellement créée</text>
+  </g>
+  <path d="M488 119 h 44" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe5)"/>
+  <text class="t op" x="510" y="108" text-anchor="middle">somme</text>
+
+  <g>
+    <rect x="540" y="80" width="200" height="78" rx="13" fill="#2f7d4f" fill-opacity="0.13" stroke="#2f7d4f" stroke-opacity="0.5"/>
+    <text class="t box" x="640" y="106" text-anchor="middle">PIB</text>
+    <text class="t sub" x="640" y="128" text-anchor="middle">toutes les entreprises</text>
+    <text class="t sub" x="640" y="146" text-anchor="middle">du pays, sur une période</text>
+  </g>
+  <path d="M746 119 h 44" stroke="#12203f" stroke-opacity="0.45" stroke-width="2" fill="none" marker-end="url(#fe5)"/>
+  <text class="t op" x="768" y="108" text-anchor="middle">÷ hab.</text>
+
+  <g>
+    <rect x="798" y="80" width="138" height="78" rx="13" fill="#2f7d4f" fill-opacity="0.13" stroke="#2f7d4f" stroke-opacity="0.5"/>
+    <text class="t box" x="867" y="106" text-anchor="middle">PIB par tête</text>
+    <text class="t sub" x="867" y="128" text-anchor="middle">capacité à satisfaire</text>
+    <text class="t sub" x="867" y="146" text-anchor="middle">les besoins</text>
+  </g>
+
+  <text class="t note" x="30" y="184">CI = consommations intermédiaires : tout ce qui est détruit ou transformé au cours du processus de production.</text>
+
+  <text class="t key" x="30" y="228">Le PIB comme mesure du bien-être : deux angles morts</text>
+
+  <g>
+    <rect x="24" y="244" width="452" height="126" rx="13" fill="#12203f" fill-opacity="0.06" stroke="#12203f" stroke-opacity="0.3"/>
+    <text class="t box" x="46" y="272">Il ne compte pas le non marchand</text>
+    <text class="t sub" x="46" y="298">travail domestique, bénévolat</text>
+    <text class="t sub" x="46" y="318">qualité du temps libre, des relations sociales</text>
+    <text class="t sub" x="46" y="338">qualité de l'environnement</text>
+    <text class="t note" x="46" y="358">→ de la richesse existe et n'entre pas dans la mesure</text>
+  </g>
+
+  <g>
+    <rect x="500" y="244" width="436" height="126" rx="13" fill="#d92d5e" fill-opacity="0.07" stroke="#d92d5e" stroke-opacity="0.4"/>
+    <text class="t box" x="522" y="272">La destruction le fait monter</text>
+    <text class="t sub" x="522" y="298">démolition</text>
+    <text class="t sub" x="522" y="318">réparation</text>
+    <text class="t sub" x="522" y="338">biens nocifs (tabac…)</text>
+    <text class="t note" x="522" y="358">→ ce qui détruit de la valeur en ajoute au PIB</text>
+  </g>
+
+  <text class="t note" x="30" y="414">La ligne de tes notes qui mène au chiffre d'affaires est ambiguë (un « + » là où on attend un « = ») : voir « À vérifier » dans la fiche.</text>
+</svg>
