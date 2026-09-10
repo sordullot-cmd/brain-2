@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" width="960" height="330" role="img" aria-label="Le bareme de l'UE 18C sur 20 points">
+  <title>Note finale de l'UE 18C : examen 13 points, recherche bibliographique 7 points, test de la BU 1 à 2 points</title>
+  <rect width="960" height="330" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 17px; font-weight: 700; }
+    .pts { font-size: 30px; font-weight: 700; }
+    .sub { font-size: 12.5px; fill: #46506b; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="36">§ présentation générale · note finale de l'UE — barème noté en amphi</text>
+
+  <!-- barre proportionnelle : 13 + 7 points sur 20 -->
+  <g>
+    <rect x="30" y="66" width="572" height="58" rx="10" fill="#2a5f9e" fill-opacity="0.16" stroke="#2a5f9e" stroke-opacity="0.55"/>
+    <text class="t box" x="316" y="92" text-anchor="middle">Examen final — 1 h</text>
+    <text class="t sub" x="316" y="112" text-anchor="middle">65 % de la note</text>
+  </g>
+  <g>
+    <rect x="612" y="66" width="308" height="58" rx="10" fill="#c2761a" fill-opacity="0.16" stroke="#c2761a" stroke-opacity="0.55"/>
+    <text class="t box" x="766" y="92" text-anchor="middle">Recherche bibliographique</text>
+    <text class="t sub" x="766" y="112" text-anchor="middle">+ bonus / malus · 35 %</text>
+  </g>
+
+  <text class="t pts" x="316" y="168" text-anchor="middle" fill="#2a5f9e">13 pts</text>
+  <text class="t pts" x="766" y="168" text-anchor="middle" fill="#c2761a">7 pts</text>
+
+  <!-- le test de la BU, en plus -->
+  <g>
+    <rect x="30" y="204" width="890" height="56" rx="10" fill="#2e7d5b" fill-opacity="0.12" stroke="#2e7d5b" stroke-opacity="0.5" stroke-dasharray="6 4"/>
+    <text class="t box" x="52" y="230" fill="#2e7d5b">Test de la BU</text>
+    <text class="t sub" x="52" y="250">l'examen et la recherche font déjà 20 — sa place dans le barème est à confirmer</text>
+    <text class="t pts" x="898" y="243" text-anchor="end" fill="#2e7d5b">1 à 2 pts</text>
+  </g>
+
+  <text class="t note" x="30" y="292">Trois enseignements y préparent : le résumé, les graphiques, la recherche bibliographique en salle.</text>
+  <text class="t note" x="30" y="312">La partie 2 du cours — réaliser un travail universitaire — est celle qui sert directement les 7 points de la recherche.</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 404" width="960" height="404" role="img" aria-label="Le resume : pourquoi, comment, erreurs a eviter">
+  <title>Le résumé — trois raisons de l'écrire, trois règles pour l'écrire, trois erreurs à éviter</title>
+  <rect width="960" height="404" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .hd  { font-size: 16px; font-weight: 700; }
+    .li  { font-size: 13.5px; fill: #46506b; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="36">§ 2.1 le résumé · première partie lue dans un travail</text>
+
+  <g>
+    <rect x="30" y="62" width="288" height="212" rx="13" fill="#2a5f9e" fill-opacity="0.13" stroke="#2a5f9e" stroke-opacity="0.5"/>
+    <text class="t hd" x="54" y="96" fill="#2a5f9e">Pourquoi</text>
+    <text class="t li" x="54" y="132">• donner envie de lire</text>
+    <text class="t li" x="54" y="160">• faire passer un message</text>
+    <text class="t li" x="54" y="188">• montrer qu'on maîtrise</text>
+    <text class="t li" x="68" y="210">son sujet</text>
+  </g>
+
+  <g>
+    <rect x="336" y="62" width="288" height="212" rx="13" fill="#2e7d5b" fill-opacity="0.13" stroke="#2e7d5b" stroke-opacity="0.5"/>
+    <text class="t hd" x="360" y="96" fill="#2e7d5b">Comment</text>
+    <text class="t li" x="360" y="132">• noter les idées principales,</text>
+    <text class="t li" x="374" y="154">une par paragraphe</text>
+    <text class="t li" x="360" y="182">• éviter les formules et les</text>
+    <text class="t li" x="374" y="204">informations inutiles</text>
+    <text class="t li" x="360" y="232">• utiliser éventuellement</text>
+    <text class="t li" x="374" y="254">les abréviations</text>
+  </g>
+
+  <g>
+    <rect x="642" y="62" width="288" height="212" rx="13" fill="#b4453c" fill-opacity="0.10" stroke="#b4453c" stroke-opacity="0.45"/>
+    <text class="t hd" x="666" y="96" fill="#b4453c">Erreurs à éviter</text>
+    <text class="t li" x="666" y="132">• le copié-collé</text>
+    <text class="t li" x="666" y="160">• les fautes d'orthographe</text>
+    <text class="t li" x="666" y="188">• « le professeur nous dit</text>
+    <text class="t li" x="680" y="210">que… » — c'est notre travail</text>
+  </g>
+
+  <g>
+    <rect x="30" y="292" width="900" height="66" rx="10" fill="#12203f" fill-opacity="0.05" stroke="#12203f" stroke-opacity="0.2"/>
+    <text class="t hd" x="52" y="317" font-size="14.5">Les 4 règles du travail universitaire</text>
+    <text class="t li" x="52" y="341">résumé clair · problématique et hypothèses · graphique · sources précises</text>
+  </g>
+
+  <text class="t note" x="30" y="384">Ce qu'il faut savoir en refaire : les trois colonnes avec trois entrées chacune, et la bande des quatre règles en dessous.</text>
+</svg>

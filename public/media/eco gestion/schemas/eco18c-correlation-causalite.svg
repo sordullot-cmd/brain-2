@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="960" height="380" role="img" aria-label="Correlation et causalite : le sens de l'implication">
+  <title>La causalité implique la corrélation, la corrélation n'implique pas la causalité</title>
+  <rect width="960" height="380" fill="#ffffff"/>
+
+  <style>
+    .t   { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #12203f; }
+    .cap { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; fill: #6b7690; }
+    .box { font-size: 17px; font-weight: 700; }
+    .sub { font-size: 12.5px; fill: #46506b; }
+    .lab { font-size: 13px; font-weight: 700; }
+    .note{ font-size: 12.5px; fill: #8a93a8; }
+  </style>
+
+  <text class="t cap" x="30" y="36">§ 1.4 approche empirique · causalité et corrélation</text>
+
+  <defs>
+    <marker id="ok18" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2e7d5b"/>
+    </marker>
+    <marker id="no18" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#b4453c"/>
+    </marker>
+  </defs>
+
+  <g>
+    <rect x="60" y="86" width="290" height="80" rx="13" fill="#2a5f9e" fill-opacity="0.14" stroke="#2a5f9e" stroke-opacity="0.5"/>
+    <text class="t box" x="205" y="122" text-anchor="middle">Causalité</text>
+    <text class="t sub" x="205" y="146" text-anchor="middle">A produit B</text>
+  </g>
+  <g>
+    <rect x="610" y="86" width="290" height="80" rx="13" fill="#c2761a" fill-opacity="0.14" stroke="#c2761a" stroke-opacity="0.5"/>
+    <text class="t box" x="755" y="122" text-anchor="middle">Corrélation</text>
+    <text class="t sub" x="755" y="146" text-anchor="middle">A et B varient ensemble</text>
+  </g>
+
+  <path d="M356 112 h248" stroke="#2e7d5b" stroke-width="2.4" fill="none" marker-end="url(#ok18)"/>
+  <text class="t lab" x="480" y="102" text-anchor="middle" fill="#2e7d5b">implique toujours</text>
+
+  <path d="M604 148 h-248" stroke="#b4453c" stroke-width="2.4" fill="none" marker-end="url(#no18)" stroke-dasharray="7 5"/>
+  <text class="t lab" x="480" y="176" text-anchor="middle" fill="#b4453c">n'implique pas</text>
+
+  <!-- le contre-exemple du cours -->
+  <g>
+    <rect x="30" y="214" width="890" height="112" rx="12" fill="#b4453c" fill-opacity="0.07" stroke="#b4453c" stroke-opacity="0.35"/>
+    <text class="t lab" x="52" y="244" fill="#b4453c">Le contre-exemple du cours — dépenses de santé et mortalité</text>
+    <text class="t sub" x="52" y="270">La France et l'Allemagne dépensent la même somme, mais les Allemands ont beaucoup moins de morts.</text>
+    <text class="t sub" x="52" y="292">On voudrait conclure « plus on dépense, moins il y a de morts » : le graphique montre l'inverse.</text>
+    <text class="t sub" x="52" y="314">Même dépense, mortalités différentes — donc la dépense seule n'explique pas la mortalité.</text>
+  </g>
+
+  <text class="t note" x="30" y="360">À refaire de tête : les deux boîtes, la flèche pleine qui va de la causalité vers la corrélation, la flèche barrée en sens inverse.</text>
+</svg>
