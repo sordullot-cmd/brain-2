@@ -375,20 +375,31 @@ for (const note of notes) {
 /**
  * Choisit l'image qui represente le mieux un projet dans la galerie.
  *
- * Priorite : `cover:` dans le frontmatter de la fiche > un VISUEL DE
- * PRESENTATION (key art, hero de campagne, ecran, illustration de marque) > a
- * defaut seulement, le logo ou l'icone d'app.
+ * Priorite : `cover:` dans le frontmatter de la fiche > L'ECRAN DE L'APP >
+ * a defaut un visuel de presentation > a defaut seulement, le logo.
  *
- * Le logo passait avant, au motif qu'il identifie une marque d'un coup d'oeil.
- * Mais un index de vingt projets devenait un index de vingt pastilles carrees,
- * toutes de la meme forme, qui ne disaient rien de ce qu'il y a dans le dossier
- * — alors qu'un key art ou un ecran montre le travail, c'est-a-dire ce qu'on
- * vient chercher ici. Le titre est ecrit sous la vignette : l'image n'a pas a
- * porter le nom.
+ * La question n'est pas « quelle est la plus belle image de ce dossier » mais
+ * « quelle image existe dans presque tous les dossiers et y veut dire la meme
+ * chose » : un index se lit comme une serie, pas comme vingt choix separes.
+ * C'est l'ecran de l'app. `ecrans/` est present dans tous les projets de
+ * produit du vault, et une capture montre exactement ce qu'on vient voir ici
+ * — le travail d'interface. Les dossiers de graphisme, qui n'ont pas d'app,
+ * repondent avec l'equivalent chez eux : une planche de `visuels/`.
  *
- * La forme compte autant que le sujet, parce que la vignette est un cadre 4/3 :
- * une capture de page longue de 18 000 px de haut ou un bandeau de 2400x180
- * sont ecartes meme quand ils s'appellent « hero ».
+ * Le marketing passait avant, au motif qu'une campagne est faite pour montrer.
+ * Mais elle est faite pour vendre : l'index se remplissait d'affiches de rue,
+ * de photos de bureau et de key arts ou l'app tient dans un coin. De belles
+ * images, qui ne montraient pas le produit et ne se comparaient pas d'un projet
+ * a l'autre. Le logo, lui, donnait vingt pastilles carrees toutes de la meme
+ * forme. Le titre est ecrit sous la vignette : l'image n'a pas a porter le nom.
+ *
+ * Dans `ecrans/`, l'accueil vient en tete : c'est l'ecran que tout le monde
+ * voit, celui qui porte l'identite de l'app. Un paywall, un reglage ou un etat
+ * vide montrent un coin du produit, pas le produit.
+ *
+ * La forme departage, sans renverser le sujet, parce que la vignette est un
+ * cadre 4/3 : une capture de page longue de 18 000 px de haut ou un bandeau de
+ * 2400x180 sont ecartes meme quand ils s'appellent « hero ».
  *
  * Renvoie `{ id, fit }`. `fit` dit au site comment poser l'image : `cover`
  * remplit le cadre (un visuel dont le recadrage ne coute rien), `contain` la
@@ -432,12 +443,18 @@ const remplitLeCadre = (m) => m.w >= 600 && m.h >= 400 && m.w / m.h >= 0.5 && m.
  * n'en contient aucun.
  */
 function meilleurVisuel(images, prefix) {
-  // Ce qui n'est pas une presentation : une palette, une planche de vignettes,
-  // une regle de charte, un specimen de typo, un etat passe, un document de
-  // fabrication.
+  // Ce qui n'est jamais une presentation, ou qu'on soit : une palette, une
+  // planche de vignettes, un specimen de typo, un document de fabrication.
   const HORS_JEU =
-    /(^|[-_])(palette|planche|archive|do-not|regle|construction|grille|filaire|clear-?space|sous-marque|nuancier|diagramme|storyboard|croquis|specimen)/i
+    /(^|[-_])(palette|planche|archive|nuancier|diagramme|storyboard|croquis|specimen)/i
+  // Les pieces de charte graphique. Hors des ecrans seulement : dans `ecrans/`,
+  // « regles » ou « grille » parlent du produit (les regles de trading de
+  // Temper, une grille de widgets), pas d'un cahier de normes.
+  const HORS_CHARTE = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|sous-marque)/i
   const HORS_DOSSIER = /^(archive|couleurs|typo)/i
+  // Au-dela de ces proportions, c'est une capture de page longue ou un bandeau :
+  // en entier elle serait un trait, recadree elle ne montrerait rien.
+  const cadrable = (m) => m.w / m.h >= 0.3 && m.w / m.h <= 4
 
   const pool = images.filter(
     (m) =>
@@ -445,45 +462,93 @@ function meilleurVisuel(images, prefix) {
       m.h &&
       !isPlanche(m.folder) &&
       !HORS_JEU.test(m.stem) &&
+      !(!estEcran(m, prefix) && HORS_CHARTE.test(m.stem)) &&
       !m.folder.split('/').some((seg) => HORS_DOSSIER.test(seg)) &&
-      !estLogo(m, prefix)
+      !estLogo(m, prefix) &&
+      cadrable(m)
   )
   if (!pool.length) return null
 
-  const tri = (a, b) => rangVisuel(a, prefix) - rangVisuel(b, prefix) || a.name.localeCompare(b.name)
+  // Le sujet decide, la forme departage — voir `rangVisuel`. Le cadrage se
+  // deduit apres coup de l'image retenue : un projet qui n'a que des captures
+  // mobiles se presente mieux par son accueil pose en entier que par un ecran
+  // secondaire qui, lui, remplirait le cadre.
+  const best = pool.sort(
+    (a, b) => rangVisuel(a, prefix) - rangVisuel(b, prefix) || a.name.localeCompare(b.name)
+  )[0]
 
-  // D'abord ce qui remplit la vignette. Sinon un visuel entier plutot que le
-  // logo : un projet qui n'a que des captures d'ecran mobile se presente mieux
-  // par une de ses captures, posee en entier, que par sa pastille d'app.
-  const cadre = pool.filter(remplitLeCadre)
-  if (cadre.length) return { id: cadre.sort(tri)[0].id, fit: 'cover' }
-
-  // Au-dela de ces proportions, c'est une capture de page longue ou un bandeau :
-  // en entier elle serait un trait, recadree elle ne montrerait rien.
-  const entier = pool.filter((m) => m.w / m.h >= 0.3 && m.w / m.h <= 4)
-  return entier.length ? { id: entier.sort(tri)[0].id, fit: 'contain' } : null
+  return { id: best.id, fit: remplitLeCadre(best) ? 'cover' : 'contain' }
 }
 
-/** Plus petit est meilleur : l'intention du dossier, puis le nom, puis la forme. */
+/**
+ * Les dossiers du vault sont ranges par intention : ce classement suit laquelle
+ * montre le mieux un projet.
+ *
+ * `ecrans/` d'abord, parce que c'est le seul aspect present dans tous les
+ * projets de produit et que c'est le travail lui-meme. `ui/` juste apres : le
+ * meme contenu quand il existe, mais il sert souvent de fourre-tout de flows et
+ * de captures App Store. `visuels/` ensuite, la reponse des dossiers de
+ * graphisme, qui n'ont pas d'app. Le marketing seulement apres : il montre la
+ * campagne, et le produit y tient dans un coin quand il y est.
+ */
+const RANG_ASPECT = {
+  ecrans: 0,
+  ui: 1,
+  visuels: 2,
+  site: 3,
+  marketing: 4,
+  campagnes: 4,
+  illustrations: 5,
+  'character-design': 5,
+  composants: 6,
+  branding: 7,
+  flows: 8,
+  animations: 9,
+  process: 10,
+}
+
+/** Le premier segment sous le dossier de projet : `ecrans`, `branding`... */
+const aspectDe = (m, prefix) => (m.folder === prefix ? '' : m.folder.slice(prefix.length + 1).split('/')[0])
+
+/** Une capture du produit — le materiau de reference de l'index. */
+const estEcran = (m, prefix) => RANG_ASPECT[aspectDe(m, prefix)] <= RANG_ASPECT.ui
+
+/** Plus petit est meilleur : l'aspect, puis ce que l'image montre, puis sa forme. */
 function rangVisuel(m, prefix) {
-  // Les dossiers du vault sont ranges par intention : ce classement suit
-  // laquelle montre le mieux un projet. Une campagne rangee sous `branding/`
-  // compte comme du marketing, d'ou le test sur le chemin entier.
-  const VITRINE = /(^|\/)(marketing|ecrans|visuels|campagne)(\/|$)/i
-  const RANG_ASPECT = { marketing: 0, ecrans: 0, visuels: 0, composants: 1, branding: 2, flows: 3, animations: 4, process: 5 }
-  // Les visuels que la marque elle-meme a choisis pour se montrer.
+  // Une campagne rangee sous `branding/` reste de la campagne, d'ou le test sur
+  // le chemin entier plutot que sur le seul premier segment.
+  const CAMPAGNE = /(^|\/)(marketing|campagnes?)(\/|$)/i
+  // L'ecran que tout le monde voit en ouvrant l'app.
+  const PRINCIPAL =
+    /(^|[-_])(accueil|home|dashboard|today|overview|principale?|vue-d-?ensemble)([-_]|$)/i
+  // Un coin du produit : vrai de l'app, mais pas ce qu'elle est. Teste avant
+  // l'accueil, sinon un « dashboard etat vide » passerait pour un dashboard.
+  const SECONDAIRE =
+    /(^|[-_])(paywall|reglages?|settings|onboarding|bienvenue|empty|etat-vide|chargement|loading|erreur|error|404|modal|popup|menu|recherche|search|connexion|login|inscription|signup|permission|notification|tutoriel)/i
+  // Hors des ecrans, les visuels que la marque elle-meme a choisis pour se montrer.
   const VEDETTE =
     /(^|[-_])(key-?art|key-?visual|hero|cover|poster|affiche|campagne|visuel|artwork|casting|illustration)([-_]|$)/i
 
-  const aspect = m.folder === prefix ? '' : m.folder.slice(prefix.length + 1).split('/')[0]
-  const rangAspect = VITRINE.test(m.folder) ? 0 : RANG_ASPECT[aspect] ?? 6
+  const rangAspect = CAMPAGNE.test(m.folder) ? RANG_ASPECT.marketing : RANG_ASPECT[aspectDe(m, prefix)] ?? 11
+  // Un ecran se juge sur ce qu'il montre, un visuel sur le fait qu'il soit une
+  // vedette. Les deux tiennent dans le meme intervalle 0-6, sous le pas de 10
+  // qui separe deux aspects : la forme departage, elle ne renverse jamais.
+  const rangSujet = estEcran(m, prefix)
+    ? SECONDAIRE.test(m.stem)
+      ? 6
+      : PRINCIPAL.test(m.stem)
+        ? 0
+        : 3
+    : VEDETTE.test(m.stem)
+      ? 0
+      : 3
   // Ecart au 4/3 du cadre, plafonne : au-dela, toutes les formes se valent.
-  const forme = Math.min(Math.abs(Math.log(m.w / m.h / (4 / 3))), 2.9)
+  const forme = Math.min(Math.abs(Math.log(m.w / m.h / (4 / 3))), 2.5)
   // Le derive de vignette fait 640 px de large : en dessous de 1200, l'image
   // n'a plus de marge pour un ecran dense. Departage, sans plus.
   const petite = m.w < 1200 ? 0.5 : 0
 
-  return rangAspect * 10 + (VEDETTE.test(m.stem) ? 0 : 3) + forme + petite
+  return rangAspect * 10 + rangSujet + forme + petite
 }
 
 /** Le logo le plus « identitaire » d'un lot — le repli quand rien ne se presente. */
