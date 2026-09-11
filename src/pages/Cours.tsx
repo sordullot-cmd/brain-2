@@ -83,9 +83,11 @@ export function CoursList({ data }: { data: VaultData }) {
     return {
       coef: f.reduce((s, x) => s + (x.coef ?? 0), 0),
       trous: f.reduce((s, x) => s + x.aVerifier, 0),
-      cartes: f.reduce((s, x) => s + x.cartes, 0),
+      // Les cartes réellement écrites dans les blocs « Cartes à créer », pas
+      // l'objectif annoncé en frontmatter : c'est ce qui est jouable ce soir.
+      cartes: toutes.reduce((s, n) => s + (n.nbCartes ?? 0), 0),
     }
-  }, [fiches])
+  }, [fiches, toutes])
 
   if (toutes.length === 0)
     return (
@@ -106,6 +108,16 @@ export function CoursList({ data }: { data: VaultData }) {
         eyebrow={surTitre}
         title={diplome || 'Mes cours'}
         desc="Les fiches d'UE du vault, dans l'ordre où elles tombent. Chacune porte ce qu'il lui manque encore et la date de sa dernière revue."
+        right={
+          total.cartes > 0 ? (
+            <Link
+              to="/cours/revision"
+              className="label px-5 py-3 rounded-full bg-brand text-background hover:opacity-80 transition-opacity"
+            >
+              Réviser les {total.cartes} cartes
+            </Link>
+          ) : undefined
+        }
       />
 
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
@@ -114,7 +126,9 @@ export function CoursList({ data }: { data: VaultData }) {
           <Chiffre n={fiches.length} l="fiches" />
           <Chiffre n={total.coef} l="coefficients" />
           <Chiffre n={total.trous} l="points à récupérer" teinte={total.trous > 0 ? TEINTE.trou : undefined} />
-          <Chiffre n={total.cartes} l="cartes à créer" />
+          <Link to="/cours/revision" className="hover:opacity-70 transition-opacity">
+            <Chiffre n={total.cartes} l="cartes à réviser" />
+          </Link>
         </div>
 
         {periodes.length > 0 && (
@@ -247,7 +261,7 @@ function CarteFiche({ note }: { note: Note }) {
           l="à récupérer"
           teinte={f.aVerifier > 0 ? TEINTE.trou : undefined}
         />
-        <Metrique n={f.cartes} l="cartes" />
+        <Metrique n={note.nbCartes ?? f.cartes} l="cartes" />
         {f.revu && <span className="text-subtle/60 mono ml-auto">revu le {fmtDate(f.revu)}</span>}
       </div>
     </Link>
@@ -408,7 +422,17 @@ export function CoursView({ data }: { data: VaultData }) {
                 </span>
               )}
               <Metrique n={f.aVerifier} l="à récupérer" teinte={f.aVerifier > 0 ? TEINTE.trou : undefined} />
-              <Metrique n={f.cartes} l="cartes" />
+              {note.nbCartes ? (
+                <Link
+                  to={`/cours/revision?paquet=${encodeURIComponent(note.id)}`}
+                  className="flex items-baseline gap-1.5 hover:text-foreground transition-colors"
+                >
+                  <span className="tabular-nums">{note.nbCartes}</span>
+                  <span className="text-subtle/60">cartes à réviser →</span>
+                </Link>
+              ) : (
+                <Metrique n={f.cartes} l="cartes" />
+              )}
               {f.revu && <span className="text-subtle/60 mono">revu le {fmtDate(f.revu)}</span>}
             </>
           ) : (

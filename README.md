@@ -43,7 +43,10 @@ Le site s'ouvre sur <http://localhost:5180>.
 - **médias** copiés dans `public/media/` en conservant l'arborescence — **copie
   incrémentale** : seuls les fichiers dont la taille ou la date ont changé sont
   recopiés, et les orphelins sont supprimés ;
-- **dérivés web** dans `public/derived/` (voir ci-dessous).
+- **dérivés web** dans `public/derived/` (voir ci-dessous) ;
+- **cartes de révision** — le bloc `## 🃏 Cartes à créer` des fiches de cours, relu au
+  format d'import d'Anki (`Recto ; Verso ; Tags`) et sorti dans `public/vault-cartes.json`
+  (voir `scripts/flashcards.mjs` et la page `/cours/revision`).
 
 Les liens non résolus (cibles supprimées) ne cassent rien : ils s'affichent en pointillé grisé, comme dans Obsidian.
 
@@ -161,6 +164,7 @@ VAULT_PATH="/chemin/vers/le/vault" npm run dev
 | `/projets` | **L'index unique** : inspirations et univers dans la même liste, filtrable par discipline puis par facette de tag (domaine, sujet, procédé, style). Les disciplines encore vides sont listées à part |
 | `/projet/:discipline/:slug` | Fiche projet : palette, aspects, galerie, note complète. Les flèches en haut tournent en boucle sur **tous** les projets, dans l'ordre de `/projets` — un univers de référence et un dossier d'inspiration ne sont pas deux choses différentes |
 | `/cours` · `/cours/*` | **Les cours** : le dossier `eco gestion` du vault, lu comme un semestre — fiches d'UE groupées par période, avec coefficient, statut, points de cours à récupérer, cartes à créer et date de dernière revue (tout vient du frontmatter, comme les tableaux Dataview dans Obsidian). La lecture d'une fiche a son sommaire collant et ses flèches entre UE |
+| `/cours/revision` | **Les flashcards** : les cartes que les fiches portent déjà, jouées une par une avec quatre réponses (à revoir · difficile · correct · je savais) et un SM-2 qui fixe le délai avant le prochain passage — annoncé sur chaque bouton. Sélection par paquet, ajout de cartes maison, export au format d'import d'Anki |
 | `/notes` · `/note/*` | Toutes les notes ; lecture avec propriétés, tags, liens sortants et backlinks |
 | `/tags` · `/tags/:tag` | Navigation par étiquette |
 
@@ -176,6 +180,21 @@ triable qui range le semestre — et c'est lui l'identité d'une note dans Obsid
 est réécrit à la lecture de l'index (`titrerLesCours`), pas dans l'indexeur, pour que le
 dossier de cours reste nommé à un seul endroit ; un `title:` posé à la main dans le
 frontmatter reste prioritaire.
+
+### Les flashcards viennent des fiches, la progression reste dans le navigateur
+
+Une carte n'est jamais écrite deux fois : sa source est le bloc `## 🃏 Cartes à créer` de sa
+fiche, dans le vault. La corriger, c'est corriger la fiche puis relancer `npm run index` —
+le site n'écrit rien dans le vault.
+
+Ce que la révision produit (les intervalles, la facilité de chaque carte, les cartes ajoutées
+depuis le site) vit en `localStorage` : c'est un cahier de révision, pas du contenu. Le perdre
+ne perd aucun cours, et deux navigateurs ne partagent pas la même progression.
+
+Le découpage `Recto ; Verso ; Tags` a un piège que `scripts/flashcards.mjs` traite : le
+point-virgule sépare les champs **et** énumère à l'intérieur d'un verso. D'où la règle —
+premier segment le recto, dernier segment les tags **s'il en a la forme et porte le tag de
+tête du bloc**, tout le reste le verso.
 
 Les filtres de `/projets` vivent dans l'URL (`?discipline=UI-DESIGN&tags=trading,dark`) :
 un tri se partage et le bouton retour le défait.

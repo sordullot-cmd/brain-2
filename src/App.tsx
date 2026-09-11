@@ -15,6 +15,7 @@ const Projets = lazy(() => import('./pages/Projets').then((m) => ({ default: m.P
 const ProjetDetail = lazy(() => import('./pages/Projet').then((m) => ({ default: m.ProjetDetail })))
 const CoursList = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursList })))
 const CoursView = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursView })))
+const Revisions = lazy(() => import('./pages/Revisions').then((m) => ({ default: m.Revisions })))
 const NotesList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NotesList })))
 const NoteView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NoteView })))
 const TagsList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagsList })))
@@ -86,6 +87,8 @@ export default function App() {
               <Route path="/univers" element={<Navigate to="/projets" replace />} />
               <Route path="/univers/:slug" element={<LegacyUnivers />} />
               <Route path="/cours" element={<CoursList data={data} />} />
+              {/* Avant le splat : `revision` n'est pas un chemin de note. */}
+              <Route path="/cours/revision" element={<Revisions data={data} />} />
               <Route path="/cours/*" element={<CoursView data={data} />} />
               <Route path="/notes" element={<NotesList data={data} />} />
               <Route path="/note/*" element={<NoteView data={data} />} />

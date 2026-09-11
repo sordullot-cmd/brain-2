@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import {
   coursSections,
   coursUrl,
-  displaySrc,
   fiche,
   fmtBytes,
   fmtDate,
@@ -12,6 +11,7 @@ import {
   type Note,
   type VaultData,
 } from '../lib/vault'
+import { ProjectCover } from '../components/ProjectCover'
 
 export function Home({ data }: { data: VaultData }) {
   const idx = indexById(data)
@@ -78,21 +78,7 @@ export function Home({ data }: { data: VaultData }) {
               const cover = u.cover ? idx.media.get(u.cover) : null
               return (
                 <Link key={u.id} to={projectUrl(u)} className="group block">
-                  <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
-                    {cover ? (
-                      <img
-                        src={displaySrc(cover, 'thumb')}
-                        alt={u.title}
-                        width={cover.dw}
-                        height={cover.dh}
-                        loading="lazy"
-                        decoding="async"
-                        className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-                      />
-                    ) : (
-                      <span className="caption text-subtle">aucun visuel</span>
-                    )}
-                  </div>
+                  <ProjectCover p={u} cover={cover ?? null} />
 
                   <div className="mt-5 px-2 flex items-baseline gap-3">
                     <h3 className="display-md group-hover:text-brand transition-colors">{u.title}</h3>

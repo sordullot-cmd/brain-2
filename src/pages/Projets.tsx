@@ -1,7 +1,8 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { PageHead, Empty } from '../components/Layout'
-import { displaySrc, indexById, projectUrl, type Media, type Project, type VaultData } from '../lib/vault'
+import { indexById, projectUrl, type Media, type Project, type VaultData } from '../lib/vault'
+import { ProjectCover } from '../components/ProjectCover'
 import {
   TRIS,
   TRI_DEFAUT,
@@ -198,21 +199,7 @@ export function Projets({ data }: { data: VaultData }) {
 function ProjectCard({ p, cover, search }: { p: Project; cover: Media | null; search: string }) {
   return (
     <Link to={{ pathname: projectUrl(p), search }} className="group block">
-      <div className="aspect-[4/3] rounded-2xl bg-surface overflow-hidden flex items-center justify-center p-8 sm:p-10">
-        {cover && cover.kind === 'image' ? (
-          <img
-            src={displaySrc(cover, 'thumb')}
-            alt={p.title}
-            width={cover.dw}
-            height={cover.dh}
-            loading="lazy"
-            decoding="async"
-            className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-          />
-        ) : (
-          <span className="caption text-subtle">aucun visuel</span>
-        )}
-      </div>
+      <ProjectCover p={p} cover={cover} />
 
       <div className="mt-5 px-2 flex items-baseline gap-3">
         <h2 className="display-md group-hover:text-brand transition-colors">{p.title}</h2>

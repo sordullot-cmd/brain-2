@@ -19,6 +19,7 @@ import { marked } from 'marked'
 import { imageSize } from './image-size.mjs'
 import { buildDerivatives, SIZES } from './derivatives.mjs'
 import { configureMarked, slug as slugAncre } from './markdown.mjs'
+import { construirePaquets } from './flashcards.mjs'
 import { FACETTES, tagsProjet, tagsVignette } from './tags-projets.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -32,6 +33,10 @@ const OUT_JSON = path.join(OUT_DIR, 'vault.json')
 // premier ecran, pour deux pages qui en ont besoin. Ils partent dans un second
 // fichier, recupere en tache de fond (voir src/lib/vault.ts).
 const OUT_TEXT = path.join(OUT_DIR, 'vault-notes.json')
+// Les cartes de revision extraites des fiches de cours (voir flashcards.mjs).
+// Un troisieme fichier, pour la meme raison que le second : seule la page de
+// revision en a besoin, et elle n'est pas le premier ecran.
+const OUT_CARTES = path.join(OUT_DIR, 'vault-cartes.json')
 
 /**
  * `fichier/` = les sources brutes que Sacha depose a cote d'une fiche : photos
@@ -368,19 +373,27 @@ for (const note of notes) {
 // ------------------------------------------------------ univers & disciplines
 
 /**
- * Choisit l'image qui represente le mieux un univers.
- * Priorite : `cover:` dans le frontmatter de la fiche > **le logo** (lockup,
- * logotype, wordmark, icone d'app) > key art / poster > la premiere image.
+ * Choisit l'image qui represente le mieux un projet dans la galerie.
  *
- * Le logo passe avant le key art : c'est lui qui identifie une app ou une marque
- * d'un coup d'oeil, et le bandeau de la page projet l'affiche en `object-contain`,
- * donc un logotype y est net. Un key art, lui, dit l'ambiance mais pas le nom.
+ * Priorite : `cover:` dans le frontmatter de la fiche > un VISUEL DE
+ * PRESENTATION (key art, hero de campagne, ecran, illustration de marque) > a
+ * defaut seulement, le logo ou l'icone d'app.
  *
- * Mais avant tout ca : une image posee A LA RACINE du dossier de projet — celle
- * qui se retrouve dans l'aspect « divers », rangee nulle part ailleurs — est un
- * choix DELIBERE du vault, pas une trouvaille. C'est l'icone de l'app dans la
- * quasi-totalite des dossiers. Elle passe donc devant, et la recherche par nom
- * ne sert plus que pour les dossiers qui n'en ont pas.
+ * Le logo passait avant, au motif qu'il identifie une marque d'un coup d'oeil.
+ * Mais un index de vingt projets devenait un index de vingt pastilles carrees,
+ * toutes de la meme forme, qui ne disaient rien de ce qu'il y a dans le dossier
+ * — alors qu'un key art ou un ecran montre le travail, c'est-a-dire ce qu'on
+ * vient chercher ici. Le titre est ecrit sous la vignette : l'image n'a pas a
+ * porter le nom.
+ *
+ * La forme compte autant que le sujet, parce que la vignette est un cadre 4/3 :
+ * une capture de page longue de 18 000 px de haut ou un bandeau de 2400x180
+ * sont ecartes meme quand ils s'appellent « hero ».
+ *
+ * Renvoie `{ id, fit }`. `fit` dit au site comment poser l'image : `cover`
+ * remplit le cadre (un visuel dont le recadrage ne coute rien), `contain` la
+ * montre en entier sur le fond (un ecran mobile, un logo — les recadrer les
+ * decapite).
  */
 function pickCover(own, fm, prefix) {
   const images = own.filter((m) => m.kind === 'image')
@@ -389,17 +402,94 @@ function pickCover(own, fm, prefix) {
   if (fm.cover) {
     const wanted = String(fm.cover).split('/').pop().normalize('NFC')
     const hit = images.find((m) => m.name.normalize('NFC') === wanted || m.stem.normalize('NFC') === wanted)
-    if (hit) return hit.id
+    // La fiche a tranche : on la suit, et on ne decide plus que du cadrage.
+    if (hit) return { id: hit.id, fit: estLogo(hit, prefix) || !remplitLeCadre(hit) ? 'contain' : 'cover' }
   }
 
-  const racine = images.filter((m) => m.folder === prefix)
-  return meilleurVisuel(racine.length ? racine : images)
+  const visuel = meilleurVisuel(images, prefix)
+  if (visuel) return visuel
+
+  // Un dossier qui n'a que de l'identite et des documents de travail : son logo.
+  return { id: meilleurLogo(images, prefix).id, fit: 'contain' }
 }
 
-/** Le visuel le plus « identitaire » d'un lot, par motif de nom puis par forme. */
-function meilleurVisuel(images) {
+/** Ce qui identifie la marque au lieu de montrer le travail. */
+const LOGO =
+  /(^|[-_])(lockup|logotype|logomark|logos?|wordmark|marque|monogramme|app-?icon|icone|icon|symbole|favicon|badges?|og-image|specimen)([-_]|$)/i
+
+/**
+ * Une image posee A LA RACINE du dossier de projet est l'icone de l'app dans la
+ * quasi-totalite des dossiers du vault (c'est l'aspect `logo-app`) : elle compte
+ * comme un logo meme sans en porter le nom.
+ */
+const estLogo = (m, prefix) => m.folder === prefix || LOGO.test(m.stem)
+
+/** Assez grande et assez proche du 4/3 pour etre recadree sans degat. */
+const remplitLeCadre = (m) => m.w >= 600 && m.h >= 400 && m.w / m.h >= 0.5 && m.w / m.h <= 2.6
+
+/**
+ * Le visuel de presentation le plus parlant d'un projet, ou `null` si le dossier
+ * n'en contient aucun.
+ */
+function meilleurVisuel(images, prefix) {
+  // Ce qui n'est pas une presentation : une palette, une planche de vignettes,
+  // une regle de charte, un specimen de typo, un etat passe, un document de
+  // fabrication.
+  const HORS_JEU =
+    /(^|[-_])(palette|planche|archive|do-not|regle|construction|grille|filaire|clear-?space|sous-marque|nuancier|diagramme|storyboard|croquis|specimen)/i
+  const HORS_DOSSIER = /^(archive|couleurs|typo)/i
+
+  const pool = images.filter(
+    (m) =>
+      m.w &&
+      m.h &&
+      !isPlanche(m.folder) &&
+      !HORS_JEU.test(m.stem) &&
+      !m.folder.split('/').some((seg) => HORS_DOSSIER.test(seg)) &&
+      !estLogo(m, prefix)
+  )
+  if (!pool.length) return null
+
+  const tri = (a, b) => rangVisuel(a, prefix) - rangVisuel(b, prefix) || a.name.localeCompare(b.name)
+
+  // D'abord ce qui remplit la vignette. Sinon un visuel entier plutot que le
+  // logo : un projet qui n'a que des captures d'ecran mobile se presente mieux
+  // par une de ses captures, posee en entier, que par sa pastille d'app.
+  const cadre = pool.filter(remplitLeCadre)
+  if (cadre.length) return { id: cadre.sort(tri)[0].id, fit: 'cover' }
+
+  // Au-dela de ces proportions, c'est une capture de page longue ou un bandeau :
+  // en entier elle serait un trait, recadree elle ne montrerait rien.
+  const entier = pool.filter((m) => m.w / m.h >= 0.3 && m.w / m.h <= 4)
+  return entier.length ? { id: entier.sort(tri)[0].id, fit: 'contain' } : null
+}
+
+/** Plus petit est meilleur : l'intention du dossier, puis le nom, puis la forme. */
+function rangVisuel(m, prefix) {
+  // Les dossiers du vault sont ranges par intention : ce classement suit
+  // laquelle montre le mieux un projet. Une campagne rangee sous `branding/`
+  // compte comme du marketing, d'ou le test sur le chemin entier.
+  const VITRINE = /(^|\/)(marketing|ecrans|visuels|campagne)(\/|$)/i
+  const RANG_ASPECT = { marketing: 0, ecrans: 0, visuels: 0, composants: 1, branding: 2, flows: 3, animations: 4, process: 5 }
+  // Les visuels que la marque elle-meme a choisis pour se montrer.
+  const VEDETTE =
+    /(^|[-_])(key-?art|key-?visual|hero|cover|poster|affiche|campagne|visuel|artwork|casting|illustration)([-_]|$)/i
+
+  const aspect = m.folder === prefix ? '' : m.folder.slice(prefix.length + 1).split('/')[0]
+  const rangAspect = VITRINE.test(m.folder) ? 0 : RANG_ASPECT[aspect] ?? 6
+  // Ecart au 4/3 du cadre, plafonne : au-dela, toutes les formes se valent.
+  const forme = Math.min(Math.abs(Math.log(m.w / m.h / (4 / 3))), 2.9)
+  // Le derive de vignette fait 640 px de large : en dessous de 1200, l'image
+  // n'a plus de marge pour un ecran dense. Departage, sans plus.
+  const petite = m.w < 1200 ? 0.5 : 0
+
+  return rangAspect * 10 + (VEDETTE.test(m.stem) ? 0 : 3) + forme + petite
+}
+
+/** Le logo le plus « identitaire » d'un lot — le repli quand rien ne se presente. */
+function meilleurLogo(images, prefix) {
   const PREFER = [
-    // Le lockup d'abord : logo + nom ensemble, et son format large remplit le bandeau.
+    // Le lockup d'abord : logo + nom ensemble, et son format large tient bien.
     /(^|[-_])lockup([-_]|$)/i,
     // Puis le nom dessine, plus precis que « logo » tout court.
     /(^|[-_])(logotype|wordmark)([-_]|$)/i,
@@ -407,13 +497,10 @@ function meilleurVisuel(images) {
     // Pour une app, son icone EST son logo.
     /(^|[-_])(app-?icon|icone?|icon)([-_]|$)/i,
     /(^|[-_])(primary|primaire|principal)([-_]|$)/i,
-    /(^|[-_])(cover|key-?art|poster|hero)([-_]|$)/i,
-    /(^|[-_])(mascotte|mascot)([-_]|$)/i,
   ]
   // Un visuel de construction, un interdit, une planche de contact ou une
   // sous-marque ne representent pas la marque.
-  const AVOID =
-    /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|planche|sous-marque)/i
+  const AVOID = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|planche|sous-marque)/i
   // Ni un visuel d'archive : un projet se presente par son etat actuel.
   const isArchive = (m) => m.folder.split('/').some((seg) => /^archive/i.test(seg))
   // Un logo range dans `branding/` vaut mieux qu'un homonyme trouve ailleurs.
@@ -421,19 +508,19 @@ function meilleurVisuel(images) {
 
   const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m))
   const pool = good.length ? good : images
-  // A motif egal, dans l'ordre : le vectoriel (net dans le bandeau), le format
-  // paysage (le bandeau est large, un logo vertical y flotte), puis `branding/`.
-  // Sans ce classement, c'est l'ordre du dossier qui decidait — donc le hasard.
+  // A motif egal, dans l'ordre : le vectoriel (net a toute taille), le format
+  // paysage, puis `branding/`. Sans ce classement, c'est l'ordre du dossier qui
+  // decidait — donc le hasard.
   const paysage = (m) => (m.w && m.h ? m.w / m.h >= 1.2 : false)
   const rang = (m) =>
     (/\.svg$/i.test(m.name) ? 0 : 4) + (paysage(m) ? 0 : 2) + (BRANDING.test(m.folder) ? 0 : 1)
 
   for (const re of PREFER) {
     const hits = pool.filter((m) => re.test(m.stem)).sort((a, b) => rang(a) - rang(b))
-    if (hits.length) return hits[0].id
+    if (hits.length) return hits[0]
   }
   // Rien de nomme : au moins un visuel d'identite plutot que le premier venu.
-  return (pool.find((m) => BRANDING.test(m.folder)) ?? pool[0]).id
+  return pool.find((m) => BRANDING.test(m.folder)) ?? pool[0]
 }
 
 /**
@@ -477,6 +564,7 @@ function buildProject(discipline, slug) {
     .sort((a, b) => b.count - a.count)
 
   const fm = note?.frontmatter || {}
+  const cover = pickCover(own, fm, prefix)
   return {
     id: `${discipline}/${slug}`,
     slug,
@@ -490,7 +578,9 @@ function buildProject(discipline, slug) {
     // exclues) : le chiffre et le poids doivent parler des memes fichiers.
     bytes: own.filter((m) => !isPlanche(m.folder)).reduce((a, m) => a + m.size, 0),
     aspects,
-    cover: pickCover(own, fm, prefix),
+    cover: cover?.id || null,
+    // Comment poser ce visuel dans une vignette — voir `pickCover`.
+    coverFit: cover?.fit || 'contain',
     couleurs: Array.isArray(fm.couleurs) ? fm.couleurs : [],
     couleurPrincipale: fm.couleur_principale || null,
     categorie: fm.categorie || fm.type_app || fm.type_site || null,
@@ -577,6 +667,18 @@ const facettesProjets = FACETTES.map(({ cle, label }) => {
   }
 }).filter((f) => f.tags.length)
 
+// ------------------------------------------------- cartes de revision (Anki)
+
+// Les fiches de cours ecrivent deja leurs cartes dans un bloc `Cartes a creer`
+// au format d'import d'Anki : on les relit ici pour que la page /cours puisse
+// les faire jouer telles quelles, sans que rien ne soit saisi deux fois.
+const paquets = construirePaquets(notes)
+const cartesParNote = new Map(paquets.map((p) => [p.noteId, p.cartes.length]))
+for (const note of notes) {
+  const n = cartesParNote.get(note.id)
+  if (n) note.nbCartes = n
+}
+
 // ------------------------------------------------------------------- sortie
 
 // Le corps brut n'est plus utile cote client (on sert le HTML) : on l'ecarte
@@ -614,6 +716,7 @@ const payload = {
 fs.mkdirSync(OUT_DIR, { recursive: true })
 fs.writeFileSync(OUT_JSON, JSON.stringify(payload))
 fs.writeFileSync(OUT_TEXT, JSON.stringify(notesText))
+fs.writeFileSync(OUT_CARTES, JSON.stringify({ generatedAt: payload.generatedAt, paquets }))
 
 const mb = (payload.stats.bytes / 1024 / 1024).toFixed(1)
 const jsonKb = (fs.statSync(OUT_JSON).size / 1024).toFixed(0)
@@ -627,4 +730,7 @@ console.log(
     ` -> public/derived/ (${(deriv.bytes / 1024 / 1024).toFixed(1)} Mo generes)`
 )
 const textKb = (fs.statSync(OUT_TEXT).size / 1024).toFixed(0)
+const cartesKb = (fs.statSync(OUT_CARTES).size / 1024).toFixed(0)
+const nbCartes = paquets.reduce((a, p) => a + p.cartes.length, 0)
+console.log(`  ${nbCartes} cartes de revision dans ${paquets.length} fiches -> vault-cartes.json (${cartesKb} Ko)`)
 console.log(`  -> public/vault.json (${jsonKb} Ko) + vault-notes.json (${textKb} Ko, differe) + public/media/\n`)

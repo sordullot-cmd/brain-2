@@ -16,7 +16,7 @@
       ]
     },
     {
-      "source": "/(vault|vault-notes).json",
+      "source": "/(vault|vault-notes|vault-cartes).json",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     }
   ]

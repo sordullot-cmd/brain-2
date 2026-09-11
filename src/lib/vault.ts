@@ -67,6 +67,12 @@ export interface Note {
   html?: string
   excerpt: string
   search?: string
+  /**
+   * Nombre de cartes de révision extraites de sa section « Cartes à créer »
+   * (voir `scripts/flashcards.mjs`). Absent quand la note n'en porte aucune ;
+   * les cartes elles-mêmes sont dans `/vault-cartes.json`, chargé à part.
+   */
+  nbCartes?: number
   mtime: number
   size: number
   tags: string[]
@@ -100,6 +106,12 @@ export interface Project {
   bytes: number
   aspects: Aspect[]
   cover: string | null
+  /**
+   * Comment poser la cover dans une vignette : `cover` remplit le cadre (un key
+   * art, un écran large), `contain` la montre en entier sur le fond (un logo,
+   * une capture d'écran mobile — les recadrer les décapite).
+   */
+  coverFit: 'cover' | 'contain'
   couleurs: string[]
   couleurPrincipale: string | null
   categorie: string | null
