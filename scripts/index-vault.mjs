@@ -375,36 +375,33 @@ for (const note of notes) {
 /**
  * Choisit l'image qui represente le mieux un projet dans la galerie.
  *
- * Priorite : `cover:` dans le frontmatter de la fiche > L'ECRAN DE L'APP >
- * a defaut un visuel de presentation > a defaut seulement, le logo.
+ * Priorite : `cover:` dans le frontmatter de la fiche > L'ICONE DE L'APP >
+ * le logo pris dans le branding du projet > a defaut seulement, un visuel.
  *
  * La question n'est pas « quelle est la plus belle image de ce dossier » mais
  * « quelle image existe dans presque tous les dossiers et y veut dire la meme
  * chose » : un index se lit comme une serie, pas comme vingt choix separes.
- * C'est l'ecran de l'app. `ecrans/` est present dans tous les projets de
- * produit du vault, et une capture montre exactement ce qu'on vient voir ici
- * — le travail d'interface. Les dossiers de graphisme, qui n'ont pas d'app,
- * repondent avec l'equivalent chez eux : une planche de `visuels/`.
+ * C'est l'identite de marque. Elle est la dans 17 dossiers sur 21 sous un nom
+ * constant — `icone.png`, pose a la racine a cote de la fiche — donc le choix
+ * n'est pas devine : il est lu.
  *
- * Le marketing passait avant, au motif qu'une campagne est faite pour montrer.
- * Mais elle est faite pour vendre : l'index se remplissait d'affiches de rue,
- * de photos de bureau et de key arts ou l'app tient dans un coin. De belles
- * images, qui ne montraient pas le produit et ne se comparaient pas d'un projet
- * a l'autre. Le logo, lui, donnait vingt pastilles carrees toutes de la meme
- * forme. Le titre est ecrit sous la vignette : l'image n'a pas a porter le nom.
+ * Le contenu du dossier ne repond pas a cette question. Une campagne donne une
+ * affiche de rue ou une photo de bureau ou le produit n'est pas ; un ecran
+ * donne, a 300 px de large, une bouillie de texte que rien ne distingue de
+ * l'ecran du projet d'a cote — et rien ne dit lequel des trente ecrans du
+ * dossier vaut pour le projet entier. D'ou l'impression d'images tirees au
+ * hasard : elles l'etaient, au sens ou aucune ne representait quoi que ce soit.
+ * Une icone d'app se reconnait d'un coup d'oeil, tient a n'importe quelle
+ * taille, et designe le projet sans ambiguite.
  *
- * Dans `ecrans/`, l'accueil vient en tete : c'est l'ecran que tout le monde
- * voit, celui qui porte l'identite de l'app. Un paywall, un reglage ou un etat
- * vide montrent un coin du produit, pas le produit.
+ * `branding/` sert de repli, mais avec precaution : on n'y descend que pour un
+ * projet de produit — un dossier de references graphiques y range les logos des
+ * marques qu'il cite, pas le sien — et en ecartant ce qui traine a cote du logo
+ * (badges de store, textures, visuels editoriaux, collections de pictos).
  *
- * La forme departage, sans renverser le sujet, parce que la vignette est un
- * cadre 4/3 : une capture de page longue de 18 000 px de haut ou un bandeau de
- * 2400x180 sont ecartes meme quand ils s'appellent « hero ».
- *
- * Renvoie `{ id, fit }`. `fit` dit au site comment poser l'image : `cover`
- * remplit le cadre (un visuel dont le recadrage ne coute rien), `contain` la
- * montre en entier sur le fond (un ecran mobile, un logo — les recadrer les
- * decapite).
+ * Renvoie `{ id, fit }`. `fit` dit au site comment poser l'image : `contain`
+ * pour une marque, qui se montre en entier sur le fond ; `cover` seulement pour
+ * un visuel de repli dont le recadrage ne coute rien.
  */
 function pickCover(own, fm, prefix) {
   const images = own.filter((m) => m.kind === 'image')
@@ -417,12 +414,42 @@ function pickCover(own, fm, prefix) {
     if (hit) return { id: hit.id, fit: estLogo(hit, prefix) || !remplitLeCadre(hit) ? 'contain' : 'cover' }
   }
 
+  // L'icone de l'app, posee a la racine du dossier a cote de la fiche.
+  const icone = images.find((m) => m.folder === prefix)
+  if (icone) return { id: icone.id, fit: 'contain' }
+
+  // Un produit sans icone : son logo, cherche dans son seul branding.
+  if (images.some((m) => estEcran(m, prefix))) {
+    const marque = images.filter((m) => estMarque(m))
+    if (marque.length) return { id: meilleurLogo(marque, prefix).id, fit: 'contain' }
+  }
+
+  // Un dossier de references graphiques n'a pas de marque a lui : son visuel.
   const visuel = meilleurVisuel(images, prefix)
   if (visuel) return visuel
 
-  // Un dossier qui n'a que de l'identite et des documents de travail : son logo.
   return { id: meilleurLogo(images, prefix).id, fit: 'contain' }
 }
+
+/** Le dossier ou un projet range sa propre identite. */
+const BRANDING = /(^|\/)(branding|logos?|identite|identity)(\/|$)/i
+
+/**
+ * A cote du logo, un dossier `branding/` accumule ce qui touche a la marque sans
+ * la porter : badges « app of the day », captures editoriales, textures de fond,
+ * images Open Graph, planches de mascotte. Et ses collections de pictos
+ * (`icones-emotions/`, `badges/`) sont des dizaines de fichiers dont le nom dit
+ * « icone » sans qu'aucun ne soit l'icone du projet. Rien de tout cela ne
+ * represente un projet dans un index.
+ */
+const HORS_MARQUE =
+  /(^|[-_])(badges?|award|app-?of-?the-?day|opengraph|og-image|texture|fond|background|editorial|presse|press|mascotte|sticker|favicon|screenshot|capture)/i
+
+const estMarque = (m) =>
+  BRANDING.test(m.folder) &&
+  // Une collection rangee sous `branding/x/` : on ne garde que le premier niveau.
+  !/(^|\/)(branding|logos?|identite|identity)\/[^/]+\//i.test(m.folder + '/') &&
+  !HORS_MARQUE.test(m.stem)
 
 /** Ce qui identifie la marque au lieu de montrer le travail. */
 const LOGO =
@@ -568,13 +595,11 @@ function meilleurLogo(images, prefix) {
   const AVOID = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|planche|sous-marque)/i
   // Ni un visuel d'archive : un projet se presente par son etat actuel.
   const isArchive = (m) => m.folder.split('/').some((seg) => /^archive/i.test(seg))
-  // Un logo range dans `branding/` vaut mieux qu'un homonyme trouve ailleurs.
-  const BRANDING = /(^|\/)(branding|logos?|identite|identity)(\/|$)/i
-
   const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m))
   const pool = good.length ? good : images
   // A motif egal, dans l'ordre : le vectoriel (net a toute taille), le format
-  // paysage, puis `branding/`. Sans ce classement, c'est l'ordre du dossier qui
+  // paysage, puis `branding/` (un logo range la vaut mieux qu'un homonyme
+  // trouve ailleurs). Sans ce classement, c'est l'ordre du dossier qui
   // decidait — donc le hasard.
   const paysage = (m) => (m.w && m.h ? m.w / m.h >= 1.2 : false)
   const rang = (m) =>
