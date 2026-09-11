@@ -47,6 +47,12 @@ import { COURS_DOMAIN, coursSections, coursUrl, type Note, type VaultData } from
 
 const TEINTE = { du: '#c2761a', acquis: '#10b981' } as const
 
+/* Une session dure un quart d'heure : au-delà on relit sans retenir, et le lot
+   restant ne perd rien à attendre demain. Le minuteur ne coupe pas la carte en
+   cours — il attend sa réponse, puis propose d'arrêter ou de rallonger. */
+const DUREE_SESSION = 15 * 60 * 1000
+const RALLONGE = 5 * 60 * 1000
+
 export function Revisions({ data }: { data: VaultData }) {
   const paquetsVault = usePaquets()
   const [perso, setPerso] = useState<CartePerso[]>(() => chargerPerso())
@@ -99,7 +105,14 @@ export function Revisions({ data }: { data: VaultData }) {
   const lancer = (mode: 'dues' | 'toutes') => {
     const lot = mode === 'dues' ? retenues.filter((c) => estDue(prog[c.id])) : retenues
     if (lot.length === 0) return
-    setSession({ file: melanger(lot), faites: 0, sues: 0, ratees: new Set(), total: lot.length })
+    setSession({
+      file: melanger(lot),
+      faites: 0,
+      sues: 0,
+      ratees: new Set(),
+      total: lot.length,
+      fin: Date.now() + DUREE_SESSION,
+    })
   }
 
   const ajouter = (c: CartePerso) => {
@@ -157,7 +170,7 @@ export function Revisions({ data }: { data: VaultData }) {
       <PageHead
         eyebrow="Cours · Révision"
         title="Flashcards"
-        desc="Les cartes que les fiches portent déjà, jouées une par une. Quatre réponses, et un intervalle propre à chaque carte : le délai annoncé sur chaque bouton est celui qu'elle engage. La progression reste dans ce navigateur."
+        desc="Les cartes que les fiches portent déjà, jouées une par une. Quatre réponses, et un intervalle propre à chaque carte : le délai annoncé sur chaque bouton est celui qu'elle engage. Une session dure un quart d'heure. La progression reste dans ce navigateur."
         right={<ExportAnki cartes={retenues} />}
       />
 
@@ -265,6 +278,8 @@ interface Session {
   ratees: Set<string>
   /** Nombre de cartes distinctes du lot — une carte qui repasse ne le gonfle pas. */
   total: number
+  /** L'horodatage où le quart d'heure expire (repoussé par une rallonge). */
+  fin: number
 }
 
 function Lecteur({
@@ -279,7 +294,19 @@ function Lecteur({
   prog: Progression
 }) {
   const [montre, setMontre] = useState(false)
+  // Le temps écoulé ne ferme pas la session lui-même : `fini` n'est posé qu'à la
+  // réponse suivante, pour ne pas escamoter la carte qu'on est en train de lire.
+  const [fini, setFini] = useState(false)
+  const [reste, setReste] = useState(() => session.fin - Date.now())
   const carte = session.file[0]
+
+  // Le compte à rebours se relit sur l'horloge plutôt qu'il ne se décrémente :
+  // un onglet mis en veille ne le fait pas prendre du retard.
+  useEffect(() => {
+    setReste(session.fin - Date.now())
+    const t = setInterval(() => setReste(session.fin - Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [session.fin])
 
   const repondreEt = useCallback(
     (r: Reponse) => {
@@ -294,12 +321,15 @@ function Lecteur({
       const reste = session.file.slice(1)
       const ratee = r === 'revoir' || session.ratees.has(carte.id)
 
+      if (Date.now() >= session.fin) setFini(true)
+
       setSession({
         file: revient ? [...reste, carte] : reste,
         faites: session.faites + (revient ? 0 : 1),
         sues: session.sues + (!revient && !ratee ? 1 : 0),
         ratees: r === 'revoir' ? new Set(session.ratees).add(carte.id) : session.ratees,
         total: session.total,
+        fin: session.fin,
       })
     },
     [carte, onRepondre, prog, session, setSession]
@@ -309,6 +339,8 @@ function Lecteur({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return setSession(null)
+      // Sur le bilan, plus rien à noter : les touches ne répondent pas à notre place.
+      if (fini) return
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault()
         // Entrée sur une carte retournée vaut « Correct », comme dans Anki.
@@ -320,25 +352,53 @@ function Lecteur({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [montre, repondreEt, setSession])
+  }, [montre, repondreEt, setSession, fini])
 
-  if (!carte) {
-    const taux = session.total > 0 ? Math.round((session.sues / session.total) * 100) : 0
+  // Deux façons de sortir : le lot est épuisé, ou le quart d'heure l'a arrêté.
+  if (fini || !carte) {
+    const interrompue = fini && session.file.length > 0
+    const passees = session.faites
+    const taux = passees > 0 ? Math.round((session.sues / passees) * 100) : 0
+    const rallonger = () => {
+      setFini(false)
+      setSession({ ...session, fin: Date.now() + RALLONGE })
+    }
+
     return (
       <div className="mx-auto max-w-[720px] px-5 sm:px-8 py-24 text-center">
-        <div className="caption uppercase text-subtle mb-5">Session terminée</div>
-        <h1 className="display-md mb-5">{session.total} cartes passées</h1>
+        <div className="caption uppercase text-subtle mb-5">
+          {interrompue ? 'Quinze minutes' : 'Session terminée'}
+        </div>
+        <h1 className="display-md mb-5">
+          {interrompue ? `${passees} cartes sur ${session.total}` : `${session.total} cartes passées`}
+        </h1>
         <p className="text-[15px] text-muted leading-relaxed mb-10">
-          {taux === 100
-            ? 'Aucune carte ratée. Elles reviendront chacune à leur date.'
-            : `${taux} % sues sans faute. Ce qui a été raté repasse dans les jours qui viennent.`}
+          {interrompue
+            ? `Le quart d'heure est écoulé — ${taux} % sues sans faute. Ce qui reste du lot ne perd rien à attendre demain, et la progression des cartes déjà notées est gardée.`
+            : taux === 100
+              ? 'Aucune carte ratée. Elles reviendront chacune à leur date.'
+              : `${taux} % sues sans faute. Ce qui a été raté repasse dans les jours qui viennent.`}
         </p>
-        <button
-          onClick={() => setSession(null)}
-          className="label px-5 py-3 rounded-full bg-brand text-background hover:opacity-80 transition-opacity"
-        >
-          Retour aux paquets
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {interrompue && (
+            <button
+              onClick={rallonger}
+              className="label px-5 py-3 rounded-full bg-brand text-background hover:opacity-80 transition-opacity"
+            >
+              Encore 5 minutes
+            </button>
+          )}
+          <button
+            onClick={() => setSession(null)}
+            className={`label px-5 py-3 rounded-full transition-colors ${
+              interrompue
+                ? 'border border-border text-subtle hover:text-foreground hover:border-brand/30'
+                : 'bg-brand text-background hover:opacity-80'
+            }`}
+          >
+            Retour aux paquets
+          </button>
+        </div>
       </div>
     )
   }
@@ -352,12 +412,15 @@ function Lecteur({
         <button onClick={() => setSession(null)} className="label text-subtle hover:text-foreground transition-colors">
           ← Quitter
         </button>
-        <span className="caption text-subtle tabular-nums">
-          {session.faites} / {session.total}
-          {session.file.length > session.total - session.faites && (
-            <span className="text-subtle/60"> · {session.file.length} en file</span>
-          )}
-        </span>
+        <div className="flex items-baseline gap-4">
+          <span className="caption text-subtle tabular-nums">
+            {session.faites} / {session.total}
+            {session.file.length > session.total - session.faites && (
+              <span className="text-subtle/60"> · {session.file.length} en file</span>
+            )}
+          </span>
+          <Chrono reste={reste} />
+        </div>
       </div>
 
       <div className="h-px bg-border mb-14 overflow-hidden">
@@ -410,6 +473,33 @@ function Lecteur({
         <span className="caption text-subtle ml-auto">{etiquette(etat)}</span>
       </div>
     </div>
+  )
+}
+
+/**
+ * Le quart d'heure qui reste. Il passe à l'orange dans les deux dernières
+ * minutes, et une fois à zéro annonce la dernière carte : le minuteur laisse
+ * toujours finir celle qui est à l'écran.
+ */
+function Chrono({ reste }: { reste: number }) {
+  if (reste <= 0)
+    return (
+      <span className="caption tabular-nums" style={{ color: TEINTE.du }}>
+        0:00 · dernière carte
+      </span>
+    )
+
+  const s = Math.ceil(reste / 1000)
+  const presse = reste <= 2 * 60 * 1000
+
+  return (
+    <span
+      className={`caption tabular-nums ${presse ? '' : 'text-subtle'}`}
+      style={presse ? { color: TEINTE.du } : undefined}
+      title="Temps restant dans la session"
+    >
+      {Math.floor(s / 60)}:{String(s % 60).padStart(2, '0')}
+    </span>
   )
 }
 

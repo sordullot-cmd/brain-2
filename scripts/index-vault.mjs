@@ -578,16 +578,53 @@ function rangVisuel(m, prefix) {
   return rangAspect * 10 + rangSujet + forme + petite
 }
 
+/**
+ * Un logo livre en blanc ou en gris tres clair est fait pour un fond sombre :
+ * pose sur la vignette, il disparait. Le cas est courant dans un dossier de
+ * branding, ou la marque range ses declinaisons sans dire laquelle va ou.
+ *
+ * Le test ne vaut que pour les SVG, ou les couleurs se lisent dans le texte du
+ * fichier : c'est aussi la ou le cas se presente (un PNG de logo clair arrive
+ * presque toujours avec son fond de marque). Un SVG dont AUCUNE couleur ne
+ * tient sur un fond clair est ecarte.
+ */
+function invisibleSurFondClair(m) {
+  if (m.ext !== 'svg') return false
+  let src
+  try {
+    src = fs.readFileSync(path.join(VAULT, m.path), 'utf8')
+  } catch {
+    return false
+  }
+  const couleurs = [...src.matchAll(/(?:fill|stroke|stop-color)="([^"]+)"/gi)].map((x) => x[1])
+  const NOMMEES = { white: 1, none: null, transparent: null, currentcolor: null }
+  const lum = (c) => {
+    const v = c.trim().toLowerCase()
+    if (v in NOMMEES) return NOMMEES[v]
+    const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/.exec(v)
+    if (!hex) return null
+    const h = hex[1].length === 3 ? [...hex[1]].map((d) => d + d).join('') : hex[1]
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+  }
+  const lues = couleurs.map(lum).filter((l) => l !== null)
+  // Un SVG sans couleur ecrite herite de la page : on ne peut rien en conclure.
+  return lues.length > 0 && lues.every((l) => l > 0.85)
+}
+
 /** Le logo le plus « identitaire » d'un lot — le repli quand rien ne se presente. */
 function meilleurLogo(images, prefix) {
+  // Le symbole d'abord : c'est la forme de l'icone d'app, qui represente les
+  // dix-sept autres projets. Un index ou une marque se presente par son dessin
+  // et la suivante par son nom ecrit ne se lit plus comme une serie.
   const PREFER = [
-    // Le lockup d'abord : logo + nom ensemble, et son format large tient bien.
-    /(^|[-_])lockup([-_]|$)/i,
-    // Puis le nom dessine, plus precis que « logo » tout court.
-    /(^|[-_])(logotype|wordmark)([-_]|$)/i,
-    /(^|[-_])(logo|logomark|marque)([-_]|$)/i,
-    // Pour une app, son icone EST son logo.
     /(^|[-_])(app-?icon|icone?|icon)([-_]|$)/i,
+    /(^|[-_])(logomark|mark|symbole?|monogramme)([-_]|$)/i,
+    /(^|[-_])(logo|marque)([-_]|$)/i,
+    // Le lockup ensuite : logo + nom ensemble, et son format large tient bien.
+    /(^|[-_])lockup([-_]|$)/i,
+    // Le nom dessine en dernier — faute de dessin, il identifie quand meme.
+    /(^|[-_])(logotype|wordmark)([-_]|$)/i,
     /(^|[-_])(primary|primaire|principal)([-_]|$)/i,
   ]
   // Un visuel de construction, un interdit, une planche de contact ou une
@@ -595,7 +632,7 @@ function meilleurLogo(images, prefix) {
   const AVOID = /(^|[-_])(do-not|regle|construction|grille|filaire|clear-?space|planche|sous-marque)/i
   // Ni un visuel d'archive : un projet se presente par son etat actuel.
   const isArchive = (m) => m.folder.split('/').some((seg) => /^archive/i.test(seg))
-  const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m))
+  const good = images.filter((m) => !AVOID.test(m.stem) && !isArchive(m) && !invisibleSurFondClair(m))
   const pool = good.length ? good : images
   // A motif egal, dans l'ordre : le vectoriel (net a toute taille), le format
   // paysage, puis `branding/` (un logo range la vaut mieux qu'un homonyme

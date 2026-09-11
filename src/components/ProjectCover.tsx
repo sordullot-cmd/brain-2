@@ -4,11 +4,11 @@ import { displaySrc, type Media, type Project } from '../lib/vault'
  * La vignette de couverture d'un projet — le cadre 4/3 de l'index et de
  * l'accueil, au même rendu des deux côtés.
  *
- * L'image est l'écran de l'app — le même matériau d'un projet à l'autre, pour
- * que l'index se lise comme une série (voir `pickCover` dans
- * `scripts/index-vault.mjs`). Deux cadrages selon sa forme : un écran large
- * remplit le cadre, alors qu'une capture mobile ou un logo se pose en entier
- * sur le fond — les recadrer les décapiterait.
+ * L'image est l'identité de la marque — presque toujours l'icône de l'app, le
+ * même matériau d'un projet à l'autre, pour que l'index se lise comme une série
+ * (voir `pickCover` dans `scripts/index-vault.mjs`). Elle se pose donc en
+ * entier sur le fond : la recadrer la décapiterait. `cover` ne sert qu'au
+ * visuel de repli d'un dossier sans marque à lui.
  */
 export function ProjectCover({ p, cover }: { p: Project; cover: Media | null }) {
   const plein = p.coverFit === 'cover'
