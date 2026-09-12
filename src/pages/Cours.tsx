@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
 import {
@@ -12,6 +12,13 @@ import {
   type SpecSection,
 } from '../components/Spec'
 import { NoteBody } from './Projet'
+import {
+  chargerPerso,
+  chargerProgression,
+  compter,
+  fusionner,
+  usePaquets,
+} from '../lib/flashcards'
 import {
   COURS_DOMAIN,
   coursSections,
@@ -406,6 +413,10 @@ export function CoursView({ data }: { data: VaultData }) {
         <h1 className="display-md max-w-4xl">{note.title}</h1>
         {f.notion && <p className="mt-5 text-[15px] leading-relaxed text-muted max-w-2xl text-pretty">{f.notion}</p>}
 
+        {/* Les cartes de cette fiche-là, jouables d'ici : le bouton ne mène pas
+            à l'écran de sélection, il lance la session sur ce seul paquet. */}
+        <Reviser note={note} />
+
         {/* Le suivi ne vaut que pour une fiche d'UE : une note d'amphi n'a ni
             trous comptés ni cartes, afficher deux zéros ne dirait rien. */}
         <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3 caption">
@@ -422,17 +433,7 @@ export function CoursView({ data }: { data: VaultData }) {
                 </span>
               )}
               <Metrique n={f.aVerifier} l="à récupérer" teinte={f.aVerifier > 0 ? TEINTE.trou : undefined} />
-              {note.nbCartes ? (
-                <Link
-                  to={`/cours/revision?paquet=${encodeURIComponent(note.id)}`}
-                  className="flex items-baseline gap-1.5 hover:text-foreground transition-colors"
-                >
-                  <span className="tabular-nums">{note.nbCartes}</span>
-                  <span className="text-subtle/60">cartes à réviser →</span>
-                </Link>
-              ) : (
-                <Metrique n={f.cartes} l="cartes" />
-              )}
+              <Metrique n={note.nbCartes ?? f.cartes} l="cartes" />
               {f.revu && <span className="text-subtle/60 mono">revu le {fmtDate(f.revu)}</span>}
             </>
           ) : (
@@ -488,6 +489,71 @@ export function CoursView({ data }: { data: VaultData }) {
           )}
         </article>
       </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------ réviser d'ici */
+
+/**
+ * Le bouton qui lance les cartes de *cette* fiche.
+ *
+ * Il annonce ce qu'il engage plutôt qu'un total : le nombre qui compte un soir
+ * de révision, c'est ce qui est dû aujourd'hui, pas ce que la fiche contient.
+ * Quand tout est à jour, le bouton ne fait pas semblant du contraire — il passe
+ * en second plan et propose de tout revoir, ce qui est un autre geste.
+ *
+ * Les cartes (40 ko) et la progression (localStorage) arrivent après la page :
+ * tant qu'elles ne sont pas là, le bouton affiche le compte de l'index, déjà
+ * chargé. Aucune attente, et le libellé s'affine tout seul.
+ */
+function Reviser({ note }: { note: Note }) {
+  const paquets = usePaquets()
+  // Lues une fois : on ne révise pas depuis cette page, rien ne les fera bouger.
+  const [perso] = useState(chargerPerso)
+  const [prog] = useState(chargerProgression)
+
+  const compte = useMemo(() => {
+    if (!paquets) return null
+    const p = fusionner(paquets, perso).find((x) => x.noteId === note.id)
+    return p ? compter(p.cartes, prog) : { total: 0, neuves: 0, dues: 0, acquises: 0 }
+  }, [paquets, perso, prog, note.id])
+
+  // Ni cartes dans la fiche, ni cartes maison rattachées : pas de bouton.
+  if (compte ? compte.total === 0 : !note.nbCartes) return null
+
+  const lien = (go: 'dues' | 'toutes') =>
+    `/cours/revision?paquet=${encodeURIComponent(note.id)}&go=${go}`
+
+  // Rien de dû : le bouton principal n'aurait rien à lancer.
+  if (compte && compte.dues === 0)
+    return (
+      <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <Link
+          to={lien('toutes')}
+          className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
+        >
+          Tout revoir ({compte.total})
+        </Link>
+        <span className="caption text-subtle">Cette fiche est à jour.</span>
+      </div>
+    )
+
+  const dues = compte?.dues ?? note.nbCartes ?? 0
+
+  return (
+    <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+      <Link
+        to={lien('dues')}
+        className="label px-5 py-3 rounded-full bg-brand text-background hover:opacity-80 transition-opacity"
+      >
+        Réviser {dues} carte{dues > 1 ? 's' : ''}
+      </Link>
+      {compte && compte.total > compte.dues && (
+        <Link to={lien('toutes')} className="caption text-subtle hover:text-foreground transition-colors">
+          ou tout revoir ({compte.total})
+        </Link>
+      )}
     </div>
   )
 }

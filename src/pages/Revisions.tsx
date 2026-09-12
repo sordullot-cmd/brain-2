@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import {
   PAQUET_PERSO,
@@ -65,6 +65,10 @@ export function Revisions({ data }: { data: VaultData }) {
   const [params] = useSearchParams()
   const demande = params.get('paquet')
 
+  // `?go=dues` (ou `go=toutes`) : la fiche n'envoie pas *choisir* un paquet,
+  // elle envoie réviser. L'écran de sélection est sauté.
+  const auto = params.get('go')
+
   /**
    * Le titre d'une fiche vient de l'index, pas du JSON des cartes : c'est
    * `lib/vault` qui rend aux notes de cours leur nom de fichier (les H1 des
@@ -114,6 +118,24 @@ export function Revisions({ data }: { data: VaultData }) {
       fin: Date.now() + DUREE_SESSION,
     })
   }
+
+  /**
+   * Le lancement direct, une seule fois par visite : la session finie ramène à
+   * cet écran, et l'URL porte toujours son `?go=` — sans ce garde, on repartirait
+   * en boucle dans le lot qu'on vient de terminer.
+   *
+   * Si rien n'est dû, `lancer` ne fait rien et l'écran de sélection reste, avec
+   * son « c'est à jour » et son « Tout revoir » : mieux vaut le dire que de
+   * refaire passer de force des cartes qui ne le demandent pas.
+   */
+  const demarre = useRef(false)
+  useEffect(() => {
+    if (!auto || demarre.current || !paquets) return
+    demarre.current = true
+    lancer(auto === 'toutes' ? 'toutes' : 'dues')
+    // `lancer` se referme sur `retenues` et `prog`, tous deux à jour à ce rendu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, paquets])
 
   const ajouter = (c: CartePerso) => {
     const suivant = [...perso, c]
