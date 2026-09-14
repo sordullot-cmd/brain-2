@@ -49,9 +49,26 @@ const TEINTE = { du: '#c2761a', acquis: '#10b981' } as const
 
 /* Une session dure un quart d'heure : au-delà on relit sans retenir, et le lot
    restant ne perd rien à attendre demain. Le minuteur ne coupe pas la carte en
-   cours — il attend sa réponse, puis propose d'arrêter ou de rallonger. */
+   cours — il attend sa réponse, puis propose d'arrêter ou de rallonger.
+
+   Ce quart d'heure est du temps passé sur les cartes, pas du temps de mur : il
+   ne court que quand l'app ou le site est au premier plan. Onglet caché, autre
+   fenêtre, écran verrouillé — le chrono se fige et reprend au retour. */
 const DUREE_SESSION = 15 * 60 * 1000
 const RALLONGE = 5 * 60 * 1000
+
+/** Vrai quand les cartes sont réellement sous les yeux : onglet affiché *et*
+ *  fenêtre au premier plan. Changer de fenêtre suffit donc à mettre en pause. */
+const auPremierPlan = () => document.visibilityState === 'visible' && document.hasFocus()
+
+/** Le temps restant, le tour en cours décompté quand le chrono tourne. */
+const resteDe = (s: Session) => (s.depuis === null ? s.restant : s.restant - (Date.now() - s.depuis))
+
+/** Fige le chrono, ou le relance là où il s'était arrêté. */
+const cadencer = (s: Session, actif: boolean): Session => {
+  if (actif === (s.depuis !== null)) return s
+  return actif ? { ...s, depuis: Date.now() } : { ...s, restant: resteDe(s), depuis: null }
+}
 
 export function Revisions({ data }: { data: VaultData }) {
   const paquetsVault = usePaquets()
@@ -115,7 +132,8 @@ export function Revisions({ data }: { data: VaultData }) {
       sues: 0,
       ratees: new Set(),
       total: lot.length,
-      fin: Date.now() + DUREE_SESSION,
+      restant: DUREE_SESSION,
+      depuis: auPremierPlan() ? Date.now() : null,
     })
   }
 
@@ -192,7 +210,7 @@ export function Revisions({ data }: { data: VaultData }) {
       <PageHead
         eyebrow="Cours · Révision"
         title="Flashcards"
-        desc="Les cartes que les fiches portent déjà, jouées une par une. Quatre réponses, et un intervalle propre à chaque carte : le délai annoncé sur chaque bouton est celui qu'elle engage. Une session dure un quart d'heure. La progression reste dans ce navigateur."
+        desc="Les cartes que les fiches portent déjà, jouées une par une. Quatre réponses, et un intervalle propre à chaque carte : le délai annoncé sur chaque bouton est celui qu'elle engage. Une session dure un quart d'heure passé sur les cartes : le chrono se met en pause dès qu'on quitte la fenêtre. La progression reste dans ce navigateur."
         right={<ExportAnki cartes={retenues} />}
       />
 
@@ -300,8 +318,11 @@ interface Session {
   ratees: Set<string>
   /** Nombre de cartes distinctes du lot — une carte qui repasse ne le gonfle pas. */
   total: number
-  /** L'horodatage où le quart d'heure expire (repoussé par une rallonge). */
-  fin: number
+  /** Ce qui reste du quart d'heure, en millisecondes, à la dernière pause. */
+  restant: number
+  /** L'horodatage où le chrono a été (re)lancé, `null` quand il est en pause —
+   *  l'app ou le site n'est pas au premier plan, ce temps-là ne compte pas. */
+  depuis: number | null
 }
 
 function Lecteur({
@@ -319,16 +340,42 @@ function Lecteur({
   // Le temps écoulé ne ferme pas la session lui-même : `fini` n'est posé qu'à la
   // réponse suivante, pour ne pas escamoter la carte qu'on est en train de lire.
   const [fini, setFini] = useState(false)
-  const [reste, setReste] = useState(() => session.fin - Date.now())
+  const [reste, setReste] = useState(() => resteDe(session))
   const carte = session.file[0]
 
+  // Les écouteurs lisent la session vivante sans se réabonner à chaque réponse.
+  const vue = useRef(session)
+  vue.current = session
+
   // Le compte à rebours se relit sur l'horloge plutôt qu'il ne se décrémente :
-  // un onglet mis en veille ne le fait pas prendre du retard.
+  // un onglet mis en veille ne le fait pas prendre du retard. Et il ne court que
+  // sous les yeux — partir sur une autre fenêtre ou un autre onglet le fige, le
+  // retour le relance là où il en était.
   useEffect(() => {
-    setReste(session.fin - Date.now())
-    const t = setInterval(() => setReste(session.fin - Date.now()), 1000)
-    return () => clearInterval(t)
-  }, [session.fin])
+    const t = setInterval(() => setReste(resteDe(vue.current)), 1000)
+
+    const bascule = () => {
+      const suivant = cadencer(vue.current, auPremierPlan())
+      if (suivant === vue.current) return
+      vue.current = suivant
+      setSession(suivant)
+      setReste(resteDe(suivant))
+    }
+
+    // `visibilitychange` couvre l'onglet caché et l'app réduite ; `focus` et
+    // `blur` couvrent le simple changement de fenêtre, qui laisse la page visible.
+    document.addEventListener('visibilitychange', bascule)
+    window.addEventListener('focus', bascule)
+    window.addEventListener('blur', bascule)
+    bascule()
+
+    return () => {
+      clearInterval(t)
+      document.removeEventListener('visibilitychange', bascule)
+      window.removeEventListener('focus', bascule)
+      window.removeEventListener('blur', bascule)
+    }
+  }, [setSession])
 
   const repondreEt = useCallback(
     (r: Reponse) => {
@@ -343,7 +390,7 @@ function Lecteur({
       const reste = session.file.slice(1)
       const ratee = r === 'revoir' || session.ratees.has(carte.id)
 
-      if (Date.now() >= session.fin) setFini(true)
+      if (resteDe(vue.current) <= 0) setFini(true)
 
       setSession({
         file: revient ? [...reste, carte] : reste,
@@ -351,7 +398,10 @@ function Lecteur({
         sues: session.sues + (!revient && !ratee ? 1 : 0),
         ratees: r === 'revoir' ? new Set(session.ratees).add(carte.id) : session.ratees,
         total: session.total,
-        fin: session.fin,
+        // L'état du chrono se lit sur la session vivante : une pause prise juste
+        // avant la réponse ne doit pas être écrasée par la copie capturée ici.
+        restant: vue.current.restant,
+        depuis: vue.current.depuis,
       })
     },
     [carte, onRepondre, prog, session, setSession]
@@ -383,7 +433,7 @@ function Lecteur({
     const taux = passees > 0 ? Math.round((session.sues / passees) * 100) : 0
     const rallonger = () => {
       setFini(false)
-      setSession({ ...session, fin: Date.now() + RALLONGE })
+      setSession({ ...session, restant: RALLONGE, depuis: auPremierPlan() ? Date.now() : null })
     }
 
     return (
@@ -518,7 +568,7 @@ function Chrono({ reste }: { reste: number }) {
     <span
       className={`caption tabular-nums ${presse ? '' : 'text-subtle'}`}
       style={presse ? { color: TEINTE.du } : undefined}
-      title="Temps restant dans la session"
+      title="Temps restant dans la session — en pause quand la fenêtre n'est pas au premier plan"
     >
       {Math.floor(s / 60)}:{String(s % 60).padStart(2, '0')}
     </span>
