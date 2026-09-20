@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" width="720" height="380" font-family="Helvetica, Arial, sans-serif">
+<!-- Source : Introduction a l'economie UE 11A, chapitre 1, section II.2 b) - figure dessinee au tableau
+     (cours n3, 14 septembre 2026). Meme figure dans L1/Introduction a l_economie/CM/Chapitre 1.pdf p.9. -->
+<rect width="720" height="380" fill="#ffffff"/>
+
+<text x="30" y="34" font-size="16" font-weight="bold" fill="#1a1a1a">L'activité économique : une tendance + des cycles</text>
+
+<!-- axes -->
+<line x1="70" y1="60" x2="70" y2="300" stroke="#1a1a1a" stroke-width="2"/>
+<line x1="70" y1="300" x2="670" y2="300" stroke="#1a1a1a" stroke-width="2"/>
+<polygon points="70,52 66,64 74,64" fill="#1a1a1a"/>
+<polygon points="678,300 666,296 666,304" fill="#1a1a1a"/>
+<text x="34" y="60" font-size="15" font-weight="bold" fill="#1a1a1a">PIB</text>
+<text x="640" y="322" font-size="15" font-weight="bold" fill="#1a1a1a">Temps</text>
+
+<!-- tendance -->
+<line x1="80" y1="268" x2="655" y2="108" stroke="#1f6feb" stroke-width="2.5" stroke-dasharray="9,5"/>
+<text x="560" y="106" font-size="14" font-weight="bold" fill="#1f6feb">Tendance</text>
+
+<!-- cycle autour de la tendance -->
+<path d="M 80 268 Q 130 218 175 240 Q 220 262 265 205 Q 310 148 355 190 Q 400 232 445 165 Q 490 98 535 145 Q 580 192 625 118"
+      fill="none" stroke="#c0392b" stroke-width="2.8"/>
+
+<!-- phases -->
+<line x1="265" y1="205" x2="310" y2="168" stroke="#2e7d32" stroke-width="1.6"/>
+<text x="252" y="150" font-size="13.5" font-weight="bold" fill="#2e7d32">Croissance</text>
+<line x1="355" y1="190" x2="400" y2="228" stroke="#8e44ad" stroke-width="1.6"/>
+<text x="358" y="262" font-size="13.5" font-weight="bold" fill="#8e44ad">Récession</text>
+
+<text x="70" y="346" font-size="12.5" fill="#333">Les prévisions se lisent sur la tendance — mais un choc peut déplacer la tendance elle-même.</text>
+</svg>

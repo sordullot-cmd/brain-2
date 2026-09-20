@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430" font-family="Helvetica, Arial, sans-serif">
+<!-- Source : Introduction a l'economie UE 11A, chapitre 1, section II.1 - figure dessinee au tableau
+     (cours n3, 14 septembre 2026). Meme figure dans L1/Introduction a l_economie/CM/Chapitre 1.pdf p.7. -->
+<rect width="820" height="430" fill="#ffffff"/>
+
+<!-- ============ PANNEAU GAUCHE : l'equilibre ============ -->
+<text x="30" y="34" font-size="16" font-weight="bold" fill="#1a1a1a">1. L'équilibre du marché</text>
+
+<!-- axes -->
+<line x1="70" y1="70" x2="70" y2="360" stroke="#1a1a1a" stroke-width="2"/>
+<line x1="70" y1="360" x2="360" y2="360" stroke="#1a1a1a" stroke-width="2"/>
+<polygon points="70,62 66,74 74,74" fill="#1a1a1a"/>
+<polygon points="368,360 356,356 356,364" fill="#1a1a1a"/>
+<text x="52" y="62" font-size="15" font-weight="bold" fill="#1a1a1a">P</text>
+<text x="366" y="382" font-size="15" font-weight="bold" fill="#1a1a1a">Q</text>
+
+<!-- demande decroissante -->
+<line x1="95" y1="90" x2="340" y2="335" stroke="#c0392b" stroke-width="2.5"/>
+<text x="300" y="330" font-size="14" font-weight="bold" fill="#c0392b">Qd</text>
+<!-- offre croissante -->
+<line x1="95" y1="335" x2="340" y2="90" stroke="#1f6feb" stroke-width="2.5"/>
+<text x="300" y="112" font-size="14" font-weight="bold" fill="#1f6feb">Qo</text>
+
+<!-- equilibre -->
+<line x1="70" y1="212" x2="217" y2="212" stroke="#555" stroke-width="1.2" stroke-dasharray="5,4"/>
+<line x1="217" y1="212" x2="217" y2="360" stroke="#555" stroke-width="1.2" stroke-dasharray="5,4"/>
+<circle cx="217" cy="212" r="5.5" fill="#1a1a1a"/>
+<text x="228" y="205" font-size="15" font-weight="bold" fill="#1a1a1a">E</text>
+<text x="42" y="217" font-size="14" fill="#1a1a1a">P*</text>
+<text x="211" y="382" font-size="14" fill="#1a1a1a">Q*</text>
+
+<text x="70" y="404" font-size="12.5" fill="#333">À l'équilibre : Qd = Qo = Q*, au prix P*</text>
+
+<!-- ============ PANNEAU DROIT : le choc ============ -->
+<text x="450" y="34" font-size="16" font-weight="bold" fill="#1a1a1a">2. Le choc : ↑ Pi (prix des ingrédients)</text>
+
+<line x1="490" y1="70" x2="490" y2="360" stroke="#1a1a1a" stroke-width="2"/>
+<line x1="490" y1="360" x2="780" y2="360" stroke="#1a1a1a" stroke-width="2"/>
+<polygon points="490,62 486,74 494,74" fill="#1a1a1a"/>
+<polygon points="788,360 776,356 776,364" fill="#1a1a1a"/>
+<text x="472" y="62" font-size="15" font-weight="bold" fill="#1a1a1a">P</text>
+<text x="786" y="382" font-size="15" font-weight="bold" fill="#1a1a1a">Q</text>
+
+<!-- demande inchangee -->
+<line x1="515" y1="90" x2="760" y2="335" stroke="#c0392b" stroke-width="2.5"/>
+<text x="720" y="330" font-size="14" font-weight="bold" fill="#c0392b">Qd</text>
+<!-- offre initiale -->
+<line x1="515" y1="335" x2="760" y2="90" stroke="#1f6feb" stroke-width="2" stroke-dasharray="6,4" opacity="0.55"/>
+<text x="742" y="112" font-size="13" fill="#1f6feb" opacity="0.75">Qo</text>
+<!-- offre deplacee vers la gauche -->
+<line x1="515" y1="255" x2="700" y2="70" stroke="#1f6feb" stroke-width="2.8"/>
+<text x="612" y="86" font-size="14" font-weight="bold" fill="#1f6feb">Qo₁</text>
+<!-- fleche de deplacement -->
+<line x1="620" y1="230" x2="578" y2="188" stroke="#1f6feb" stroke-width="2"/>
+<polygon points="571,181 585,184 582,195" fill="#1f6feb"/>
+
+<!-- ancien equilibre -->
+<line x1="490" y1="212" x2="637" y2="212" stroke="#999" stroke-width="1.1" stroke-dasharray="5,4"/>
+<line x1="637" y1="212" x2="637" y2="360" stroke="#999" stroke-width="1.1" stroke-dasharray="5,4"/>
+<circle cx="637" cy="212" r="5" fill="#999"/>
+<text x="649" y="232" font-size="13" fill="#777">E</text>
+<text x="462" y="217" font-size="13" fill="#777">P*</text>
+<text x="631" y="382" font-size="13" fill="#777">Q*</text>
+
+<!-- nouvel equilibre -->
+<line x1="490" y1="166" x2="596" y2="166" stroke="#111" stroke-width="1.3" stroke-dasharray="5,4"/>
+<line x1="596" y1="166" x2="596" y2="360" stroke="#111" stroke-width="1.3" stroke-dasharray="5,4"/>
+<circle cx="596" cy="166" r="5.5" fill="#1a1a1a"/>
+<text x="605" y="158" font-size="15" font-weight="bold" fill="#1a1a1a">E₁</text>
+<text x="455" y="171" font-size="14" font-weight="bold" fill="#1a1a1a">P*₁</text>
+<text x="566" y="382" font-size="14" font-weight="bold" fill="#1a1a1a">Q*₁</text>
+
+<text x="490" y="404" font-size="12.5" fill="#333">↑ Pi → l'offre seule se déplace → P* augmente, Q* diminue</text>
+</svg>
