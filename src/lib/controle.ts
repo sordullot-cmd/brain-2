@@ -24,7 +24,8 @@ function lire(bloc: Element, n: number, theme: string | null, base: string): Que
   if (propositions.length < 2) return null
 
   const reponse = ps[1].querySelector(':scope > strong:first-child')
-  const bonnes = new Set(reponse?.textContent?.match(/[a-e]/g) ?? [])
+  // Lettres isolées seulement : « a, b et d » ne doit pas lire le « e » de « et ».
+  const bonnes = new Set(reponse?.textContent?.match(/\b[a-e]\b/g) ?? [])
   if (!bonnes.size || ![...bonnes].every((l) => propositions.some((m) => m[1] === l))) return null
   reponse!.remove()
 
