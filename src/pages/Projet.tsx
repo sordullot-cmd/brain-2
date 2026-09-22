@@ -4,7 +4,6 @@ import { Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
 import { MediaLayout } from '../components/MediaLayout'
 import { useLightbox } from '../components/Lightbox'
-import { useControles } from '../components/Controle'
 import {
   SpecCanvas,
   SpecHero,
@@ -272,8 +271,6 @@ export function NoteBody({ id, media }: { id: string; media?: Map<string, Media>
   const { onClick, node } = useProseLightbox(media)
   const html = text?.[id]?.html
   const { hash } = useLocation()
-  const [racine, setRacine] = useState<HTMLDivElement | null>(null)
-  const controles = useControles(racine, html)
 
   /**
    * Aller au titre visé par l'ancre.
@@ -310,8 +307,7 @@ export function NoteBody({ id, media }: { id: string; media?: Map<string, Media>
     )
   return (
     <>
-      <div ref={setRacine} className="prose-vault" onClick={onClick} dangerouslySetInnerHTML={{ __html: html }} />
-      {controles}
+      <div className="prose-vault" onClick={onClick} dangerouslySetInnerHTML={{ __html: html }} />
       {node}
     </>
   )

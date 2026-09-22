@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { PageHead, Empty } from '../components/Layout'
 import { useDockPager } from '../components/Dock'
@@ -12,6 +12,8 @@ import {
   type SpecSection,
 } from '../components/Spec'
 import { NoteBody } from './Projet'
+import { QcmSession } from './Qcm'
+import { qcmDeFiche } from '../lib/controle'
 import {
   chargerPerso,
   chargerProgression,
@@ -329,6 +331,7 @@ function Bloc({ titre, children }: { titre: string; children: React.ReactNode })
 export function CoursView({ data }: { data: VaultData }) {
   const params = useParams()
   const navigate = useNavigate()
+  const [recherche] = useSearchParams()
   const idx = useMemo(() => indexById(data), [data])
   const text = useNotesText()
 
@@ -355,6 +358,12 @@ export function CoursView({ data }: { data: VaultData }) {
     }
     return out
   }, [html])
+
+  // Les blocs « Contrôle » de la fiche, jouables comme un QCM d'annales.
+  const questions = useMemo(
+    () => (html && note ? qcmDeFiche(html, coursUrl(note)) : []),
+    [html, note]
+  )
 
   const active = useScrollSpy(useMemo(() => specIds(sections), [sections]))
 
@@ -390,6 +399,22 @@ export function CoursView({ data }: { data: VaultData }) {
       </div>
     )
 
+  // `?qcm` : la fiche se joue au lieu de se lire. Même adresse, pour que le
+  // retour du navigateur ramène au texte.
+  if (recherche.has('qcm') && questions.length > 0)
+    return (
+      <div onClick={onClick}>
+        <QcmSession
+          key={note.id}
+          questions={questions}
+          retour={{ to: coursUrl(note), label: note.title }}
+          surtitre="Contrôle"
+          titre={note.title}
+          html
+        />
+      </div>
+    )
+
   const f = fiche(note)
   const links = note.links.map((i) => idx.notes.get(i)!).filter(Boolean)
   const backlinks = note.backlinks.map((i) => idx.notes.get(i)!).filter(Boolean)
@@ -415,7 +440,17 @@ export function CoursView({ data }: { data: VaultData }) {
 
         {/* Les cartes de cette fiche-là, jouables d'ici : le bouton ne mène pas
             à l'écran de sélection, il lance la session sur ce seul paquet. */}
-        <Reviser note={note} />
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <Reviser note={note} />
+          {questions.length > 0 && (
+            <Link
+              to="?qcm"
+              className="label px-5 py-3 rounded-full border border-brand/40 text-foreground hover:border-brand transition-colors"
+            >
+              Lancer le QCM ({questions.length} question{questions.length > 1 ? 's' : ''})
+            </Link>
+          )}
+        </div>
 
         {/* Le suivi ne vaut que pour une fiche d'UE : une note d'amphi n'a ni
             trous comptés ni cartes, afficher deux zéros ne dirait rien. */}
@@ -528,7 +563,7 @@ function Reviser({ note }: { note: Note }) {
   // Rien de dû : le bouton principal n'aurait rien à lancer.
   if (compte && compte.dues === 0)
     return (
-      <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <Link
           to={lien('toutes')}
           className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
@@ -542,7 +577,7 @@ function Reviser({ note }: { note: Note }) {
   const dues = compte?.dues ?? note.nbCartes ?? 0
 
   return (
-    <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
       <Link
         to={lien('dues')}
         className="label px-5 py-3 rounded-full bg-brand text-background hover:opacity-80 transition-opacity"

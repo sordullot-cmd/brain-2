@@ -26,30 +26,21 @@ const juste = (q: Question, choix: string[]) => {
 
 const corrigee = (q: Question) => q.options.some((o) => o.correcte)
 
+/**
+ * Le texte d'une question. Celles des annales sont du texte brut à formules
+ * `$…$` ; celles des fiches (voir lib/controle.ts) arrivent en HTML déjà rendu
+ * par l'indexeur, formules comprises.
+ */
+function Texte({ children, html }: { children: string; html?: boolean }) {
+  return html ? <span dangerouslySetInnerHTML={{ __html: children }} /> : <Maths>{children}</Maths>
+}
+
 export function QcmView() {
   const params = useParams()
   const id = `${params.matiere}/${params.slug}`
   const data = useAnnales()
   const qcm = useQcm(id)
   const epreuve = data?.epreuves.find((e) => e.id === id)
-
-  const [theme, setTheme] = useState<string | null>(null)
-  const [i, setI] = useState(0)
-  const [etats, setEtats] = useState<Record<number, Etat>>({})
-  const [fini, setFini] = useState(false)
-
-  const questions = useMemo(
-    () => (qcm?.questions ?? []).filter((q) => !theme || q.theme === theme),
-    [qcm, theme]
-  )
-
-  // Changer de thème (ou de paquet) recommence la série : le rang n'a plus
-  // le même sens d'une liste à l'autre.
-  useEffect(() => {
-    setI(0)
-    setEtats({})
-    setFini(false)
-  }, [theme, id])
 
   if (qcm === undefined) return <Chargement />
   if (!qcm)
@@ -59,7 +50,54 @@ export function QcmView() {
       </div>
     )
 
-  const themes = [...new Set(qcm.questions.map((q) => q.theme).filter(Boolean))] as string[]
+  return (
+    <QcmSession
+      key={id}
+      questions={qcm.questions}
+      retour={{ to: `/annales/${id}`, label: epreuve?.titre ?? 'L’épreuve' }}
+      surtitre={qcm.matiere}
+      titre={qcm.titre}
+    />
+  )
+}
+
+/**
+ * L'écran de jeu lui-même, commun aux annales et aux fiches de cours : une
+ * question à la fois, la validation, puis le bilan et les ratées à rejouer.
+ * Changer de série se fait en changeant sa `key`.
+ */
+export function QcmSession({
+  questions: toutes,
+  retour,
+  surtitre,
+  titre,
+  html,
+}: {
+  questions: Question[]
+  retour: { to: string; label: string }
+  surtitre?: string
+  titre: string
+  html?: boolean
+}) {
+  const [theme, setTheme] = useState<string | null>(null)
+  const [i, setI] = useState(0)
+  const [etats, setEtats] = useState<Record<number, Etat>>({})
+  const [fini, setFini] = useState(false)
+
+  const questions = useMemo(
+    () => toutes.filter((q) => !theme || q.theme === theme),
+    [toutes, theme]
+  )
+
+  // Changer de thème recommence la série : le rang n'a plus le même sens
+  // d'une liste à l'autre.
+  useEffect(() => {
+    setI(0)
+    setEtats({})
+    setFini(false)
+  }, [theme])
+
+  const themes = [...new Set(toutes.map((q) => q.theme).filter(Boolean))] as string[]
   const q = questions[i]
   const etat = q ? etats[q.n] : undefined
 
@@ -101,28 +139,25 @@ export function QcmView() {
   return (
     <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-12 pb-24">
       <div className="flex items-center justify-between gap-4 mb-10">
-        <Link
-          to={`/annales/${id}`}
-          className="label text-subtle hover:text-foreground transition-colors"
-        >
-          ← {epreuve?.titre ?? 'L’épreuve'}
+        <Link to={retour.to} className="label text-subtle hover:text-foreground transition-colors">
+          ← {retour.label}
         </Link>
         <span className="caption text-subtle tabular-nums">
           {bonnes.length} / {repondues.length || 0} juste{bonnes.length > 1 ? 's' : ''}
         </span>
       </div>
 
-      <div className="caption uppercase text-subtle mb-4">{qcm.matiere}</div>
-      <h1 className="display-md mb-8">{qcm.titre}</h1>
+      {surtitre && <div className="caption uppercase text-subtle mb-4">{surtitre}</div>}
+      <h1 className="display-md mb-8">{titre}</h1>
 
       {themes.length > 1 && (
         <div className="flex flex-wrap gap-2 mb-10">
           <Puce actif={theme === null} onClick={() => setTheme(null)}>
-            Tout ({qcm.questions.length})
+            Tout ({toutes.length})
           </Puce>
           {themes.map((t) => (
             <Puce key={t} actif={theme === t} onClick={() => setTheme(t)}>
-              {t} ({qcm.questions.filter((x) => x.theme === t).length})
+              {t} ({toutes.filter((x) => x.theme === t).length})
             </Puce>
           ))}
         </div>
@@ -142,6 +177,7 @@ export function QcmView() {
           bonnes={bonnes.length}
           ratees={ratees}
           etats={etats}
+          html={html}
           onRejouer={rejouerRatees}
           onRecommencer={() => {
             setEtats({})
@@ -171,7 +207,7 @@ export function QcmView() {
           </div>
 
           <p className="text-[17px] leading-relaxed mb-8">
-            <Maths>{q.enonce}</Maths>
+            <Texte html={html}>{q.enonce}</Texte>
           </p>
 
           <div className="space-y-2.5">
@@ -202,7 +238,7 @@ export function QcmView() {
                     {o.lettre}
                   </span>
                   <span className="text-[15px] leading-relaxed">
-                    <Maths>{o.texte}</Maths>
+                    <Texte html={html}>{o.texte}</Texte>
                   </span>
                 </button>
               )
@@ -252,6 +288,15 @@ export function QcmView() {
               Réponse retrouvée — {q.source}
             </p>
           )}
+
+          {/* Pourquoi, quand la fiche le dit : le QCM d'une fiche sert à
+              apprendre, pas seulement à se noter. */}
+          {etat?.valide && q.explication && (
+            <p
+              className="prose-vault mt-6 text-[15px] leading-relaxed border-l-2 border-border pl-4"
+              dangerouslySetInnerHTML={{ __html: q.explication }}
+            />
+          )}
         </>
       )}
     </div>
@@ -263,6 +308,7 @@ function Bilan({
   bonnes,
   ratees,
   etats,
+  html,
   onRejouer,
   onRecommencer,
 }: {
@@ -270,6 +316,7 @@ function Bilan({
   bonnes: number
   ratees: Question[]
   etats: Record<number, Etat>
+  html?: boolean
   onRejouer: () => void
   onRecommencer: () => void
 }) {
@@ -299,7 +346,7 @@ function Bilan({
           {ratees.map((q) => (
             <div key={q.n} className="border-l-2 pl-4" style={{ borderColor: '#d92d5e' }}>
               <p className="text-[15px] leading-relaxed mb-2">
-                <Maths>{q.enonce}</Maths>
+                <Texte html={html}>{q.enonce}</Texte>
               </p>
               <p className="caption text-subtle">
                 Répondu : {etats[q.n]?.choix.join(', ').toUpperCase() || '—'} · attendu :{' '}
@@ -313,7 +360,7 @@ function Bilan({
                   .filter((o) => o.correcte)
                   .map((o) => (
                     <li key={o.lettre} className="caption leading-relaxed" style={{ color: '#10b981' }}>
-                      <Maths>{o.texte}</Maths>
+                      <Texte html={html}>{o.texte}</Texte>
                     </li>
                   ))}
               </ul>

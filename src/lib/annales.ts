@@ -33,6 +33,12 @@ export interface Question {
    * = la réponse vient du corrigé de l'épreuve elle-même.
    */
   source?: string
+  /**
+   * Pourquoi c'est la bonne réponse, en HTML déjà rendu. Seules les questions
+   * de contrôle des fiches en portent (voir controle.ts) ; leurs textes sont
+   * alors du HTML, pas du texte à formules.
+   */
+  explication?: string
 }
 
 export interface Tableau {
