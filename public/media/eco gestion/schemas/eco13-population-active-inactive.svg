@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" font-family="Helvetica, Arial, sans-serif">
+<!-- Reproduit la figure de la slide 6 du Chapitre 2 (PEC, Olivier Mouate).
+     Actif (occupe ou non) et inactif : l'emboitement des populations. -->
+<rect width="640" height="400" fill="#ffffff"/>
+<text x="320" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Actif (occupé ou non) et inactif</text>
+<rect x="40" y="48" width="560" height="296" rx="10" fill="#f6f7fa" stroke="#55607a" stroke-width="1.6"/>
+<text x="56" y="70" font-size="13" font-weight="bold" fill="#1a1a1a">Population totale</text>
+<rect x="60" y="84" width="520" height="242" rx="9" fill="#eef2f9" stroke="#5b6b8c" stroke-width="1.6"/>
+<text x="76" y="106" font-size="13" font-weight="bold" fill="#1a1a1a">Population en âge de travailler</text>
+<text x="290" y="106" font-size="11.5" font-style="italic" fill="#55607a">15-64 ans, par convention statistique</text>
+<rect x="80" y="120" width="330" height="190" rx="8" fill="#dde6f4" stroke="#2f4470" stroke-width="1.8"/>
+<text x="96" y="142" font-size="13" font-weight="bold" fill="#1a1a1a">Population active</text>
+<rect x="96" y="156" width="140" height="138" rx="7" fill="#2f6b46"/>
+<text x="166" y="212" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">Actifs</text>
+<text x="166" y="230" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">occupés</text>
+<text x="166" y="252" text-anchor="middle" font-size="11" fill="#d8e8dd">ils ont un emploi</text>
+<rect x="250" y="156" width="144" height="138" rx="7" fill="#8c3a3a"/>
+<text x="322" y="204" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">Chômeurs</text>
+<text x="322" y="224" text-anchor="middle" font-size="11" fill="#f0dcdc">« actifs inoccupés »</text>
+<text x="322" y="248" text-anchor="middle" font-size="11" fill="#f0dcdc">sans emploi</text>
+<text x="322" y="264" text-anchor="middle" font-size="11" fill="#f0dcdc">et en recherche</text>
+<rect x="424" y="120" width="140" height="190" rx="8" fill="#e8e4ef" stroke="#5a4b7a" stroke-width="1.8"/>
+<text x="494" y="196" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">Inactifs</text>
+<text x="494" y="220" text-anchor="middle" font-size="11" fill="#4a4358">sans emploi</text>
+<text x="494" y="236" text-anchor="middle" font-size="11" fill="#4a4358">et sans recherche</text>
+<text x="320" y="376" text-anchor="middle" font-size="11.5" fill="#55607a">Slide 6 — ce qui sépare un chômeur d'un inactif, c'est la recherche d'emploi</text>
+</svg>

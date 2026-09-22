@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 430" width="640" height="430" font-family="Helvetica, Arial, sans-serif">
+<!-- Reproduit la figure de la slide 5 du Chapitre 2 (PEC, Olivier Mouate).
+     Le marche du travail : offre, demande, et le couple d'equilibre (L*, w*). -->
+<rect width="640" height="430" fill="#ffffff"/>
+<text x="320" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Le marché du travail</text>
+<g stroke="#1a1a1a" stroke-width="1.8">
+<line x1="110" y1="350" x2="545" y2="350"/>
+<line x1="110" y1="350" x2="110" y2="66"/>
+</g>
+<polygon points="552,350 542,345 542,355" fill="#1a1a1a"/>
+<polygon points="110,58 105,68 115,68" fill="#1a1a1a"/>
+<text x="545" y="374" text-anchor="end" font-size="12.5" fill="#1a1a1a">Quantité de travail (L)</text>
+<text x="120" y="70" font-size="12.5" fill="#1a1a1a">Prix du travail (w)</text>
+<!-- demande : decroissante, libellee en haut a gauche pour degager l'axe -->
+<line x1="160" y1="130" x2="470" y2="318" stroke="#8c3a3a" stroke-width="2.6"/>
+<text x="168" y="106" font-size="12" font-weight="bold" fill="#8c3a3a">Demande de travail</text>
+<text x="168" y="121" font-size="11" fill="#8c3a3a">= offre d'emploi</text>
+<text x="168" y="136" font-size="10.5" fill="#a06a6a">les employeurs</text>
+<!-- offre : croissante -->
+<line x1="160" y1="318" x2="470" y2="130" stroke="#2f6b46" stroke-width="2.6"/>
+<text x="462" y="106" text-anchor="end" font-size="12" font-weight="bold" fill="#2f6b46">Offre de travail</text>
+<text x="462" y="121" text-anchor="end" font-size="11" fill="#2f6b46">= demande d'emploi</text>
+<text x="462" y="136" text-anchor="end" font-size="10.5" fill="#5f8c73">les personnes</text>
+<!-- equilibre -->
+<g stroke="#55607a" stroke-width="1.3" stroke-dasharray="5 4">
+<line x1="315" y1="224" x2="110" y2="224"/>
+<line x1="315" y1="224" x2="315" y2="350"/>
+</g>
+<circle cx="315" cy="224" r="5.5" fill="#1a1a1a"/>
+<text x="98" y="229" text-anchor="end" font-size="14" font-style="italic" font-weight="bold" fill="#1a1a1a">w*</text>
+<text x="315" y="370" text-anchor="middle" font-size="14" font-style="italic" font-weight="bold" fill="#1a1a1a">L*</text>
+<text x="320" y="406" text-anchor="middle" font-size="11.5" fill="#55607a">Slide 5 — les personnes offrent le travail, les employeurs le demandent</text>
+</svg>
