@@ -1,0 +1,1269 @@
+[
+  {
+    "id": "statistiques/ct-stat-23-24-session-1",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2023-2024",
+    "session": 1,
+    "note": "Le sujet porte des coches manuscrites sur le QCM (questions 1 et 2) : ce sont les réponses d’un étudiant pendant l’épreuve, pas un corrigé. Elles ne sont donc pas reprises ici.",
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": "Florian Navarro",
+        "consignes": [
+          "Calculatrices fournies.",
+          "Période 3 — L1 EG, ME, DE, Accès santé.",
+          "Le sujet se décompose en 3 parties. Les questions sont numérotées de 1 à 13 indépendamment des parties : répondez sur votre copie en indiquant le numéro.",
+          "QCM (questions 1 à 4) : indiquez le numéro et la lettre de la ou des réponses qui vous semblent vraies. Il y a nécessairement au moins une bonne réponse par question.",
+          "Exercice d’application (questions 8 à 13) : répondez avec des résultats à 2 chiffres après la virgule."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — QCM",
+          "points": 4,
+          "enonce": [
+            "Les quatre questions du QCM sont reprises telles quelles dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Question de cours",
+          "points": 4,
+          "enonce": [
+            "Soit deux variables quantitatives X et Y pour lesquelles on a n observations. On considère la droite de régression linéaire permettant l’estimation des valeurs de Y par les valeurs de X. On rajoute une observation supplémentaire $(x_{n+1}, y_{n+1})$. La valeur $y_{n+1}$ est égale à la moyenne de Y ($y_{n+1} = \\bar{y}$) et la valeur $x_{n+1}$ est supérieure au maximum des valeurs observées de X précédemment ($x_{n+1} > \\max_i x_i$).",
+            "Chacune des réponses doit être argumentée (il est possible d’argumenter sans calcul)."
+          ],
+          "questions": [
+            {
+              "ref": "5",
+              "texte": "Est-ce que la variance de X augmente ou diminue ?",
+              "points": null
+            },
+            {
+              "ref": "6",
+              "texte": "Est-ce que la covariance entre X et Y augmente ou diminue ?",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "Comment va changer la droite de régression ?",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Exercice d’application",
+          "points": 12,
+          "enonce": [
+            "En 2006, l’économiste Ariel Rubinstein a publié un article scientifique rapportant les résultats d’une expérimentation menée sur des étudiant·es de deux universités (A. Rubinstein, « A sceptic’s comments on the study of Economics », The Economic Journal, 116, 2006). Cette expérimentation avait pour but d’observer si oui ou non les études d’économie avaient tendance à rendre les étudiant·es plus égoïstes et moins sensibles aux impacts sociaux des décisions économiques.",
+            "Aux étudiant·es de différentes filières (Économie, Business Administration, Droit, Mathématiques et Philosophie) a été présentée une situation dans laquelle il leur était demandé de s’imaginer en tant que vice-président d’une société faisant face à des difficultés financières. La société devait décider de maximiser le profit en licenciant la moitié des salariés, ou d’accepter des profits positifs mais moindres en licenciant moins que ce nombre. Le contexte économique décrivait une situation de fort chômage.",
+            "Les étudiant·es pouvaient choisir de ne licencier personne (profit estimé de 400 000), de licencier 26 personnes (profit estimé de 1 million), 52 personnes (profit estimé de 1,6 million) et enfin 96 personnes (profit estimé de 2 millions). Le tableau suivant regroupe les résultats de cette expérimentation."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "Nb de licenciements \\ Filières",
+                "Econ",
+                "BA",
+                "Droit",
+                "Math",
+                "Phil"
+              ],
+              "lignes": [
+                [
+                  "96",
+                  "105",
+                  "56",
+                  "58",
+                  "10",
+                  "11"
+                ],
+                [
+                  "52",
+                  "72",
+                  "50",
+                  "78",
+                  "23",
+                  "17"
+                ],
+                [
+                  "26",
+                  "19",
+                  "40",
+                  "39",
+                  "16",
+                  "22"
+                ],
+                [
+                  "0",
+                  "22",
+                  "21",
+                  "28",
+                  "7",
+                  "32"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "8",
+              "texte": "Combien d’étudiant·es étaient en Philosophie et ont choisi de licencier 26 salariés ?",
+              "points": null
+            },
+            {
+              "ref": "9",
+              "texte": "Calculez les fréquences marginales des filières et les fréquences marginales des nombres de licenciements.",
+              "points": null
+            },
+            {
+              "ref": "10",
+              "texte": "Calculez la moyenne marginale et l’écart-type marginal des nombres de licenciement.",
+              "points": null
+            },
+            {
+              "ref": "11",
+              "texte": "Calculez les fréquences conditionnelles des nombres de licenciements pour les étudiant·es d’économie, ainsi que les fréquences conditionnelles des filières pour la décision de licencier 96 salariés.",
+              "points": null
+            },
+            {
+              "ref": "12",
+              "texte": "Calculez les moyennes conditionnelles des licenciements pour les étudiant·es en Économie, en Business Administration et en Philosophie.",
+              "points": null
+            },
+            {
+              "ref": "13",
+              "texte": "En utilisant les résultats aux questions précédentes, commentez l’hypothèse que la formation en Économie impacte la réponse à l’étude.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable quantitative X. La fonction de répartition F(X)",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "associe à chaque observation de X la fréquence cumulée de cette observation.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "est décroissante sur l’ensemble des nombres réels.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "associe à chaque observation de X sa distance à la moyenne.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "associe à chaque observation de X la fréquence de cette observation.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », déf. 4 : la fonction de répartition associe à chaque valeur « la fréquence cumulée associée »."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable quantitative X,",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "l’écart-type est une mesure de la distance moyenne entre les observations de X et la moyenne de X.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "la variance est égale à la moyenne de la différence entre les observations de X et la moyenne de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "le coefficient de variation de X est égal à la variance de X divisée par la moyenne de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "l’écart-type est égal à l’écart au carré moyen entre les observations de X et la moyenne de X.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § écart-type : « l’écart-type donne l’écart standard d’une observation par rapport à la moyenne »."
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable X dont la moyenne est égale à 10, la variance égale à 4 et l’étendue égale à 20. On peut dire que",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "en moyenne, l’observation d’un individu se situe entre 4 et 20.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "en moyenne, l’observation d’un individu se situe entre 8 et 12.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "en moyenne, l’observation d’un individu se situe entre 6 et 14.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "en moyenne, l’observation d’un individu se situe entre 10 et 20.",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : l’écart-type vaut √4 = 2, donc une observation se situe en moyenne entre 10 − 2 et 10 + 2. L’étendue ne change rien à ce calcul."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit deux variables X et Y avec chacune p et q modalités respectivement.",
+          "multiple": true,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "La somme des effectifs marginaux de X est égale à la somme des effectifs marginaux de Y.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "La moyenne marginale de X est égale à la moyenne des moyennes conditionnelles de X selon Y pondérées par les effectifs de modalités de Y.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "La variance marginale de X est égale à la variance des moyennes conditionnelles de X plus la moyenne des variances conditionnelles de X.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "La variance marginale de X est égale à la variance des moyennes marginales de X plus la moyenne des variances conjointes de X.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § tableaux de contingence : les deux sommes d’effectifs marginaux valent n ; x̄ = (1/n) Σ n•j x̄j ; et « la variance marginale est égale à la variance des moyennes conditionnelles ajoutée à la moyenne des variances conditionnelles »."
+        }
+      ]
+    }
+  },
+  {
+    "id": "statistiques/ct-2021-2022-session-1",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2021-2022",
+    "session": 1,
+    "note": "Le sujet est annoté à la main (croix devant les questions, réponses entourées) : ce sont les marques d’un étudiant, pas un corrigé officiel. Elles ne sont pas reprises dans les données.",
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": null,
+        "consignes": [
+          "Pas de calculatrice : les nombres sont choisis pour avoir des calculs simples. Si vous obtenez une fraction irréductible, donnez-la comme réponse.",
+          "L1 EG, ME, DE, Accès santé.",
+          "Le sujet se décompose en 3 parties, les questions sont numérotées de 1 à 13 indépendamment des parties.",
+          "QCM (questions 1 à 5) : indiquez le numéro et la lettre de la ou des réponses vraies. Il y a nécessairement au moins une bonne réponse par question."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — QCM",
+          "points": 5,
+          "enonce": [
+            "Les cinq questions du QCM sont reprises telles quelles dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Questions de cours",
+          "points": 10,
+          "enonce": [],
+          "questions": [
+            {
+              "ref": "6",
+              "texte": "Soit une variable quantitative X regroupée par classes, la classe $i$ étant notée $[e_i, e_{i+1}]$. Donnez la formule de la densité des classes ; donnez la formule du coefficient directeur de la droite de la fonction de répartition sur le morceau $[e_i, e_{i+1}]$ ; montrez que ces deux formules sont égales puis expliquez avec vos propres mots pourquoi.",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "Énoncez les trois propriétés de la variance vues en cours.",
+              "points": null
+            },
+            {
+              "ref": "8",
+              "texte": "Soit deux variables quantitatives X et Y avec $Y = X - \\bar{x}$ : déterminez la moyenne de Y ; montrez que $V(Y) = \\frac{1}{n}\\sum_{i=1}^{n}(x_i - \\bar{x})^2$ ; montrez que la corrélation linéaire entre X et Y est égale à 1 et expliquez pourquoi ce résultat n’est pas surprenant.",
+              "points": null
+            },
+            {
+              "ref": "9",
+              "texte": "Soit deux variables X et Y, avec 100 observations et les statistiques $\\bar{x} = 5$, $\\bar{y} = 10$, $\\sum_{i=1}^{n} x_i y_i = 700$, $V(X) = 2$. Quelle est la covariance entre X et Y ? Interprétez cette covariance. Calculez les paramètres $\\hat{a}$ et $\\hat{b}$ de la droite de régression linéaire obtenue par la méthode des moindres carrés.",
+              "points": null
+            },
+            {
+              "ref": "10",
+              "texte": "Donnez une définition du coefficient de détermination. Pourquoi peut-on dire qu’il mesure la qualité d’une régression linéaire ?",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Exercice d’application",
+          "points": 5,
+          "enonce": [
+            "On considère les notes (sur 4) des étudiant·es à un exercice. Ces étudiant·es provenaient de deux groupes de TD (A et B)."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "Notes / Groupes",
+                "A",
+                "B"
+              ],
+              "lignes": [
+                [
+                  "1",
+                  "1",
+                  "7"
+                ],
+                [
+                  "2",
+                  "4",
+                  "17"
+                ],
+                [
+                  "3",
+                  "19",
+                  "5"
+                ],
+                [
+                  "4",
+                  "6",
+                  "1"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "11",
+              "texte": "Quelle est la fréquence conjointe de l’observation ligne 4 et colonne A ? Qu’est-ce que cette fréquence représente ? Quelle est la fréquence marginale d’une note de 3 ?",
+              "points": null
+            },
+            {
+              "ref": "12",
+              "texte": "Calculez la moyenne et la variance (en valeurs exactes) des notes pour les groupes A et B.",
+              "points": null
+            },
+            {
+              "ref": "13",
+              "texte": "Calculez la moyenne globale.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": "QCM (5 points)",
+          "enonce": "La somme des écarts des observations à la moyenne est",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "égale à la variance.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "égale à 0.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "égale à 1.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "égale à l’écart-type.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », propriétés de la moyenne : la somme des écarts à la moyenne est nulle."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": "QCM (5 points)",
+          "enonce": "Pour tout échantillon, la médiane est égale",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "au 1er quartile.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "au 3e quartile.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "au 5e décile.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "au 25e centile.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § quantiles : la médiane est le quantile d’ordre 0,5 — donc le 2e quartile et le 5e décile."
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": "QCM (5 points)",
+          "enonce": "L’écart inter-quartile",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "correspond à l’écart entre le 3e quartile et la médiane.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "contient autant d’observations qu’il y a d’observations inférieures à la médiane.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "contient 25 % des observations.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "contient 75 % des observations.",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : l’intervalle interquartile [q1 ; q3] contient la moitié des observations, soit autant que ce qui se trouve sous la médiane. Il ne contient ni 25 % ni 75 %, et q3 − médiane n’en est que la moitié haute."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": "QCM (5 points)",
+          "enonce": "Soit deux variables X et Y avec p et q modalités respectivement. On note $x_i$ et $y_j$ ces modalités. Les moyennes conditionnelles de X selon elle-même sont",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "toutes égales à la moyenne de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "égales à $x_i$ pour chaque modalité.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "impossible à définir.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "égales aux moyennes conditionnelles de Y selon elle-même.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § moyennes conditionnelles : la moyenne des X parmi les individus qui présentent la modalité x_i vaut x_i."
+        },
+        {
+          "numero": 5,
+          "n": 5,
+          "theme": "QCM (5 points)",
+          "enonce": "Soit deux variables X et Y. On considère le coefficient de corrélation linéaire entre ces deux variables.",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Si le coefficient de corrélation linéaire est nul alors les variables sont indépendantes.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Si le coefficient de corrélation linéaire est élevé alors il existe un lien de causalité entre ces variables.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "S’il existe un lien de causalité entre ces variables alors le coefficient de corrélation linéaire est élevé.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Le coefficient de corrélation linéaire est forcément positif.",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée, et à vérifier : Cours de F. Navarro, « Statistiques descriptives » § 4.3 pose que « corrélation ne veut pas dire causalité » — ce qui élimine a et b ; d est faux (le coefficient peut être négatif). Reste c, la réciproque, que le cours ne discute pas explicitement."
+        }
+      ]
+    }
+  },
+  {
+    "id": "statistiques/ct-stat-l1-2022-2023",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2022-2023",
+    "session": 1,
+    "note": "Le sujet numérote ses questions de 1 à 15, mais aucune question 5 n’apparaît entre le QCM (1 à 4) et la question de cours (6) : la numérotation du sujet saute ce numéro.",
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": null,
+        "consignes": [
+          "Calculatrices fournies.",
+          "L1 EG, ME, DE, Accès santé.",
+          "Le sujet se décompose en 3 parties, les questions sont numérotées de 1 à 15 indépendamment des parties.",
+          "QCM (questions 1 à 4) : indiquez le numéro et la lettre de la ou des réponses vraies. Il y a nécessairement au moins une bonne réponse par question."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — QCM",
+          "points": 4,
+          "enonce": [
+            "Les quatre questions du QCM sont reprises telles quelles dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Question de cours",
+          "points": 2,
+          "enonce": [],
+          "questions": [
+            {
+              "ref": "6",
+              "texte": "Soit une variable quantitative continue X. Soit une variable Y telle que $Y = a \\times X + b$, $a$ et $b$ étant deux nombres réels. Exprimez $\\bar{y}$ (la moyenne de Y) en fonction de $\\bar{x}$ ; exprimez $V(Y)$ (la variance de Y) en fonction de $V(X)$.",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Exercice 1",
+          "points": 8,
+          "enonce": [
+            "On a procédé à un sondage à la sortie d’un bureau de vote. On demande aux votant·es leur âge ainsi que le candidat pour lequel ils ont voté. Les résultats sont agrégés dans le tableau de contingence suivant."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "Candidat / Âge",
+                "[18 ; 32[",
+                "[32 ; 48[",
+                "[48 ; 72["
+              ],
+              "lignes": [
+                [
+                  "A",
+                  "30",
+                  "70",
+                  "100"
+                ],
+                [
+                  "B",
+                  "120",
+                  "60",
+                  "120"
+                ],
+                [
+                  "C",
+                  "150",
+                  "120",
+                  "230"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "7",
+              "texte": "Que représente le nombre 30 dans le tableau ? Quelle est la fréquence marginale des votant·es entre 32 et 48 ans ?",
+              "points": null
+            },
+            {
+              "ref": "8",
+              "texte": "Donnez les fréquences conditionnelles des candidat·es choisis par les votant·es entre 18 et 32 ans.",
+              "points": null
+            },
+            {
+              "ref": "9",
+              "texte": "Calculez la moyenne marginale et l’écart-type marginal de l’âge des votant·es. Faites une phrase pour interpréter ces deux chiffres.",
+              "points": null
+            },
+            {
+              "ref": "10",
+              "texte": "Quel est l’âge moyen et l’écart-type des votant·es du candidat B ? Faites une phrase pour interpréter ces deux chiffres.",
+              "points": null
+            },
+            {
+              "ref": "11",
+              "texte": "En comparant les résultats des deux questions précédentes, est-ce qu’il vous semble correct d’émettre l’hypothèse que les électeur·ices du candidat B appartiennent à certaines classes d’âges en particulier ?",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Exercice 2",
+          "points": 6,
+          "enonce": [
+            "On considère deux variables quantitatives continues X et Y. On a les données suivantes.",
+            "On sait que $\\bar{x} = 5$, $\\bar{y} = 75$ et $V(X) = 5$."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "X",
+                "Y"
+              ],
+              "lignes": [
+                [
+                  "2",
+                  "50"
+                ],
+                [
+                  "4",
+                  "80"
+                ],
+                [
+                  "6",
+                  "80"
+                ],
+                [
+                  "8",
+                  "90"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "12",
+              "texte": "Calculez la covariance entre X et Y.",
+              "points": null
+            },
+            {
+              "ref": "13",
+              "texte": "Calculez l’équation de la droite de régression linéaire expliquant Y par X.",
+              "points": null
+            },
+            {
+              "ref": "14",
+              "texte": "Pour chaque valeur observée $x_i$ de X, calculez la prédiction $\\hat{y}_i$ selon la droite de régression linéaire.",
+              "points": null
+            },
+            {
+              "ref": "15",
+              "texte": "Calculez la somme des carrés totaux et la somme des carrés des résidus. Déduisez-en le coefficient de détermination de la droite de régression.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": "QCM (4 points)",
+          "enonce": "Le coefficient de corrélation linéaire entre deux variables X et Y est",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "compris entre 0 et 1.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "compris entre -1 et 1.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "égal au carré de la covariance.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "mesure le lien de causalité entre ces deux variables.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § coefficient de corrélation linéaire : il est compris entre −1 et 1, et ne mesure pas la causalité."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable quantitative X. La fréquence cumulée d’une modalité $k$ de la variable X",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "ne peut être que strictement inférieure à 1.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "est égale au nombre d’individus présentant une modalité égale ou inférieure à $k$.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "est égale à la proportion d’individus présentant une modalité égale ou inférieure à $k$.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "est égale au nombre d’individus présentant une modalité inférieure à $k$.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § fréquences cumulées : « quelle proportion des individus présente la modalité p ou inférieure »."
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable X,",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "la variance est égale à la moyenne du carré des différences entre les observations de X et la moyenne de X.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "l’écart-type de X est égal au carré de la variance de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "le coefficient de variation de X est égal à la variance de X divisée par la moyenne de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "l’écart-type est une mesure de la distance moyenne entre les observations de X et la médiane de X.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », déf. 11 : « la variance est la moyenne des écarts quadratiques à la moyenne »."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit deux variables X et Y.",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Les variances conditionnelles de X selon Y sont des indicateurs de la dispersion des valeurs observées de Y regroupées par les modalités prises de la variable X.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Les moyennes conditionnelles de Y selon X sont des indicateurs de la dispersion des valeurs observées de Y regroupées par les modalités prises de la variable X.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Les moyennes conditionnelles de X selon Y sont des indicateurs de la tendance centrale des valeurs observées de X regroupées par les modalités prises de la variable Y.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Les variances conditionnelles de Y selon X sont des indicateurs de la tendance centrale des valeurs observées de Y regroupées par les modalités prises de la variable X.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § moyennes conditionnelles : x̄j est la moyenne des X pour les individus qui présentent la modalité j de Y — un indicateur de tendance centrale, pas de dispersion."
+        }
+      ]
+    }
+  },
+  {
+    "id": "statistiques/annales",
+    "titre": "Contrôle terminal — année non identifiée",
+    "type": "Examen",
+    "annee": null,
+    "note": "Photos d’un sujet sans page de garde : ni l’année ni la session n’y figurent. Les pages ont été remises dans l’ordre du sujet (pages 2, 3 puis 4).",
+    "ordre": [
+      3,
+      1,
+      2
+    ],
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": null,
+        "consignes": [
+          "Calculatrices fournies.",
+          "L1 EG, ME, DE, Accès santé.",
+          "Le sujet se décompose en 3 parties, les questions sont numérotées de 1 à 15 indépendamment des parties.",
+          "QCM (questions 1 à 4) : indiquez le numéro et la lettre de la ou des réponses vraies.",
+          "Exercice d’application (questions 8 à 15) : répondez avec des résultats à 2 chiffres après la virgule."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — QCM",
+          "points": 4,
+          "enonce": [
+            "Les quatre questions du QCM sont reprises telles quelles dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Question de cours",
+          "points": 4,
+          "enonce": [
+            "On considère deux variables X et Y examinées conjointement dans un tableau de contingence. On note $n_{k\\bullet}$ les effectifs marginaux de X et $n_{\\bullet p}$ les effectifs marginaux de Y. On note $n_{kp}$ les effectifs conjoints et $n$ l’effectif total."
+          ],
+          "questions": [
+            {
+              "ref": "5",
+              "texte": "Pour un couple de modalités $(k, p)$ donné, on considère la quantité $n^*_{kp} = \\frac{n_{\\bullet p}}{n} \\times n_{k\\bullet}$, c’est-à-dire la fréquence marginale de la modalité $p$ de Y multipliée par l’effectif marginal de la modalité $k$ de X. On appellera cette quantité « effectif théorique » du couple $(k,p)$. Dans quel cas particulier cette quantité est-elle égale à l’effectif conjoint de ce couple de modalités ?",
+              "points": null
+            },
+            {
+              "ref": "6",
+              "texte": "Que mesure la valeur $n_{kp} - n^*_{kp}$ ?",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "En utilisant ces valeurs pour chaque couple de modalités, proposez la construction d’un indicateur qui permettrait de mesurer une dépendance entre les deux variables.",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Exercice d’application",
+          "points": 12,
+          "enonce": [
+            "On considère les données (fictives) collectées auprès de dix municipalités. On dispose, pour chaque commune, du taux de participation aux dernières élections municipales ainsi que du nombre de bureaux de vote pour 1000 habitants (obtenu en divisant le nombre de bureaux de vote de la commune par le nombre d’habitants en milliers)."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "lignes": [
+                [
+                  "Nb de bureaux de vote pour 1000 habitants",
+                  "1.2",
+                  "0.8",
+                  "1.1",
+                  "1.2",
+                  "1.3",
+                  "1.4",
+                  "0.7",
+                  "1.2",
+                  "1.3",
+                  "0.9"
+                ],
+                [
+                  "Taux de participation (en %)",
+                  "51",
+                  "47",
+                  "52",
+                  "53",
+                  "53",
+                  "55",
+                  "47",
+                  "51",
+                  "53",
+                  "47"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "8",
+              "texte": "Quel est le taux de participation moyen aux élections municipales pour ces villes ?",
+              "points": null
+            },
+            {
+              "ref": "9",
+              "texte": "En moyenne, combien y a-t-il de bureaux de vote pour 1000 habitants dans ces 10 villes ?",
+              "points": null
+            },
+            {
+              "ref": "10",
+              "texte": "Après avoir calculé la variance et l’écart-type du nombre de bureaux de vote pour 1000 habitants, donnez une fourchette du nombre de bureaux de vote que l’on peut s’attendre à voir dans une ville de 20 000 habitants.",
+              "points": null
+            },
+            {
+              "ref": "11",
+              "texte": "Calculez la covariance entre les deux variables du tableau.",
+              "points": null
+            },
+            {
+              "ref": "12",
+              "texte": "Déterminez la droite de régression qui essaie d’estimer le taux de participation d’une ville en fonction de son nombre de bureaux de vote pour 1000 habitants.",
+              "points": null
+            },
+            {
+              "ref": "13",
+              "texte": "À combien peut-on estimer le taux de participation d’une ville de 20 000 habitants ayant 23 bureaux de vote ?",
+              "points": null
+            },
+            {
+              "ref": "14",
+              "texte": "Calculez la somme des carrés totaux, la somme des carrés expliqués ainsi que la somme des carrés des résidus et déduisez-en le coefficient de détermination.",
+              "points": null
+            },
+            {
+              "ref": "15",
+              "texte": "Interprétez en une phrase le coefficient de détermination.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable X, la variance de X",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "est nécessairement strictement positive.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "est égale à la moyenne de la différence entre les observations de X et la moyenne de X.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "est d’autant plus élevée que les observations de X sont hétérogènes.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "est égale à la racine carrée de l’écart-type de X.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », déf. 11 : la variance mesure la dispersion ; elle est nulle si toutes les observations sont identiques, donc d’autant plus élevée qu’elles sont hétérogènes."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit deux variables X et Y. On considère la droite de régression de Y par rapport à X.",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Cette droite passe par tous les points $(x_i, y_i)$ du nuage de points.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Cette droite ne passe jamais par le point $(\\bar{x}, \\bar{y})$.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Cette droite a pour équation $\\hat{Y} = \\hat{a}X + \\hat{b}$, où $\\hat{b}$ est le coefficient de la pente de la droite.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Si les deux variables ont un coefficient de corrélation linéaire nul alors la pente de la droite est horizontale.",
+              "correcte": true
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § régression linéaire : la pente vaut cov(X,Y)/V(X), nulle quand la corrélation l’est. La droite passe toujours par (x̄, ȳ), rarement par tous les points, et dans Ŷ = âX + b̂ c’est â la pente."
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": "QCM (4 points)",
+          "enonce": "Soit une variable quantitative X. La fréquence cumulée d’une modalité $k$ de la variable X",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "est égale au nombre d’individus présentant une modalité égale ou inférieure à $k$.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "est égale à la proportion d’individus présentant une modalité égale ou inférieure à $k$.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "ne peut être que strictement inférieure à 1.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "est égale au nombre d’individus présentant une modalité inférieure à $k$.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § fréquences cumulées : c’est une proportion, pas un effectif."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": "QCM (4 points)",
+          "enonce": "Le coefficient de corrélation linéaire entre deux variables X et Y est",
+          "multiple": false,
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "compris entre 0 et 1.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "compris entre -1 et 1.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "égal au carré de la variance.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "mesure le lien de causalité entre deux variables.",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de F. Navarro, « Statistiques descriptives », § coefficient de corrélation linéaire : compris entre −1 et 1."
+        }
+      ]
+    }
+  },
+  {
+    "id": "statistiques/cc-2022",
+    "titre": "Contrôle continu — copie corrigée",
+    "type": "Contrôle continu",
+    "annee": "2022-2023",
+    "note": "Ce sont les pages d’une copie rendue et corrigée : l’énoncé imprimé est repris ci-dessous, les réponses manuscrites et les points attribués par le correcteur restent lisibles sur les images de pages.",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": null,
+        "consignes": [
+          "Épreuve sur document réponse : chaque question est suivie d’un cadre à remplir."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice 1",
+          "points": null,
+          "enonce": [
+            "Une enquête menée auprès d’un échantillon de 275 individus permet d’obtenir le tableau de contingence suivant, croisant la variable « âge » et la variable « Abonnement » désignant le nombre d’abonnements simultanés à des plateformes de streaming vidéo (Netflix, OCS, Prime Video, etc.). Nous souhaitons étudier l’existence d’un lien entre l’âge et les abonnements multiples."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "Âge / Abonnements",
+                "0",
+                "1",
+                "2",
+                "3"
+              ],
+              "lignes": [
+                [
+                  "20",
+                  "19",
+                  "14",
+                  "8",
+                  "4"
+                ],
+                [
+                  "30",
+                  "28",
+                  "34",
+                  "45",
+                  "11"
+                ],
+                [
+                  "45",
+                  "43",
+                  "36",
+                  "26",
+                  "7"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Quelle est la nature de la variable « Abonnements » ? Justifiez.",
+              "points": null
+            },
+            {
+              "ref": "2",
+              "texte": "Quelle est la proportion d’individus de l’échantillon ayant 1 abonnement et 20 ans ? Indiquez la notation et la formule.",
+              "points": null
+            },
+            {
+              "ref": "3",
+              "texte": "Calculez et interprétez la fréquence de la modalité « 3 abonnements ».",
+              "points": null
+            },
+            {
+              "ref": "4",
+              "texte": "Quelle proportion des individus ayant 30 ans ne possède aucun abonnement ? Indiquez la notation, la formule et le résultat.",
+              "points": null
+            },
+            {
+              "ref": "5",
+              "texte": "Quel est l’âge moyen des individus au sein de cet échantillon ?",
+              "points": null
+            },
+            {
+              "ref": "6",
+              "texte": "Calculer l’écart-type marginal de l’âge. Interprétez.",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "Calculer la moyenne conditionnelle du nombre d’abonnements pour les individus ayant 30 ans. Sachant que les moyennes sont respectivement de 0,93 et 0,97 pour les individus ayant 20 ans et 45 ans, que peut-on en conclure ?",
+              "points": null
+            },
+            {
+              "ref": "8",
+              "texte": "Calculer l’écart-type conditionnel du nombre d’abonnements pour les individus ayant 30 ans. Sachant que l’écart-type marginal du nombre d’abonnements est de 2 et la moyenne marginale de 1,2, que pouvez-vous dire sur les individus ayant 30 ans par rapport à l’ensemble des individus ?",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Exercice 2",
+          "points": null,
+          "enonce": [
+            "Le tableau ci-dessous répertorie le temps de trajet en minutes des étudiant·es d’une promotion par rapport à leur composante d’étude."
+          ],
+          "tableaux": [
+            {
+              "colonnes": [
+                "i",
+                "Temps (minutes) $x_i$",
+                "Effectif $n_i$"
+              ],
+              "lignes": [
+                [
+                  "1",
+                  "[0 ; 5[",
+                  "44"
+                ],
+                [
+                  "2",
+                  "[5 ; 10[",
+                  "40"
+                ],
+                [
+                  "3",
+                  "[10 ; 15[",
+                  "55"
+                ],
+                [
+                  "4",
+                  "[15 ; 30[",
+                  "20"
+                ],
+                [
+                  "5",
+                  "[30 ; 60[",
+                  "16"
+                ]
+              ]
+            }
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Quel graphique est le plus adapté pour représenter la distribution des temps de trajet ? Que doit-on représenter en abscisses et en ordonnées ? Justifiez vos réponses. Attention, il n’est pas demandé de réaliser de graphique.",
+              "points": null
+            },
+            {
+              "ref": "2",
+              "texte": "Indiquez la classe médiane et déterminez le temps de trajet médian. Interprétez.",
+              "points": null
+            },
+            {
+              "ref": "3",
+              "texte": "Déterminez la valeur du troisième quartile. Interprétez.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

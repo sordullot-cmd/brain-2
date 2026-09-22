@@ -1,0 +1,745 @@
+[
+  {
+    "id": "introduction-a-la-gestion/intro-a-la-gestion-2024",
+    "titre": "Contrôle terminal",
+    "type": "Examen",
+    "annee": "2023-2024",
+    "note": "Sujet vierge : aucune réponse n’y figure. Les réponses du QCM ont donc été retrouvées dans les diapos de cours de l’enseignante, ou reconstituées à partir du cours — chaque question dit d’où vient la sienne. Elles ne remplacent pas un corrigé officiel. La page 4 du sujet manque au scan (fin de la partie 2).",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": null,
+        "consignes": [
+          "Partie 1 — QCM (6 points) : entourer lisiblement au stylo la lettre correspondant à la ou aux bonnes réponses.",
+          "Au moins une bonne réponse par question, plusieurs réponses possibles pour certaines.",
+          "Les points sont attribués si la totalité des bonnes réponses est cochée et qu’aucune mauvaise réponse ne l’est : 0,5 point par question.",
+          "Parties 2 et 3 : répondre directement sur le sujet, dans les espaces prévus."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — Questions à choix multiples",
+          "points": 6,
+          "enonce": [
+            "Les douze questions se jouent dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Questions de cours",
+          "points": 7,
+          "enonce": [
+            "En vous appuyant sur les éléments du cours, répondre aux questions directement sur le sujet en respectant les espaces prévus."
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Qu’est-ce qu’un « business model » ? Vous expliquerez à quelles questions le business model est supposé répondre.",
+              "points": null
+            },
+            {
+              "ref": "2",
+              "texte": "En vous appuyant sur l’organigramme du groupe Bouygues (activités de construction — Bouygues Construction, Bouygues Immobilier, Colas ; Énergies & Services — Equans ; Médias — TF1 ; Télécoms — Bouygues Telecom), vous analyserez la stratégie du Groupe Bouygues et mobiliserez, en les expliquant, les notions de : segmentation stratégique, DAS, stratégie corporate.",
+              "points": null
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Situation pratique",
+          "points": 7,
+          "enonce": [
+            "Document : « Arkopharma récompensé pour son excellence opérationnelle » (Lizza Paillier, Tribune, Bulletin Côte d’Azur, 31 janvier 2019). Organisés depuis 1992 par l’AFQP, la DGE, le MEDEF, les prix nationaux de la qualité et de l’excellence opérationnelle récompensent des entreprises pour « leurs démarches/analyses de management par la qualité et d’excellence opérationnelle au service de la performance ». Parmi les 12 lauréats de l’édition 2019, Arkopharma, labo de phytothérapie basé à Carros, reçoit le Prix des Bonnes Pratiques en catégorie ETI, qui récompense une bonne pratique dans l’un des 5 facteurs du modèle européen EFQM : leadership, stratégie, personnel, partenariats et ressources, processus, produits et services.",
+            "Arkopharma et le management participatif : avec sa cession à un fonds d’investissement en 2014, Arkopharma, jusqu’alors entreprise familiale, se dote d’une nouvelle équipe dirigeante qui décide d’une grande restructuration afin de relocaliser l’ensemble de la production à Carros. Pour emporter l’adhésion des collaborateurs, la direction décide de les impliquer, demandant aux salariés de repenser eux-mêmes les ateliers de production plutôt que de faire appel à une société externe. Arkopharma a investi 25 M€ sur quatre ans sur son siège : locaux et équipement, ergonomie et sécurité, et même le développement d’une machine d’extraction des plantes par ultrasons, qui a fait l’objet d’un dépôt de brevet. Changement de culture aussi, avec des rencontres tous les matins où les salariés exposent les problèmes de la veille et proposent eux-mêmes des solutions.",
+            "Une mutation en quatre ans : 95 % de la production se fait désormais à Carros contre 70 % en 2014, faisant du site le plus important site de phytothérapie d’Europe (1,2 milliard de gélules produites chaque année). L’entreprise enregistre 2 fois moins de problèmes sur la chaîne de production, 80 % des clients sont livrés « on time, in full » (34 % en 2014), et Arko renouvelle toutes ses certifications en 2018. Côté RH, le nombre d’accidents du travail a été réduit de moitié en 4 ans, 90 % des employés sont satisfaits (contre 70 %) et l’absentéisme, historiquement de 5,5 %, est passé sous la barre des 4 %."
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "De quel niveau de gestion relève la décision de « céder Arkopharma à un fonds d’investissement » ? Quelles sont les caractéristiques de ce type de décision de gestion ?",
+              "points": null
+            },
+            {
+              "ref": "2",
+              "texte": "Indiquez quelles sont les activités (ou fonctions de l’entreprise) qui ont permis cette réussite et comment elles y ont contribué (vous rappellerez le rôle de chacune de ces fonctions).",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": null,
+          "multiple": true,
+          "enonce": "Font parties de l’ESS en France :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Les ONG",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Les hôpitaux",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Les coopératives viticoles",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Les mutuelles",
+              "correcte": true
+            }
+          ],
+          "source": "Reconstituée : l’économie sociale et solidaire regroupe associations, coopératives, mutuelles et fondations (loi du 31 juillet 2014). Les hôpitaux publics relèvent du secteur public ; les ONG, qui sont des associations, sont comptées dans l’ESS par certains corrigés — la réponse retenue ici s’en tient aux deux formes juridiques explicitement citées en cours."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": null,
+          "multiple": true,
+          "enonce": "Grâce aux relations mises en place avec l’un de vos fournisseurs, vous pouvez proposer à vos clients une table de jardin avec parasol intégré, avec un encombrement minimal (moindre que ce qui existe pour ce genre de produit combiné). De quel type d’innovation s’agit-il ?",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Innovation de rupture",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Innovation incrémentale",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Innovation produit",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Innovation de service",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séances 3 et 4 : la même question y est posée (variante barbecue-plancha) sans réponse écrite. Le tableau du cours définit l’innovation incrémentale comme « l’amélioration progressive d’un produit déjà existant » — c’est le cas ici, et elle porte sur le produit lui-même."
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": null,
+          "multiple": true,
+          "enonce": "La chaîne de la valeur de Porter (choisissez la ou les bonnes réponses) :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Identifie les activités principales et de soutien qui contribuent à la création de valeur",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Considère que le « Service » est une activité de soutien",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Distingue la logistique « interne » et la logistique « externe »",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses ci-dessus",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : la chaîne de valeur de Porter (Diapos de C. Vigeant, « Introduction à la gestion », séance 5) sépare activités principales et activités de soutien, et distingue logistique interne et logistique externe. Le « Service » y est une activité PRINCIPALE, pas de soutien."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Quelle(s) organisation(s) a (ont) une finalité qui ne correspond pas à sa nature ?",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Une entreprise a vocation à faire du profit en intégrant la RSE.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Une organisation publique satisfait une mission de service public. Elle sert l’intérêt général en définissant sa politique.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Un syndicat défend les droits de ses membres et les intérêts de la profession qu’il défend.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Une association adhère à une cause afin de réaliser des bénéfices.",
+              "correcte": true
+            }
+          ],
+          "source": "Reconstituée : une association est par nature à but non lucratif ; « réaliser des bénéfices » ne correspond donc pas à sa finalité. Les trois autres énoncés sont cohérents avec la nature de l’organisation décrite."
+        },
+        {
+          "numero": 5,
+          "n": 5,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Quelle(s) proposition(s) est (sont) fausse(s) :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Le service est un acte immatériel",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Le service est stockable",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Le service est intangible",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Le service fait participer le client à sa réalisation",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : les quatre caractéristiques du service sont l’immatérialité, l’intangibilité, la participation du client et la NON-stockabilité. « Le service est stockable » est donc la proposition fausse."
+        },
+        {
+          "numero": 6,
+          "n": 6,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une société de capitaux dispose :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "D’un seul associé",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Obligatoirement de plusieurs associés",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "D’un ou de plusieurs associés",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "De minimum 7 associés",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : une société de capitaux (SAS, SA) peut n’avoir qu’un associé (SASU) comme en compter plusieurs. Le minimum de 7 associés ne vaut plus que pour les SA cotées."
+        },
+        {
+          "numero": 7,
+          "n": 7,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Le groupe Virgin exerça un temps son activité dans les secteurs de la boisson, des magasins de musique, des librairies, du multimédia (téléphonie, radio et télévision). De quel type de diversification s’agissait-il :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "D’une diversification verticale (logique de filière)",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "D’une diversification horizontale (complémentarité)",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "D’une diversification non liée (logique financière)",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses ci-dessus",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séance 7 : Virgin y est l’exemple de la diversification — des activités sans lien entre elles (boissons, disques, télécoms, spatial), donc une diversification non liée, de logique financière (conglomérat)."
+        },
+        {
+          "numero": 8,
+          "n": 8,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les grands distributeurs construisent et financent leurs propres hypermarchés dans les grandes villes chinoises. À quel type de croissance correspond cette démarche :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Croissance interne",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Croissance externe",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Croissance conjointe",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses ci-dessus",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séance 7, « croissance interne versus croissance externe » : construire et financer soi-même ses propres magasins, c’est de la croissance interne ; la croissance externe passe par le rachat."
+        },
+        {
+          "numero": 9,
+          "n": 9,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les quatre composants du marketing mix sont :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Prix, Produit, Communication et Distribution.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Prix, Production, Marché et Distribution.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Marché, Concurrence, Communication et Distribution.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Distribution intensive, distribution sélective, distribution exclusive, distribution extensive.",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séances 3 et 4 : « le marketing mix (les 4P) » — Produit, Prix, Promotion (communication) et Place (distribution)."
+        },
+        {
+          "numero": 10,
+          "n": 10,
+          "theme": null,
+          "multiple": false,
+          "enonce": "À qui doit-on le modèle des 5 (5 + 1) forces ?",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Henry Mintzberg",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Boston Consulting Group (BCG)",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Michaël Porter",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "J. A. Schumpeter",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séance 5 : le modèle des 5 (+1) forces est celui de Michael Porter, comme la chaîne de valeur."
+        },
+        {
+          "numero": 11,
+          "n": 11,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Vaut-il mieux avoir un BFR qui représente :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "10 jours du CA hors taxe",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "20 jours du CA hors taxe",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "40 jours du CA hors taxe",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "aucune des réponses ci-avant car le BFR ne s’exprime jamais en jours de CA",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : le BFR est un besoin de financement, donc plus il est court en jours de chiffre d’affaires, moins l’entreprise a d’argent immobilisé. 10 jours valent mieux que 20 ou 40, et le BFR s’exprime bien en jours de CA."
+        },
+        {
+          "numero": 12,
+          "n": 12,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Dans le SWOT, si le principal concurrent de l’entreprise est en faillite, il s’agit :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "d’une menace",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "d’une faiblesse",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "d’une opportunité",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses ci-dessus",
+              "correcte": false
+            }
+          ],
+          "source": "Diapos de C. Vigeant, « Introduction à la gestion », séance 5 : dans le SWOT, ce qui vient de l’extérieur est menace ou opportunité. La faillite du principal concurrent est un évènement externe favorable — une opportunité."
+        }
+      ]
+    }
+  },
+  {
+    "id": "introduction-a-la-gestion/annales-2023",
+    "titre": "Contrôle terminal — copie corrigée",
+    "type": "Examen",
+    "annee": "2022-2023",
+    "ordre": [
+      1,
+      2,
+      4,
+      5,
+      3
+    ],
+    "note": "Photos d’une copie rendue et notée. Les réponses du QCM données ici sont celles que la correction valide (questions ayant rapporté leurs points, et question 2 où le correcteur a écrit la bonne lettre en marge) ; les questions 1, 3 et 5, ratées ou non tranchées par la copie, restent sans réponse plutôt que d’être devinées.",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": null,
+        "consignes": [
+          "Partie 1 — QCM (8 points) : entourer lisiblement au stylo la lettre correspondant à la ou aux bonnes réponses.",
+          "Au moins une bonne réponse par question, plusieurs réponses possibles pour certaines.",
+          "Les points sont attribués si la totalité des bonnes réponses est cochée et qu’aucune mauvaise réponse ne l’est : 1 point par question, sauf les questions 6 et 7 notées sur 1,5.",
+          "Parties 2 et 3 : répondre directement sur le sujet, dans les espaces prévus."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — Questions à choix multiples",
+          "points": 8,
+          "enonce": [
+            "Les sept questions se jouent dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Questions de cours",
+          "points": 7,
+          "enonce": [
+            "En vous appuyant sur les éléments du cours, répondre aux questions directement sur le sujet en respectant les espaces prévus."
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Citez au moins 4 éléments de l’environnement MACRO ÉCONOMIQUE qui peuvent avoir une influence sur la stratégie de l’entreprise et développez vos réponses en illustrant avec un exemple. (Le tableau à remplir suit les lettres du PESTEL : Politique, Économique, Social, Technologique, Écologique, Législatif.)",
+              "points": 2
+            },
+            {
+              "ref": "2",
+              "texte": "À propos des exemples d’entreprises suivants, indiquez la stratégie poursuivie : Essilor, à travers sa marque Varilux, est devenu leader mondial dans le verre correcteur ; Blablacar a développé un nouvel espace stratégique à partir de la création d’un marché, mettant ses concurrents hors-jeu en créant une nouvelle demande ; Skoda a rationalisé son organisation et standardisé ses productions de manière à profiter des économies d’échelle et à réduire ses charges ; Michelin a décidé d’acheter des plantations d’hévéas pour la fabrication de ses pneus ; Nestlé confie le traitement de sa comptabilité à une entreprise roumaine ; Hermès détient un record au niveau du prix de vente d’un sac à main et sélectionne rigoureusement ses fournisseurs pour maintenir un niveau élevé de qualité.",
+              "points": 1.5
+            },
+            {
+              "ref": "3",
+              "texte": "Identifiez au moins 4 des principaux bénéficiaires du partage de la valeur ajoutée (vous préciserez la forme sous laquelle ils bénéficient de cette répartition).",
+              "points": 2
+            },
+            {
+              "ref": "4",
+              "texte": "Les citations suivantes présentent des caractéristiques d’un secteur ou d’une entreprise. Pour chacune, cochez la case permettant d’identifier s’il s’agit, pour l’entreprise ou le secteur concerné, d’une force, d’une faiblesse, d’une menace ou d’une opportunité : la valeur ajoutée est faible ; le cours de la Bourse de l’entreprise monte régulièrement depuis quelques mois ; l’Union européenne a validé la fin des moteurs thermiques dans les voitures neuves à partir de 2035 (branche des constructeurs automobiles généralistes européens) ; l’entreprise détient un important portefeuille de brevets ; un nouveau concurrent puissant arrive dans le secteur ; le principal concurrent de l’entreprise est en faillite.",
+              "points": 1.5
+            }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Question de réflexion",
+          "points": 5,
+          "enonce": [
+            "Texte : « Il y a cinquante ans, le Nobel d’économie Milton Friedman affirmait que “Peu d’évolutions pourraient miner aussi profondément les fondations mêmes de notre société libre que l’acceptation par les dirigeants d’entreprise d’une responsabilité sociale autre que celle de faire le plus d’argent possible pour leurs actionnaires”. Aujourd’hui, certains dirigeants et/ou économistes pensent au contraire que : “la RSE n’est plus une option, c’est une nécessité”. »",
+            "Réponse structurée en une vingtaine de lignes, arguments précis et concis, à écrire dans le cadre de réponse."
+          ],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Après avoir défini le concept de RSE (en expliquant ses principes), vous apporterez votre éclairage à ces deux visions des finalités de l’entreprise.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Un directeur de magasin demande à un de ses commerciaux de faire de la prospection téléphonique, cela relève de :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "De la structure formelle",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "De la structure informelle",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "De la division verticale du travail",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "De la division horizontale du travail",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : Diapos de C. Vigeant, « Introduction à la gestion », séances 1 et 2, range la division du travail en division verticale (qui décide, qui exécute) et horizontale (répartition des tâches de même niveau). Un directeur qui donne une consigne à son commercial relève de la division verticale. La copie a coché en plus « structure formelle » et perdu le point, ce qui confirme qu’une seule réponse était attendue."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les situations de gestion sont :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Contextuelles et spécifiques au type d’organisation, à la taille et à l’âge de l’organisation, aux types de production (biens ou services)…",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Universelles et s’appuient sur de grands invariants.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Compréhensibles seulement par le dirigeant qui assume seul la responsabilité des actions de gouvernance.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Un domaine d’actions réservé exclusivement aux actionnaires sans prise en compte des autres parties prenantes.",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Henry Ford a dit un jour : « Si j’avais demandé à mes clients ce qu’ils voulaient, ils m’auraient répondu : un cheval plus rapide. » Quel type de démarche marketing, axée sur les besoins du client, cette phrase illustre-t-elle ?",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Marketing pull",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "La segmentation marketing",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Prix Produit Promotion Place",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Marketing Mix",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": null,
+          "multiple": true,
+          "enonce": "Une stratégie de domination par les coûts s’obtient par :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Un volume de production important.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Une concurrence faible.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Des coûts réduits.",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 5,
+          "n": 5,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Que sont : « les Facteurs Clés de Succès (FCS) » ?",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Les conditions de réussite sur un segment d’activité.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Les entreprises qui sont leaders sur un segment d’activité.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Les éléments qui déterminent le cycle de vie d’un produit.",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 6,
+          "n": 6,
+          "theme": null,
+          "multiple": true,
+          "enonce": "Quelles sont les 5 (+1) forces du jeu concurrentiel selon Porter ? (6 réponses attendues)",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "La menace de produits de substitution",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "L’intensité concurrentielle liée à la rivalité entre les firmes existantes.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Le pouvoir de négociation des fournisseurs",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Le cours des actions",
+              "correcte": false
+            },
+            {
+              "lettre": "e",
+              "texte": "L’environnement économique",
+              "correcte": false
+            },
+            {
+              "lettre": "f",
+              "texte": "Le pouvoir de négociation des clients",
+              "correcte": true
+            },
+            {
+              "lettre": "g",
+              "texte": "Le pouvoir de négociation des syndicats",
+              "correcte": false
+            },
+            {
+              "lettre": "h",
+              "texte": "La menace de nouveaux entrants",
+              "correcte": true
+            },
+            {
+              "lettre": "i",
+              "texte": "La menace de nouveaux marchés",
+              "correcte": false
+            },
+            {
+              "lettre": "j",
+              "texte": "La politique de l’État",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 7,
+          "n": 7,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Calcul du Besoin en fonds de roulement (BFR) et du cycle d’exploitation. D’après le schéma (stockage 50 jours, crédit fournisseurs 30 jours, crédit clients 40 jours), cochez la bonne réponse.",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Le cycle d’exploitation est de 70 jours et le BFR est de 40 jours.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Le cycle d’exploitation est de 90 jours et le BFR est de 60 jours.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Le cycle d’exploitation est de 60 jours et le BFR de 90 jours.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Le cycle d’exploitation est de 80 jours et il n’y a pas de besoins en fonds de roulement.",
+              "correcte": false
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

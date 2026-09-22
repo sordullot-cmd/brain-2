@@ -1,0 +1,480 @@
+[
+  {
+    "id": "principes-de-macroeconomie/qcm-pensees-et-auteurs",
+    "titre": "QCM — Pensées et auteurs",
+    "type": "QCM",
+    "annee": "2021-2022",
+    "note": "Les bonnes réponses viennent du corrigé manuscrit qui accompagne le QCM dans le même dossier (« Corrigé Pensées et Auteurs »), relevé question par question.",
+    "reponses": {
+      "1": [
+        "c",
+        "d"
+      ],
+      "2": [
+        "a",
+        "c"
+      ],
+      "3": [
+        "b",
+        "c"
+      ],
+      "4": [
+        "b",
+        "c"
+      ],
+      "5": [
+        "c",
+        "d"
+      ],
+      "6": [
+        "c"
+      ],
+      "7": [
+        "b"
+      ],
+      "8": [
+        "a",
+        "b"
+      ],
+      "9": [
+        "a",
+        "d"
+      ],
+      "10": [
+        "c"
+      ],
+      "11": [
+        "b"
+      ],
+      "12": [
+        "b"
+      ],
+      "13": [
+        "b",
+        "c"
+      ],
+      "14": [
+        "c"
+      ],
+      "15": [
+        "c"
+      ],
+      "16": [
+        "a",
+        "b"
+      ],
+      "17": [
+        "a",
+        "b"
+      ],
+      "18": [
+        "a",
+        "c"
+      ],
+      "19": [
+        "a",
+        "d"
+      ],
+      "20": [
+        "b",
+        "d"
+      ],
+      "21": [
+        "a"
+      ],
+      "22": [
+        "c"
+      ],
+      "23": [
+        "b"
+      ],
+      "24": [
+        "c"
+      ],
+      "25": [
+        "c"
+      ],
+      "26": [
+        "d"
+      ],
+      "27": [
+        "a",
+        "c"
+      ],
+      "28": [
+        "d"
+      ],
+      "29": [
+        "c"
+      ],
+      "30": [
+        "a"
+      ],
+      "31": [
+        "c"
+      ],
+      "32": [
+        "b"
+      ],
+      "33": [
+        "c"
+      ],
+      "34": [
+        "c",
+        "d"
+      ],
+      "35": [
+        "a",
+        "b"
+      ],
+      "36": [
+        "b"
+      ],
+      "37": [
+        "a",
+        "b"
+      ],
+      "38": [
+        "b",
+        "c"
+      ],
+      "39": [
+        "b"
+      ],
+      "40": [
+        "a",
+        "d"
+      ],
+      "41": [
+        "b",
+        "c"
+      ],
+      "42": [
+        "a",
+        "c"
+      ],
+      "43": [
+        "a"
+      ],
+      "44": [
+        "b"
+      ],
+      "45": [
+        "a"
+      ],
+      "46": [
+        "c"
+      ],
+      "47": [
+        "a",
+        "b"
+      ],
+      "48": [
+        "a"
+      ],
+      "49": [
+        "a",
+        "c"
+      ],
+      "50": [
+        "b",
+        "d"
+      ],
+      "51": [
+        "b"
+      ],
+      "52": [
+        "b",
+        "c"
+      ],
+      "53": [
+        "c"
+      ],
+      "54": [
+        "c"
+      ],
+      "55": [
+        "a",
+        "d"
+      ],
+      "56": [
+        "a"
+      ],
+      "57": [
+        "c"
+      ],
+      "58": [
+        "d"
+      ],
+      "59": [
+        "c"
+      ],
+      "60": [
+        "a",
+        "d"
+      ]
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/corrige-pensees-et-auteurs",
+    "titre": "Corrigé du QCM « Pensées et auteurs »",
+    "type": "QCM",
+    "annee": "2021-2022",
+    "note": "Feuille manuscrite listant les bonnes réponses des 60 questions. Elles sont reportées sur le QCM « Pensées et auteurs », qui se joue directement sur le site.",
+    "rotation": -90
+  },
+  {
+    "id": "principes-de-macroeconomie/ct-macro-rattrapage-23-24",
+    "titre": "Contrôle terminal — session 2 (rattrapage)",
+    "type": "Rattrapage",
+    "annee": "2023-2024",
+    "session": 2,
+    "epreuve": {
+      "entete": {
+        "duree": "120 minutes",
+        "documents": "Aucun",
+        "enseignant": "Pr. Guido Hülsmann",
+        "consignes": [
+          "Calculatrice : non.",
+          "Sciences économiques et de Gestion 1."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Questions",
+          "points": 20,
+          "enonce": [],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Pourquoi Adam Smith prônait-il le libre échange ?",
+              "points": 1
+            },
+            {
+              "ref": "2",
+              "texte": "Que veut dire « rallonger » et « raccourcir » un détour de production ?",
+              "points": 1
+            },
+            {
+              "ref": "3",
+              "texte": "Quelle est la différence entre la masse monétaire et l’offre de monnaie ?",
+              "points": 1
+            },
+            {
+              "ref": "4",
+              "texte": "Illustrer une baisse du taux d’épargne globale avec le diagramme de Jevons et aussi avec le diagramme du marché du capital monétaire, tout en désignant les axes et les courbes.",
+              "points": 3
+            },
+            {
+              "ref": "5",
+              "texte": "L’arbitrage entraîne des conséquences qui sont bénéfiques du point de vue global. Lesquelles ? Expliquer.",
+              "points": 1
+            },
+            {
+              "ref": "6",
+              "texte": "Quel secteur institutionnel crée chaque année la plus grande partie de l’épargne monétaire ? Expliquer.",
+              "points": 1
+            },
+            {
+              "ref": "7",
+              "texte": "Quelles sont les trois manières de calculer le PIB nominal ? Donner les formules.",
+              "points": 1.5
+            },
+            {
+              "ref": "8",
+              "texte": "Quel est, ceteris paribus, l’impact à long terme d’une hausse (une fois pour toutes) du taux de l’épargne globale sur les variables suivantes : dépenses à la consommation finale, niveau des prix (P), PIB nominal, PIB réel, chiffre d’affaires global des firmes.",
+              "points": 2.5
+            },
+            {
+              "ref": "9",
+              "texte": "Comparer les traits caractéristiques d’une croissance induite par l’épargne en économie monétaire par rapport à une économie individuelle (Robinson).",
+              "points": 3
+            },
+            {
+              "ref": "10",
+              "texte": "Nommer les quatre types de chômage présentés dans le CM. Quelles sont leurs causes ?",
+              "points": 2
+            },
+            {
+              "ref": "11",
+              "texte": "Donner les valeurs approximatives, en euros, des variables suivantes : PIB de la France, dépenses de l’État.",
+              "points": 1
+            },
+            {
+              "ref": "12",
+              "texte": "Donner une représentation graphique de la demande globale, en fonction du revenu global, selon la conception keynésienne. Dans le même graphique, illustrer l’impact d’une hausse de la propension marginale à consommer. Expliquer.",
+              "points": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/cc-macro-2023-2024",
+    "titre": "Contrôle continu 2 — copie corrigée",
+    "type": "Contrôle continu",
+    "annee": "2023-2024",
+    "numero": 2,
+    "note": "Photo d’une copie rendue et notée (20/20). L’énoncé imprimé est repris ci-dessous ; les réponses manuscrites et les points du correcteur restent lisibles sur l’image de la page.",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": "M. Malécot",
+        "consignes": [
+          "Épreuve sur document réponse : les réponses s’écrivent sous chaque question."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "CC2 Macroéconomie",
+          "points": 20,
+          "enonce": [],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Quelles sont les 4 raisons de la rémunération des épargnants ?",
+              "points": 2
+            },
+            {
+              "ref": "2",
+              "texte": "Citer 2 économistes libéraux autrichiens.",
+              "points": null
+            },
+            {
+              "ref": "3",
+              "texte": "Définir « détour de production ». Qui est l’auteur de ce concept ?",
+              "points": null
+            },
+            {
+              "ref": "4",
+              "texte": "Qu’est-ce qu’un arbitrage ?",
+              "points": null
+            },
+            {
+              "ref": "5",
+              "texte": "Représenter l’impact d’une augmentation de l’épargne sur le marché global du capital monétaire.",
+              "points": 3
+            },
+            {
+              "ref": "6",
+              "texte": "Donner deux exemples d’activités productives qui ne sont pas comptabilisées dans le TES.",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "Quels sont les 3 tableaux produits par la CNF ? Sigle à expliciter.",
+              "points": 1.5
+            },
+            {
+              "ref": "8",
+              "texte": "Quels sont les 3 sous-tableaux qui composent le TES ?",
+              "points": 1.5
+            },
+            {
+              "ref": "9",
+              "texte": "Est-ce que la CNF fournit des renseignements sur les relations causales entre les variables macroéconomiques ?",
+              "points": 1
+            },
+            {
+              "ref": "10",
+              "texte": "Représentez avec deux graphiques une hausse de la demande de monnaie via l’échange.",
+              "points": 4
+            },
+            {
+              "ref": "11",
+              "texte": "Expliquer les équations et sigles suivants : EBE ; RNcap ; MDD = MDR + MDE.",
+              "points": 2
+            },
+            {
+              "ref": "12",
+              "texte": "Exercice — Identités comptables d’une économie fermée sans État. Données d’une économie fermée non statique : valeur globale des ressources = 300 ; somme des valeurs des emplois intermédiaires = 120 ; EBE des capitalistes = 55 ; valeur monétaire de la formation brute de capital = 30. 1. Calculer la valeur des dépenses à la consommation finale. 2. Calculer le PIB nominal.",
+              "points": 3
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/qcm-vrac",
+    "note": "Les deux questions que le corrigé du fichier laissait sans réponse (« La demande de monnaie… » et « les activités d’arbitrage entraînent… ») ont été complétées d’après le cours magistral ; elles le signalent quand on les joue.",
+    "reponses": {
+      "48": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 3 — « deux composantes de la demande totale (demande de détention) : la demande via l’échange (DE) et la demande de rétention (DR) ; DD = DE + DR »."
+      },
+      "56": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 4, « externalités de l’arbitrage » — l’arbitrage intègre les marchés partiels, réduit les écarts de prix et maximise la division du travail. Il est le fait des acheteurs finaux, des producteurs et des spécialistes : il coordonne donc les producteurs entre eux et avec les consommateurs. Il n’égalise ni les revenus des ménages ni les patrimoines."
+      }
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/qcm-vrac-corriges",
+    "note": "Les deux questions que le corrigé du fichier laissait sans réponse (« La demande de monnaie… » et « les activités d’arbitrage entraînent… ») ont été complétées d’après le cours magistral ; elles le signalent quand on les joue.",
+    "reponses": {
+      "48": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 3 — « deux composantes de la demande totale (demande de détention) : la demande via l’échange (DE) et la demande de rétention (DR) ; DD = DE + DR »."
+      },
+      "56": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 4, « externalités de l’arbitrage » — l’arbitrage intègre les marchés partiels, réduit les écarts de prix et maximise la division du travail. Il est le fait des acheteurs finaux, des producteurs et des spécialistes : il coordonne donc les producteurs entre eux et avec les consommateurs. Il n’égalise ni les revenus des ménages ni les patrimoines."
+      }
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/qcm-classe",
+    "note": "Les deux questions que le corrigé du fichier laissait sans réponse (« La demande de monnaie… » et « les activités d’arbitrage entraînent… ») ont été complétées d’après le cours magistral ; elles le signalent quand on les joue.",
+    "reponses": {
+      "75": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 3 — « deux composantes de la demande totale (demande de détention) : la demande via l’échange (DE) et la demande de rétention (DR) ; DD = DE + DR »."
+      },
+      "101": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 4, « externalités de l’arbitrage » — l’arbitrage intègre les marchés partiels, réduit les écarts de prix et maximise la division du travail. Il est le fait des acheteurs finaux, des producteurs et des spécialistes : il coordonne donc les producteurs entre eux et avec les consommateurs. Il n’égalise ni les revenus des ménages ni les patrimoines."
+      }
+    }
+  },
+  {
+    "id": "principes-de-macroeconomie/qcm-classe-corriges",
+    "note": "Les deux questions que le corrigé du fichier laissait sans réponse (« La demande de monnaie… » et « les activités d’arbitrage entraînent… ») ont été complétées d’après le cours magistral ; elles le signalent quand on les joue.",
+    "reponses": {
+      "75": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 3 — « deux composantes de la demande totale (demande de détention) : la demande via l’échange (DE) et la demande de rétention (DR) ; DD = DE + DR »."
+      },
+      "101": {
+        "lettres": [
+          "b",
+          "c"
+        ],
+        "source": "Retrouvée dans le cours : Cours du Pr. G. Hülsmann, « Principes de macroéconomie », leçon 4, « externalités de l’arbitrage » — l’arbitrage intègre les marchés partiels, réduit les écarts de prix et maximise la division du travail. Il est le fait des acheteurs finaux, des producteurs et des spécialistes : il coordonne donc les producteurs entre eux et avec les consommateurs. Il n’égalise ni les revenus des ménages ni les patrimoines."
+      }
+    }
+  }
+]

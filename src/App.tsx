@@ -16,6 +16,9 @@ const ProjetDetail = lazy(() => import('./pages/Projet').then((m) => ({ default:
 const CoursList = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursList })))
 const CoursView = lazy(() => import('./pages/Cours').then((m) => ({ default: m.CoursView })))
 const Revisions = lazy(() => import('./pages/Revisions').then((m) => ({ default: m.Revisions })))
+const AnnalesList = lazy(() => import('./pages/Annales').then((m) => ({ default: m.AnnalesList })))
+const AnnaleView = lazy(() => import('./pages/Annales').then((m) => ({ default: m.AnnaleView })))
+const QcmView = lazy(() => import('./pages/Qcm').then((m) => ({ default: m.QcmView })))
 const NotesList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NotesList })))
 const NoteView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NoteView })))
 const TagsList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagsList })))
@@ -90,6 +93,11 @@ export default function App() {
               {/* Avant le splat : `revision` n'est pas un chemin de note. */}
               <Route path="/cours/revision" element={<Revisions data={data} />} />
               <Route path="/cours/*" element={<CoursView data={data} />} />
+              {/* Les annales vivent hors du vault (~/Documents/L1) : elles ont
+                  leur propre index, chargé seulement ici. */}
+              <Route path="/annales" element={<AnnalesList />} />
+              <Route path="/annales/:matiere/:slug" element={<AnnaleView />} />
+              <Route path="/annales/:matiere/:slug/qcm" element={<QcmView />} />
               <Route path="/notes" element={<NotesList data={data} />} />
               <Route path="/note/*" element={<NoteView data={data} />} />
               <Route path="/tags" element={<TagsList data={data} />} />

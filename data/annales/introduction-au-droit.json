@@ -1,0 +1,92 @@
+[
+  {
+    "id": "introduction-au-droit/ct-2021-2022-session-1",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2021-2022",
+    "session": 1,
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": "Pierre Brossard",
+        "consignes": [
+          "Calculatrice : non.",
+          "Période 1 — Licence 1 Économie-gestion."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Répondre aux quatre questions suivantes",
+          "points": 20,
+          "enonce": ["5 points par question."],
+          "questions": [
+            { "ref": "1", "texte": "Quelles sont les différences entre une loi et un acte réglementaire ?", "points": 5 },
+            { "ref": "2", "texte": "Quelles sont les différentes juridictions administratives ?", "points": 5 },
+            { "ref": "3", "texte": "Que signifie le principe de supériorité des traités sur les lois (article 55 de la Constitution française) ?", "points": 5 },
+            { "ref": "4", "texte": "Qu’est-ce que le droit de propriété et quels sont les pouvoirs que détient un propriétaire sur son bien ?", "points": 5 }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "introduction-au-droit/ct-2021-2022-session-2",
+    "titre": "Contrôle terminal — session 2 (rattrapage)",
+    "type": "Rattrapage",
+    "annee": "2021-2022",
+    "session": 2,
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": "Pierre Brossard",
+        "consignes": ["Calculatrice : non."]
+      },
+      "parties": [
+        {
+          "titre": "Répondre aux quatre questions suivantes",
+          "points": 20,
+          "enonce": ["5 points par question."],
+          "questions": [
+            { "ref": "1", "texte": "Qu’est-ce qu’une loi ?", "points": 5 },
+            { "ref": "2", "texte": "Qu’est-ce que le Tribunal judiciaire et quelle est sa compétence matérielle ?", "points": 5 },
+            { "ref": "3", "texte": "Qu’est-ce que le principe de non-rétroactivité des lois ?", "points": 5 },
+            { "ref": "4", "texte": "Comment définir le droit de propriété ?", "points": 5 }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "introduction-au-droit/droit-2016-2017",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2016-2017",
+    "session": 1,
+    "epreuve": {
+      "entete": {
+        "duree": "2h",
+        "documents": "Aucun",
+        "enseignant": "Pierre Brossard",
+        "consignes": [
+          "Semestre 1 — Licence 1 SEG.",
+          "Épreuve du 9 janvier 2017, de 9 h à 11 heures."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Répondre aux quatre questions suivantes",
+          "points": 20,
+          "enonce": ["5 points par question."],
+          "questions": [
+            { "ref": "1", "texte": "Qu’est-ce qu’une coutume ?", "points": 5 },
+            { "ref": "2", "texte": "Quelles sont les juridictions administratives ?", "points": 5 },
+            { "ref": "3", "texte": "Qu’est-ce que le principe de l’effet immédiat de la loi nouvelle ?", "points": 5 },
+            { "ref": "4", "texte": "Qu’est-ce que le droit de propriété ?", "points": 5 }
+          ]
+        }
+      ]
+    }
+  }
+]

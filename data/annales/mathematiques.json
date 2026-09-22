@@ -1,0 +1,274 @@
+[
+  {
+    "id": "mathematiques/ct-2023-2024",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2023-2024",
+    "session": 1,
+    "epreuve": {
+      "entete": {
+        "duree": "1h30",
+        "documents": "Aucun",
+        "enseignant": "Boris Gourlay",
+        "consignes": [
+          "Calculatrice, montre connectée, smartphone : interdits.",
+          "Période 4 — L1 Économie Gestion / DL1 Droit-Économie.",
+          "Le barème indiqué est approximatif."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice 1",
+          "points": 10,
+          "enonce": ["On considère la fonction définie sur $\\mathbb{R}$ par $f(x) = x^3 e^{-x}$."],
+          "questions": [
+            { "ref": "A.1", "texte": "Partie A — sens de variation : calculer $f'(x)$, la dérivée première de $f$.", "points": null },
+            { "ref": "A.2", "texte": "Étudier les variations de $f$.", "points": null },
+            { "ref": "A.3", "texte": "Calculer les limites de $f$ en $+\\infty$ et $-\\infty$ et dresser le tableau de variation de $f$.", "points": null },
+            { "ref": "B.1", "texte": "Partie B — convexité : calculer $f''(x)$, la dérivée seconde de $f$.", "points": null },
+            { "ref": "B.2", "texte": "Sur quel(s) intervalle(s) $f$ est-elle convexe ? concave ? (on justifiera avec soin).", "points": null },
+            { "ref": "B.3", "texte": "Déterminer le(s) point(s) d’inflexion de C, la courbe de $f$.", "points": null },
+            { "ref": "C.1", "texte": "Partie C — fonction de deux variables, avec $F(x;y) = (x + 2y)^3 e^{-x-2y}$ : calculer $F(0;0)$, $F(-2;1)$, $F(-2a;a)$ pour un réel quelconque $a$.", "points": null },
+            { "ref": "C.2", "texte": "Calculer $F'_x = \\frac{\\partial F}{\\partial x}$ et $F'_y = \\frac{\\partial F}{\\partial y}$, les dérivées partielles de $F$.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 2",
+          "points": 10,
+          "enonce": [
+            "On considère les matrices $A = \\begin{pmatrix} 1 & 2 & -2 \\\\ 2 & -1 & 0 \\\\ -1 & 2 & 0 \\end{pmatrix}$ et $P = \\begin{pmatrix} 1 & 6 & 1 \\\\ 1 & 4 & -1 \\\\ 1 & 1 & 1 \\end{pmatrix}$."
+          ],
+          "questions": [
+            { "ref": "A.1", "texte": "Partie A — inversibilité de P : montrer que P est une matrice inversible.", "points": null },
+            { "ref": "A.2", "texte": "Calculer la matrice inverse $P^{-1}$.", "points": null },
+            { "ref": "B.1", "texte": "Partie B — calcul de $A^n$, avec $D = P^{-1}.A.P$ et $n$ entier naturel non nul : calculer AP et D.", "points": null },
+            { "ref": "B.2", "texte": "Calculer les matrices $D^n$ et $A^n$.", "points": null },
+            { "ref": "C.1", "texte": "Partie C — système de suites $(u_n), (v_n), (w_n)$ avec $u_0 = -1$, $v_0 = 1$, $w_0 = 0$ et, pour tout entier $n$ : $u_{n+1} = u_n + 2v_n - 2w_n$, $v_{n+1} = 2u_n - v_n$, $w_{n+1} = -u_n + 2v_n$. Calculer $u_1, v_1, w_1$.", "points": null },
+            { "ref": "C.2", "texte": "Calculer $u_n, v_n, w_n$ en fonction de $n$ pour tout $n$.", "points": null }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "mathematiques/rattrapage-maths-23-24",
+    "titre": "Rattrapage — session 2",
+    "type": "Rattrapage",
+    "annee": "2023-2024",
+    "session": 2,
+    "epreuve": {
+      "entete": {
+        "duree": "1h30",
+        "documents": "Aucun",
+        "enseignant": "Boris Gourlay",
+        "consignes": [
+          "Calculatrice, montre connectée, smartphone : interdits.",
+          "Période 4 — L1 Économie Gestion.",
+          "Le barème indiqué est approximatif."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice 1",
+          "points": 10,
+          "enonce": [
+            "On considère la fonction numérique définie par $f(x) = \\dfrac{\\ln x + x + 1}{x}$. C désigne la courbe représentative de $f$."
+          ],
+          "questions": [
+            { "ref": "A.1", "texte": "Partie A — sens de variation : quel est le domaine de définition de $f$ (justifier votre réponse avec soin) ?", "points": null },
+            { "ref": "A.2", "texte": "Calculer $f'(x)$, la dérivée première de $f(x)$.", "points": null },
+            { "ref": "A.3", "texte": "Étudier le sens de variation de $f$.", "points": null },
+            { "ref": "A.4", "texte": "Calculer les limites de $f$ aux bornes de son domaine de définition et dresser le tableau de variation de $f$.", "points": null },
+            { "ref": "B.1", "texte": "Partie B — convexité : calculer $f''(x)$, la dérivée seconde de $f$.", "points": null },
+            { "ref": "B.2", "texte": "Sur quel(s) intervalle(s) $f$ est-elle convexe ? concave ?", "points": null },
+            { "ref": "B.3", "texte": "Déterminer le(s) point(s) d’inflexion de C.", "points": null },
+            { "ref": "C.1", "texte": "Partie C — fonction de deux variables $F(x;y) = \\dfrac{\\ln(x^2 + 2y) + x^2 + 2y + 1}{x^2 + 2y}$ : calculer $F(1;0)$.", "points": null },
+            { "ref": "C.2", "texte": "Calculer $F'_x = \\frac{\\partial F}{\\partial x}$ et $F'_y = \\frac{\\partial F}{\\partial y}$, les dérivées partielles de $F$.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 2",
+          "points": 10,
+          "enonce": [
+            "On considère les matrices $A = \\begin{pmatrix} -1 & 8 & -6 \\\\ -4 & 11 & -6 \\\\ -4 & 8 & -3 \\end{pmatrix}$ et $P = \\begin{pmatrix} 2 & 3 & 1 \\\\ 1 & 0 & 1 \\\\ 0 & -2 & 1 \\end{pmatrix}$."
+          ],
+          "questions": [
+            { "ref": "A.1", "texte": "Partie A — inversibilité de P : démontrer que P est une matrice inversible.", "points": null },
+            { "ref": "A.2", "texte": "Calculer $P^{-1}$, la matrice inverse de P.", "points": null },
+            { "ref": "B.1", "texte": "Partie B — calcul de $A^n$, avec $D = P^{-1}.A.P$ et $n$ entier naturel : calculer A.P et D.", "points": null },
+            { "ref": "B.2", "texte": "Calculer $D^n$ et $A^n$.", "points": null },
+            { "ref": "C.1", "texte": "Partie C — système de suites $(u_n), (v_n), (w_n)$ avec $u_0 = 1$, $v_0 = -1$, $w_0 = 2$ et, pour tout entier $n$ : $u_{n+1} = -u_n + 8v_n - 6w_n$, $v_{n+1} = -4u_n + 11v_n - 6w_n$, $w_{n+1} = -4u_n + 8v_n - 3w_n$. Calculer $u_1, v_1, w_1$.", "points": null },
+            { "ref": "C.2", "texte": "Calculer $u_n, v_n, w_n$ pour tout $n$.", "points": null }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "mathematiques/2017",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2016-2017",
+    "session": 1,
+    "note": "Photos du sujet papier : le bord droit de la page 2 est coupé, deux fins de phrase y sont reconstituées par le contexte.",
+    "epreuve": {
+      "entete": {
+        "duree": "1h30",
+        "documents": "Aucun",
+        "enseignant": "Boris Gourlay",
+        "consignes": [
+          "Calculatrice autorisée.",
+          "Semestre 2 — L1 Sciences Économiques et Gestion / L1 Économie Droit.",
+          "Les calculs doivent être détaillés et expliqués ; la rédaction claire et soignée.",
+          "Barème approximatif : I/ 6 points, II/ 7 points, III/ 7 points."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice I",
+          "points": 6,
+          "enonce": ["Soit la fonction $z = f(x;y) = x^2 + 3xy + 2y^2 - 3x + 4y - 2$."],
+          "questions": [
+            { "ref": "1", "texte": "Déterminer $f(M_0)$, la valeur de $f$ au point $M_0(2;3)$.", "points": null },
+            { "ref": "2", "texte": "Calculer $f'_x$ et $f'_y$, les dérivées partielles de $f$.", "points": null },
+            { "ref": "3", "texte": "Calculer $dz$, la différentielle de $f$.", "points": null },
+            { "ref": "4", "texte": "À partir de $M_0$, donner une estimation de $f(2{,}01 ; 2{,}98)$.", "points": null },
+            { "ref": "5", "texte": "À partir de $M_0$, $x$ augmente de 0,1 : de quelle quantité doit varier $y$ pour que $f$ reste (approximativement) égale à sa valeur en $M_0$ ? (On pourra utiliser le taux marginal de substitution, avec $TMS = \\frac{dy}{dx} = -\\frac{f'_x}{f'_y}$.)", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice II",
+          "points": 7,
+          "enonce": ["On considère la contrainte $3x + y \\le 2$ (1). D est le domaine défini par (1)."],
+          "questions": [
+            { "ref": "1", "texte": "Représenter graphiquement D sur votre copie.", "points": null },
+            { "ref": "2a", "texte": "On étudie les extrema de $f(x;y) = xy$ (avec $x > 0$, $y > 0$) sous la contrainte (1), via le lagrangien $L(x;y;\\lambda) = xy - \\lambda(3x + y - 2)$ : calculer les dérivées partielles de L et résoudre $L'_x = 0$, $L'_y = 0$, $L'_\\lambda = 0$. On trouvera un point solution $M_0$.", "points": null },
+            { "ref": "2b", "texte": "Déterminer l’équation de $C^*$, la courbe de niveau de $f$ passant par $M_0$.", "points": null },
+            { "ref": "2c", "texte": "Sur votre graphique, représenter $C^*$ et le gradient de $f$ en $M_0$.", "points": null },
+            { "ref": "2d", "texte": "Y a-t-il un extremum pour $f$, sous la contrainte (1), en $M_0$ ? (justifier)", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice III",
+          "points": 7,
+          "enonce": [
+            "On considère les matrices $A = \\begin{pmatrix} 2 & 3 & -1 \\\\ 0 & -1 & 1 \\\\ 0 & 1 & -1 \\end{pmatrix}$ et $P = \\begin{pmatrix} 1 & 1 & 1 \\\\ -1 & 0 & -1 \\\\ -1 & 0 & 1 \\end{pmatrix}$."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Démontrer que P est inversible et calculer $P^{-1}$, la matrice inverse de P.", "points": null },
+            { "ref": "2", "texte": "Calculer $D = P^{-1}.A.P$ et $D^n$ ($n \\in \\mathbb{N}^*$).", "points": null },
+            { "ref": "3", "texte": "En déduire $A^n$ pour tout entier non nul $n$.", "points": null },
+            { "ref": "4", "texte": "On considère les suites $u$, $v$ et $w$ telles que $u_0 = 1$, $v_0 = -1$, $w_0 = 0$ et, pour $n \\in \\mathbb{N}$ : $u_{n+1} = 2u_n + 3v_n - w_n$, $v_{n+1} = -v_n + w_n$, $w_{n+1} = v_n - w_n$. Déterminer $u_n$, $v_n$ et $w_n$ pour tout $n$.", "points": null }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "mathematiques/2014-2015",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2014-2015",
+    "session": 1,
+    "note": "Le dossier mêle deux sujets : les pages 1 et 3 forment le sujet de 2014-2015 (exercices 1 à 4), la page 2 est la page d’un autre sujet, transcrite ici sous « Autre sujet ». Photos de 540 px : quelques numéros de question sont à la limite du lisible.",
+    "epreuve": {
+      "entete": {
+        "duree": "1h30",
+        "documents": "Aucun",
+        "enseignant": "Boris Gourlay",
+        "consignes": [
+          "Calculatrice fournie : autorisée. Calculatrice personnelle : interdite.",
+          "Semestre 2, session 1 — L1 Économie et Gestion.",
+          "Les calculs doivent être expliqués et détaillés ; la rédaction claire et soignée.",
+          "Les quatre exercices sont indépendants."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice 1",
+          "points": null,
+          "enonce": ["On considère la suite numérique $u$ telle que $u_0 = 3$ et $u_{n+1} = 2u_n + 1$. On pose $v_n = 1 + u_n$."],
+          "questions": [
+            { "ref": "1", "texte": "Calculer $u_1$ et $u_2$. La suite $u$ est-elle arithmétique ? géométrique ? (justifier)", "points": null },
+            { "ref": "2", "texte": "Calculer $v_0$, $v_1$ et $v_2$. Démontrer que $v$ est une suite géométrique.", "points": null },
+            { "ref": "3", "texte": "Calculer $v_n$ puis $u_n$ en fonction de $n$.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 2",
+          "points": null,
+          "enonce": ["On considère la fonction $f(x;y) = 3x^2 - 5y^2 + 10x - 2y + 7$ et le point $M_0(1;-1)$."],
+          "questions": [
+            { "ref": "1", "texte": "Calculer $f(M_0)$.", "points": null },
+            { "ref": "2", "texte": "Calculer $dz$, la différentielle de $z = f(x;y)$.", "points": null },
+            { "ref": "3", "texte": "En déduire une estimation de $f$ en $M(0{,}9 ; -1{,}01)$.", "points": null },
+            { "ref": "4", "texte": "À partir de $M_0$, on suppose que $y$ augmente de 0,1. De combien doit varier $x$ pour que $f$ reste (approximativement) égale à sa valeur en $M_0$ ?", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 3",
+          "points": null,
+          "enonce": [
+            "On considère les matrices $A = \\begin{pmatrix} 2 & 0 & 4 \\\\ 3 & -4 & 12 \\\\ 1 & -2 & 5 \\end{pmatrix}$ et $P = \\begin{pmatrix} -4 & -4 & 2 \\\\ 3 & 0 & 1 \\\\ 2 & 1 & 0 \\end{pmatrix}$."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Calculer $P^{-1}$, la matrice inverse de P.", "points": null },
+            { "ref": "2", "texte": "Calculer $D = P^{-1}.A.P$ ; en déduire $D^n$ ($n \\in \\mathbb{N}^*$).", "points": null },
+            { "ref": "3", "texte": "On admet que $A^n = P.D^n.P^{-1}$. Calculer $A^n$.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 4",
+          "points": null,
+          "enonce": [
+            "Étudier les extrema de $f(x;y) = \\ln(x) + \\ln(y)$ (avec $x > 0$, $y > 0$) sous la contrainte $x^2 + y = 12$, à l’aide de la méthode du lagrangien. On résoudra (au choix) avec un graphique (annoter avec soin votre figure) ou avec les matrices. On rappelle que $L(x;y;\\lambda) = \\ln(x) + \\ln(y) - \\lambda(x^2 + y - 12)$."
+          ],
+          "questions": []
+        },
+        {
+          "titre": "Autre sujet — Exercice I",
+          "points": null,
+          "enonce": ["On considère la fonction numérique de 2 variables $z = f(x;y) = x^{4/5} y^{1/5}$ (avec $x, y > 0$). Soit le point $M_0(32;1)$."],
+          "questions": [
+            { "ref": "1", "texte": "Calculer $f(M_0)$.", "points": null },
+            { "ref": "2", "texte": "Calculer les dérivées partielles $f'_x$ et $f'_y$ de $f$.", "points": null },
+            { "ref": "3", "texte": "En déduire les élasticités partielles de $f$ par rapport à $x$ et $y$. On rappelle que $E_{f/x} = x\\frac{f'_x}{f}$ et $E_{f/y} = y\\frac{f'_y}{f}$.", "points": null },
+            { "ref": "4", "texte": "Si, à partir de $M_0$, $x$ augmente de 1 % et $y$ diminue de 3 %, de quel pourcentage va (approximativement) varier $f$ ?", "points": null }
+          ]
+        },
+        {
+          "titre": "Autre sujet — Exercice II",
+          "points": null,
+          "enonce": ["Calculer S, la somme des entiers pairs formés de deux chiffres : $S = 10 + 12 + 14 + \\dots + 98$."],
+          "questions": []
+        },
+        {
+          "titre": "Autre sujet — Exercice III",
+          "points": null,
+          "enonce": [
+            "On considère la suite $u$ telle que $u_0 = 1$, $u_1 = e$ et, pour tout $n$, $u_{n+2} = \\sqrt{u_n u_{n+1}}$. $e$ désigne la base du logarithme népérien, c’est-à-dire le nombre réel tel que $\\ln(e) = 1$. On admet que pour tout entier $n$, $u_n > 0$. On pose $v_n = \\ln(u_n)$."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Démontrer que $v$ est la solution de l’équation de récurrence $v_{n+2} = 0{,}5\\,v_{n+1} + 0{,}5\\,v_n$ (1), telle que $v_0 = 0$ et $v_1 = 1$.", "points": null },
+            { "ref": "2", "texte": "Résoudre (1) et calculer $v_n$ pour tout $n$.", "points": null },
+            { "ref": "3", "texte": "Démontrer que pour tout $n$ on a $u_n = e^{\\frac{2}{3}[1 - (-0{,}5)^n]}$.", "points": null },
+            { "ref": "4", "texte": "La suite $u$ est-elle convergente ? (justifier)", "points": null }
+          ]
+        },
+        {
+          "titre": "Autre sujet — Exercice IV",
+          "points": null,
+          "enonce": [
+            "On considère les matrices $A = \\begin{pmatrix} 10 & 9 & 9 \\\\ -9 & -8 & -9 \\\\ -9 & -9 & -8 \\end{pmatrix}$ et $P = \\begin{pmatrix} 1 & 0 & 1 \\\\ 0 & 1 & -1 \\\\ -1 & -1 & -1 \\end{pmatrix}$."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Démontrer que P est inversible et calculer $P^{-1}$, la matrice inverse de P.", "points": null },
+            { "ref": "2", "texte": "Calculer $A.P$ puis $D = P^{-1}.A.P$ ; en déduire $D^n$ pour $n$ entier.", "points": null },
+            { "ref": "3", "texte": "On admet que $A^n = P.D^n.P^{-1}$. Calculer $A^n$.", "points": null },
+            { "ref": "4", "texte": "Soient $u$, $v$ et $w$ des suites telles que $u_0 = 1$, $v_0 = -1$, $w_0 = 1$ vérifiant, pour $n \\in \\mathbb{N}$ : $u_{n+1} = 10u_n + 9v_n + 9w_n$, $v_{n+1} = -9u_n - 8v_n - 9w_n$, $w_{n+1} = -9u_n - 9v_n - 8w_n$. Calculer $u_n$, $v_n$ et $w_n$ pour tout $n$.", "points": null }
+          ]
+        }
+      ]
+    }
+  }
+]

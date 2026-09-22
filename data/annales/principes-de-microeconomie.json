@@ -1,0 +1,69 @@
+[
+  {
+    "id": "principes-de-microeconomie/cc-2021-2022",
+    "titre": "Contrôle continu n° 1 — copie corrigée",
+    "type": "Contrôle continu",
+    "annee": "2021-2022",
+    "numero": 1,
+    "note": "Photos d’une copie rendue et notée 18,75/20. L’énoncé imprimé est repris ci-dessous ; les réponses manuscrites, les remarques du correcteur et les points restent lisibles sur les images de pages. Attention : la page de garde porte le nom et la note d’une étudiante.",
+    "epreuve": {
+      "entete": {
+        "duree": "1h30",
+        "documents": "Aucun",
+        "enseignant": null,
+        "consignes": [
+          "Les calculatrices, téléphones portables et montres connectées sont interdits.",
+          "Période 3 — L1 EG, DL1 ED, DL1 ME.",
+          "Les explications doivent être rédigées. Aucune flèche ni abréviation non conventionnelle ne sont autorisées.",
+          "Les graphiques doivent être clairs et lisibles ; n’oubliez pas d’indiquer les titres d’axes et noms des courbes."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Exercice 1",
+          "points": null,
+          "enonce": [
+            "Le marché des livres papier de la ville est initialement en équilibre. Répondez aux questions suivantes pour déterminer l’effet, sur ce marché, du développement du marché des livres numériques."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Quel côté du marché des livres papier est affecté et pourquoi ?", "points": null },
+            { "ref": "2", "texte": "Faites une illustration graphique. Vous compléterez le graphique en répondant aux autres questions.", "points": null },
+            { "ref": "3", "texte": "Dans quelle situation se retrouve le marché ? Représentez-la sur le graphique ci-dessus.", "points": null },
+            { "ref": "4", "texte": "Décrivez le mécanisme permettant d’aboutir à un nouvel équilibre. Complétez le graphique ci-dessus pour illustrer votre raisonnement.", "points": null },
+            { "ref": "5", "texte": "Caractérisez le nouvel équilibre.", "points": null },
+            { "ref": "6", "texte": "À partir de la situation initiale, expliquez l’impact de l’ouverture d’une nouvelle librairie sur le marché des livres papier de la ville.", "points": null },
+            { "ref": "7", "texte": "Faites une illustration graphique de cette deuxième situation et caractérisez le nouvel équilibre, sans détailler le mécanisme permettant de l’atteindre.", "points": null },
+            { "ref": "8", "texte": "Si les deux phénomènes interviennent en même temps, que pouvez-vous dire sur les quantités de livres échangées en nouvel équilibre ? Justifiez votre réponse.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 2",
+          "points": null,
+          "enonce": ["Les préférences exprimées par Thomas sont : $(7;4) \\succ (1;5) \\succ (11;2) \\succ (2;3)$."],
+          "questions": [
+            { "ref": "1", "texte": "Parmi les fonctions proposées ci-dessous, laquelle décrit les préférences de Thomas et pourquoi ? a) $u(x;y) = x^{1/2} y^{1/2}$ ; b) $v(x;y) = x^{1/7} y^{3/7}$ ; c) $w(x;y) = x + \\sqrt{y}$.", "points": null },
+            { "ref": "2", "texte": "Donnez la définition d’une courbe d’indifférence.", "points": null },
+            { "ref": "3", "texte": "Pour la fonction d’utilité choisie à la question 1, donnez l’équation d’une courbe d’indifférence et représentez-la.", "points": null },
+            { "ref": "4", "texte": "Quelles sont les propriétés des courbes d’indifférence ? Énumérez-les et expliquez leur lien avec les hypothèses des préférences.", "points": null }
+          ]
+        },
+        {
+          "titre": "Exercice 3",
+          "points": null,
+          "enonce": [
+            "Pour la fête des voisins, Nina a un budget cadeau de 30 euros, qu’elle alloue entre l’achat de bouquets de fleurs et des gâteaux. Ses préférences pour les fleurs et les gâteaux sont données par la fonction d’utilité $u(f,g) = 4f^2 g$. Le prix d’un bouquet de fleurs est 4 €, le prix d’un gâteau est 10 €."
+          ],
+          "questions": [
+            { "ref": "1", "texte": "Écrivez le programme de choix optimal de Nina.", "points": null },
+            { "ref": "2", "texte": "Sur un graphique, tracez la contrainte budgétaire de Nina, après avoir donné sa définition. La quantité des bouquets de fleurs est indiquée sur l’axe des abscisses, la quantité des gâteaux sur l’axe des ordonnées.", "points": null },
+            { "ref": "3", "texte": "Quelle est l’interprétation économique du coefficient directeur de la contrainte de budget ?", "points": null },
+            { "ref": "4", "texte": "Écrire la condition nécessaire d’optimalité.", "points": null },
+            { "ref": "5", "texte": "Résoudre le programme optimal de Nina.", "points": null },
+            { "ref": "6", "texte": "Quelles quantités de bouquets de fleurs et de gâteaux choisira Nina pour sa fête ?", "points": null },
+            { "ref": "7", "texte": "Expliquez la résolution graphique du programme de Nina et représentez-la sur le graphique initial de la question 2.", "points": null }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,158 @@
+[
+  {
+    "id": "management-et-theorie-des-organisations/cc2023-2024",
+    "titre": "Contrôle continu — copie corrigée",
+    "type": "Contrôle continu",
+    "annee": "2023-2024",
+    "ordre": [2, 4, 3, 5, 1],
+    "note": "Photos d’une copie rendue et notée (QCM 4/5, questions 7/8, réflexion 5/7). Les pages ont été remises dans l’ordre du sujet. Les réponses du QCM données ici sont celles que le correcteur a validées ; pour les questions 5 et 10, que la copie a ratées, la bonne réponse est celle du cours (modes de coordination de Mintzberg ; « structure follows strategy » de Chandler) et non une réponse lue sur la copie.",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": null,
+        "consignes": [
+          "Partie 1 : QCM (5 points) — entourer lisiblement au stylo la lettre correspondant à la ou aux bonnes réponses.",
+          "Au moins une bonne réponse par question, plusieurs réponses possibles pour certaines.",
+          "Les points sont attribués si la totalité des bonnes réponses est cochée et qu’aucune mauvaise réponse ne l’est : 0,5 point par question."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Partie 1 — QCM",
+          "points": 5,
+          "enonce": ["Les dix questions du QCM se jouent dans l’onglet QCM de cette épreuve."],
+          "questions": []
+        },
+        {
+          "titre": "Partie 2 — Questions / réponses",
+          "points": 8,
+          "enonce": [],
+          "questions": [
+            { "ref": "1", "texte": "Énoncez les 4 principes fondamentaux de l’organisation scientifique du travail dans le tableau ci-après.", "points": 2 },
+            { "ref": "2", "texte": "Compléter le tableau comparant l’École classique et l’École des relations humaines sur six lignes : base de l’organisation, décision, approche de l’organisation, contrôle, style de management, facteur de motivation. La colonne « École classique » est donnée (individu ; centralisée et descendante ; rationnelle ; par les managers ; directif ; l’argent), celle de l’École des relations humaines est à remplir.", "points": 3 },
+            { "ref": "3", "texte": "Analyse de structure : identifiez le type de structure représenté par l’organigramme (un CEO, cinq vice-présidents par fonction, quatre managers de produit, des « two-boss employees » aux intersections) et sa principale caractéristique.", "points": 3 }
+          ]
+        },
+        {
+          "titre": "Partie 3 — Sujet de réflexion",
+          "points": 7,
+          "enonce": [
+            "Texte : « Si le principal facteur de compétitivité et d’excellence des entreprises est bien le facteur humain et organisationnel, et s’il faut toujours des processus pour impliquer les hommes et susciter leur motivation, la question reste posée de savoir pourquoi ces processus changent au cours du temps, diffèrent d’un pays à l’autre et apportent, suivant les cas, des succès ou des échecs, bref sont contingents ? Le constat de la contingence des clés de l’excellence et de la fragilité des modes managériales serait désespérant s’il n’était possible d’en tirer un principe de management résistant bien à l’épreuve du temps. […] Le principe de contingence affleure régulièrement dans la littérature. Citons P. Lawrence et J. Lorsh écrivant dès 1968 : “Il n’y a pas une structure qui est meilleure mais plutôt différentes structures qui sont meilleures dans différentes conditions”. Il n’y a pas de facteurs clés de succès universels valables en toutes circonstances. Le zéro stock et les flux tendus ont été des objectifs rentables pour certaines entreprises mais aussi très coûteux pour d’autres. Les théoriciens du management devraient se rappeler les leçons de la statistique et ne pas confondre corrélation avec causalité. Il faut reconnaître le principe de contingence et admettre qu’il y a des combinaisons de facteurs humains, organisationnels, techniques et financiers qui sont efficaces, dans un contexte donné, et qui ne le sont plus dans d’autres. Ces combinaisons sont multiples et changeantes au cours du temps. » — Source : Michel Gode, Les entreprises face aux mutations, in Lettres Sol et Civilisation n° 23, 2003.",
+            "Règles à respecter : dans une introduction, citez les principes de l’École à laquelle il est fait allusion dans le texte et en quoi ces principes s’opposent à un autre courant. Dans le développement, mobilisez les apports théoriques relatifs aux notions de facteurs internes et de facteurs externes, ainsi que les auteurs pertinents associés à ces notions. L’analyse doit tenir dans le cadre de réponse (pages 6 et 7)."
+          ],
+          "questions": [
+            { "ref": "a", "texte": "En vous appuyant sur le texte précédent et sur vos connaissances, montrez comment s’expliquent les mutations des structures des organisations.", "points": null },
+            { "ref": "b", "texte": "Expliquez en quoi ces mutations sont un élément essentiel de la performance organisationnelle.", "points": null }
+          ]
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1, "n": 1, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "L’ambiance dans un petit groupe de travail est un facteur favorable à l’augmentation de la productivité quand :",
+          "options": [
+            { "lettre": "a", "texte": "Il existe une forte cohésion entre les membres du groupe.", "correcte": true },
+            { "lettre": "b", "texte": "Les membres du groupe respectent tous les règles de l’organisation.", "correcte": false },
+            { "lettre": "c", "texte": "Les salariés sont payés aux pièces.", "correcte": false }
+          ]
+        },
+        {
+          "numero": 2, "n": 2, "theme": "Partie 1 — QCM", "multiple": true,
+          "enonce": "Henry Mintzberg identifie différentes composantes de l’organisation :",
+          "options": [
+            { "lettre": "a", "texte": "La technostructure.", "correcte": true },
+            { "lettre": "b", "texte": "Le service juridique.", "correcte": false },
+            { "lettre": "c", "texte": "La base opérationnelle.", "correcte": true },
+            { "lettre": "d", "texte": "La ligne hiérarchique.", "correcte": true },
+            { "lettre": "e", "texte": "La chaîne de valeur.", "correcte": false },
+            { "lettre": "f", "texte": "Le sommet hiérarchique.", "correcte": true },
+            { "lettre": "g", "texte": "Aucune réponse n’est correcte.", "correcte": false }
+          ]
+        },
+        {
+          "numero": 3, "n": 3, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "Pour Fayol, administrer c’est :",
+          "options": [
+            { "lettre": "a", "texte": "Prévoir-organiser-commander-coordonner-contrôler.", "correcte": true },
+            { "lettre": "b", "texte": "Prévoir-planifier-organiser-coordonner-décider.", "correcte": false },
+            { "lettre": "c", "texte": "Prévoir-diriger-coordonner-organiser-contrôler.", "correcte": false }
+          ]
+        },
+        {
+          "numero": 4, "n": 4, "theme": "Partie 1 — QCM", "multiple": true,
+          "enonce": "Dans l’entreprise MACHIN, le manager de l’équipe B de manutentionnaires est autoritaire car il a une vision pessimiste de l’homme au travail (théorie X). Il considère donc que ses subordonnés ont les caractéristiques suivantes :",
+          "options": [
+            { "lettre": "a", "texte": "Les manutentionnaires ne s’engagent que si leurs besoins sont satisfaits.", "correcte": false },
+            { "lettre": "b", "texte": "Les manutentionnaires sont paresseux.", "correcte": true },
+            { "lettre": "c", "texte": "Les manutentionnaires aiment se dépenser physiquement.", "correcte": false },
+            { "lettre": "d", "texte": "Les manutentionnaires n’aiment pas les responsabilités.", "correcte": true }
+          ]
+        },
+        {
+          "numero": 5, "n": 5, "theme": "Partie 1 — QCM", "multiple": true,
+          "enonce": "Les modes de coordination identifiés par Mintzberg sont :",
+          "options": [
+            { "lettre": "a", "texte": "L’ajustement mutuel.", "correcte": true },
+            { "lettre": "b", "texte": "Le télétravail.", "correcte": false },
+            { "lettre": "c", "texte": "La collaboration.", "correcte": false },
+            { "lettre": "d", "texte": "La supervision directe.", "correcte": true },
+            { "lettre": "e", "texte": "Différents types de standardisation.", "correcte": true }
+          ]
+        },
+        {
+          "numero": 6, "n": 6, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "L’acronyme VUCA signifie que l’environnement est :",
+          "options": [
+            { "lettre": "a", "texte": "Versatile, Incertain, Compétitif et Ambigu.", "correcte": false },
+            { "lettre": "b", "texte": "Versatile, Incertain, Confiant et Ambigu.", "correcte": false },
+            { "lettre": "c", "texte": "Virulent, Incertain, Cohérent et Ambigu.", "correcte": false },
+            { "lettre": "d", "texte": "Versatile, Incertain, Complexe et Ambigu.", "correcte": true }
+          ]
+        },
+        {
+          "numero": 7, "n": 7, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "Le nombre de niveaux hiérarchiques renvoie à :",
+          "options": [
+            { "lettre": "a", "texte": "La division verticale du travail.", "correcte": true },
+            { "lettre": "b", "texte": "La division horizontale du travail.", "correcte": false },
+            { "lettre": "c", "texte": "La spécialisation.", "correcte": false }
+          ]
+        },
+        {
+          "numero": 8, "n": 8, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "Aujourd’hui, M. Martin prend sa retraite. Il vend sa boulangerie, où travaillent désormais 4 salariés, à la chaîne « Paul ». L’enseigne décide de placer à la direction de son nouveau point de vente Jacques, qui a 15 ans d’ancienneté au sein de l’entreprise et a suivi toutes les formations internes proposées, concernant aussi bien la fabrication que le suivi des budgets et le management. Jacques doit mettre en place les procédures de fabrication et de vente de l’enseigne. Sur quoi s’appuie-t-il pour réussir sa mission ?",
+          "options": [
+            { "lettre": "a", "texte": "Sur son pouvoir.", "correcte": false },
+            { "lettre": "b", "texte": "Sur la légitimité traditionnelle.", "correcte": false },
+            { "lettre": "c", "texte": "Sur la légitimité charismatique.", "correcte": false },
+            { "lettre": "d", "texte": "Sur la légitimité rationnelle.", "correcte": true }
+          ]
+        },
+        {
+          "numero": 9, "n": 9, "theme": "Partie 1 — QCM", "multiple": true,
+          "enonce": "Selon Lawrence et Lorsch, l’impact de l’environnement sur l’organisation est fondé sur :",
+          "options": [
+            { "lettre": "a", "texte": "Le système de production.", "correcte": false },
+            { "lettre": "b", "texte": "La différenciation.", "correcte": true },
+            { "lettre": "c", "texte": "L’intégration.", "correcte": true },
+            { "lettre": "d", "texte": "Le système de pouvoir.", "correcte": false }
+          ]
+        },
+        {
+          "numero": 10, "n": 10, "theme": "Partie 1 — QCM", "multiple": false,
+          "enonce": "La structure de l’entreprise est intrinsèquement liée à sa stratégie. Quel(s) théoricien(s) de l’organisation a (ou ont) avancé ces propos ?",
+          "options": [
+            { "lettre": "a", "texte": "Mintzberg.", "correcte": false },
+            { "lettre": "b", "texte": "Burns et Stalker.", "correcte": false },
+            { "lettre": "c", "texte": "Chandler.", "correcte": true },
+            { "lettre": "d", "texte": "Lawrence et Lorsch.", "correcte": false },
+            { "lettre": "e", "texte": "Porter.", "correcte": false }
+          ]
+        }
+      ]
+    }
+  }
+]

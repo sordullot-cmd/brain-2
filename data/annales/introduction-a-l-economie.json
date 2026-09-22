@@ -1,0 +1,1383 @@
+[
+  {
+    "id": "introduction-a-l-economie/intro-a-l-eco-2024-2025",
+    "titre": "Contrôle terminal — session 1",
+    "type": "Examen",
+    "annee": "2024-2025",
+    "session": 1,
+    "note": "Les bonnes réponses sont celles surlignées en jaune sur le sujet (le surlignage de correction, distinct des entourages au stylo bleu, qui sont les réponses données pendant l’épreuve). Les questions 3, 10 et 16, que le surlignage laissait ouvertes, ont été complétées d’après le cours et la feuille « CORRECTION De CT 2024 » : elles le disent quand on les joue.",
+    "epreuve": {
+      "entete": {
+        "duree": "1h",
+        "documents": "Aucun",
+        "enseignant": "Xavier Pautrel",
+        "consignes": [
+          "Calculatrice : non.",
+          "Période 1, session 1 — L1 Économie Gestion.",
+          "Ne détachez pas les feuillets du sujet ; tout sujet rendu non complet aura la note 0.",
+          "1 seule bonne réponse possible par question : entourez la bonne réponse sur le QCM puis noircissez la case correspondante sur la grille.",
+          "Barème : une bonne réponse = +1 point ; une mauvaise réponse = -0,5 point ; absence de réponse = 0 point."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "QCM",
+          "points": 20,
+          "enonce": [
+            "Les vingt questions se jouent dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Un modèle mathématique en économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "permet de tester les résultats des corrélations entre données statistiques à l’aide d’hypothèses simplificatrices",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "permet de déterminer des hypothèses simplificatrices",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "permet d’expliquer la réalité à l’aide d’hypothèses simplificatrices",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les données statistiques",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "servent à invalider les théories économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "permettent d’obtenir des corrélations qui expliquent le lien de causalité entre deux variables économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "servent à expliquer les théories économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La science économique",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "étudie la satisfaction des besoins des individus en présence de ressources rares.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "s’intéresse à la manière dont les hommes organisent leurs efforts pour mettre en valeur les ressources afin de satisfaire leurs besoins.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "s’intéresse aux interactions sociales en présence de ressources rares",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : la feuille « CORRECTION De CT 2024 » donne comme bonne réponse « s’intéresse aux interactions en présence de ressources rares », qui est la proposition C de ce sujet. Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : l’économie est une science sociale, les choix naissent de la rareté des ressources."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": null,
+          "multiple": false,
+          "enonce": "On appelle « économie positive »",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "une approche économique qui cherche à expliquer comment fonctionne l’économie",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "une approche économique qui cherche à expliquer le comportement des consommateurs plus efficace",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "une approche économique qui cherche à expliquer ce que devrait être l’économie.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 5,
+          "n": 5,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Dans la vision planifiée / socialiste de l’économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "l’individu est central et l’absence de règles du jeu permet de ne pas entraver le bon fonctionnement des marchés",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "la société connaît mieux les objectifs à atteindre que chaque individu.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "l’État est central et cherche à favoriser les comportements individuels.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 6,
+          "n": 6,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une courbe d’indifférence représente toutes les combinaisons entre deux biens",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "qui offrent à un consommateur une satisfaction optimale",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "qui offrent à un consommateur une satisfaction identique",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "qui offrent à un consommateur une satisfaction compatible avec une contrainte budgétaire",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 7,
+          "n": 7,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une économie est en équilibre lorsque",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "les consommateurs maximisent leur utilité",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "les producteurs maximisent leurs profits",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "les conséquences des actions entreprises par les agents sont conformes à leurs anticipations.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 8,
+          "n": 8,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La courbe de demande individuelle",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "est déterminée par la maximisation de l’utilité sous contrainte budgétaire",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "est déterminée par les préférences des agents, leur contrainte budgétaire et la disponibilité relative des biens",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "est déterminée par la structure de marché et les prix relatifs des biens",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 9,
+          "n": 9,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Le graphique ci-contre (droite passant par E = 20 en ordonnée et F = 15 en abscisse) représente la contrainte budgétaire (d’un consommateur) suivante :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "540 = 27 Qco + 36 Qci",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "800 = 40 Qco + 80 Qci",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "600 = 30 Qco + 45 Qci",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 10,
+          "n": 10,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Le producteur définit la quantité qu’il produit",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "pour que son coût marginal soit minimal",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "pour que la différence entre sa recette moyenne et son coût moyen soit maximale",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "pour que son profit marginal soit nul",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 3 : « si Δprofit/ΔQ = 0 : profit maximal (Rm = Cm) ». Le producteur pousse la quantité tant que le profit marginal est positif et s’arrête quand il s’annule."
+        },
+        {
+          "numero": 11,
+          "n": 11,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une expérience naturelle en économie consiste à",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "définir de manière aléatoire un groupe de contrôle et un groupe de traitement",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "utiliser les évènements historiques pour étudier les causalités entre variables économiques",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "étudier l’existence de corrélations entre variables économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 12,
+          "n": 12,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les incitations sont",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "des signaux adressés aux individus lorsqu’ils font de mauvais choix",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "des signaux que les individus sont obligés de suivre pour faire des choix",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "des signaux qui permettent d’orienter les choix individuels",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 13,
+          "n": 13,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Même un milliardaire doit faire des choix",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "parce qu’il y a 24 heures dans une journée",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "parce qu’il a à sa disposition de nombreux biens qu’il peut consommer",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "parce que les entreprises produisent différents biens",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 14,
+          "n": 14,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Il existe des rendements croissants dans la production, si toute chose égale par ailleurs,",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "le coût marginal de production augmente avec l’embauche d’un nouveau travailleur.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "la production marginale augmente avec l’embauche d’un nouveau travailleur.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "la recette marginale diminue avec l’embauche d’un nouveau travailleur.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 15,
+          "n": 15,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les conventions sont un moyen de coordonner les individus :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "lorsque les intérêts des agents divergent",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "en présence de fortes interactions sociales",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "afin de minimiser les coûts de chacun",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 16,
+          "n": 16,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une défaillance de marché existe dans l’économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "lorsque les décisions individuelles conduisent à une allocation efficace des ressources",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "lorsque les entreprises ne sont pas en capacité d’influencer les prix des biens échangés sur un marché",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "lorsque les consommateurs n’ont pas toutes les informations à leur disposition",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : une défaillance de marché a deux causes — les externalités et le pouvoir de marché. Aucune des trois premières propositions ne les décrit ; la feuille de correction conclut elle aussi « aucune »."
+        },
+        {
+          "numero": 17,
+          "n": 17,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Prendre une décision « à la marge » consiste à",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "comparer les gains marginaux retirés de faire une activité plutôt qu’une autre",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "comparer les coûts et bénéfices de faire un peu plus d’une activité contre un peu moins d’une autre",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "comparer les coûts et bénéfices de faire une activité plutôt qu’une autre",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 18,
+          "n": 18,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Pierre et Luc sont deux entrepreneurs qui produisent des paquets de bonbons et des tablettes de chocolat. Il faut à Pierre 10 minutes pour produire un paquet de bonbons et 15 minutes pour produire une tablette de chocolat. Il faut à Luc 20 minutes pour produire une tablette de chocolat et 5 minutes pour produire un paquet de bonbons.",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Pierre a un avantage comparatif dans la production de bonbons",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Pierre a un avantage absolu dans la production de bonbons",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Luc a un avantage comparatif dans la production de chocolat.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": true
+            }
+          ]
+        },
+        {
+          "numero": 19,
+          "n": 19,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La théorie classique des marchés diffère de la théorie moderne des marchés car elle suppose",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Que l’information est parfaite entre les agents",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Que les agents ont une rationalité limitée",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Que les produits peuvent être de qualités différentes",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": false
+            }
+          ]
+        },
+        {
+          "numero": 20,
+          "n": 20,
+          "theme": null,
+          "multiple": false,
+          "enonce": "L’aléa moral est un phénomène qui apparaît",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Lorsque les individus ont un pouvoir de négociation très important",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Lorsque les co-contractants ont la possibilité de tricher sans être détectés",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Dès qu’un contrat est signé entre deux agents",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "introduction-a-l-economie/ct-2023-2024",
+    "titre": "Contrôle terminal — session 2",
+    "type": "Rattrapage",
+    "annee": "2022-2023",
+    "session": 2,
+    "note": "Le dossier s’appelle « CT 2023-2024 » mais la page de garde indique l’année universitaire 2022-2023, période 1, session 2. Aucune réponse n’est marquée sur ces photos : les vingt réponses du QCM ont été retrouvées dans le cours de l’enseignant, chaque question citant le passage dont elle vient. Elles ne remplacent pas un corrigé officiel.",
+    "epreuve": {
+      "entete": {
+        "duree": "1h",
+        "documents": "Aucun",
+        "enseignant": "X. Pautrel",
+        "consignes": [
+          "Calculatrice : non.",
+          "Période 1, session 2 — Licence 1 Économie et Gestion / Droit et Économie.",
+          "Interdiction de détacher les feuillets ; l’énoncé est à rendre avec la grille.",
+          "1 seule bonne réponse possible par question.",
+          "Barème : une bonne réponse = +1 point ; une mauvaise réponse = -0,5 point ; absence de réponse = 0 point."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "QCM",
+          "points": 20,
+          "enonce": [
+            "Les vingt questions se jouent dans l’onglet QCM de cette épreuve."
+          ],
+          "questions": []
+        }
+      ]
+    },
+    "qcm": {
+      "questions": [
+        {
+          "numero": 1,
+          "n": 1,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Un modèle mathématique en économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "permet de déterminer la valeur des variables exogènes",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "sert à représenter la réalité pour l’expliquer",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "permet de récolter et traiter des données statistiques",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : le modèle mathématique est « une représentation simplifiée de la réalité » qui sert à l’expliquer à l’aide d’hypothèses simplificatrices."
+        },
+        {
+          "numero": 2,
+          "n": 2,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les données statistiques",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "servent à expliquer les théories économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "permettent d’obtenir des corrélations qui expliquent le lien de causalité entre deux variables économiques",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "servent à valider les théories économiques",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : les données statistiques servent à tester la théorie — « validation empirique = modèle accepté », sinon rejet. (Dans la version 2024-2025 du sujet, où « valider » n’était pas proposé, la bonne réponse était « aucune ».)"
+        },
+        {
+          "numero": 3,
+          "n": 3,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La science économique",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "étudie comment les individus font des choix et les conséquences de ces choix, en présence de ressources rares",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "étudie la satisfaction des besoins des individus.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "s’intéresse aux interactions sociales",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : « la science économique étudie les choix, comment les individus font des choix, les conséquences de ces choix » — choix rendus nécessaires par la rareté des ressources."
+        },
+        {
+          "numero": 4,
+          "n": 4,
+          "theme": null,
+          "multiple": false,
+          "enonce": "On appelle « économie normative »",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "une approche économique qui s’intéresse au rôle de la norme sociale en économie",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "une approche économique qui s’interroge sur ce que sera l’économie.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "une approche économique à la base des recommandations de politique économique",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : « économie normative — base de recommandation de la politique économique »."
+        },
+        {
+          "numero": 5,
+          "n": 5,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Dans la vision libérale de l’économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "l’individu est central et l’État veut privilégier l’individu par rapport à la société dans son ensemble.",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "la société connaît moins bien les objectifs à atteindre que chaque individu pris séparément.",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "l’individu est central et l’absence de règles du jeu permet de ne pas entraver le bon fonctionnement des marchés",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : le système planifié repose sur l’idée que « la société connaît mieux les objectifs à atteindre que chaque individu séparément » ; la vision libérale est exactement l’inverse. Le cours rappelle par ailleurs que le rôle de l’État n’y est pas nul."
+        },
+        {
+          "numero": 6,
+          "n": 6,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une courbe d’indifférence représente toutes les combinaisons entre deux biens",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "qui offrent à un consommateur une satisfaction optimale",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "qui offrent à un consommateur une satisfaction identique",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "qui offrent à un consommateur une satisfaction compatible avec ses préférences",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 2 : « toutes les combinaisons de 2 biens sur une même courbe d’indifférence offrent le même niveau de satisfaction »."
+        },
+        {
+          "numero": 7,
+          "n": 7,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une économie est en équilibre lorsque",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "les conséquences des actions entreprises par les agents sont conformes à leurs anticipations.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "les consommateurs maximisent leur utilité",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "les producteurs maximisent leurs profits",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 4 : « les conséquences des actions réalisées (ex-post) sont conformes aux anticipations (ex-ante) ». C’est aussi la réponse surlignée sur le sujet 2024-2025."
+        },
+        {
+          "numero": 8,
+          "n": 8,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La contrainte budgétaire représente :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "L’ensemble de toutes les combinaisons de biens qu’un consommateur va consommer en dépensant la totalité de son revenu",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "L’ensemble de toutes les combinaisons de biens qu’un consommateur peut acquérir en dépensant la totalité de son revenu",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "L’ensemble de toutes les combinaisons de biens qui maximisent l’utilité d’un consommateur lorsqu’il dépense la totalité de son revenu",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 2 : la contrainte budgétaire « définit l’ensemble des choix possibles », c’est-à-dire ce que le consommateur PEUT acquérir avec son revenu — pas ce qu’il va consommer, ni ce qui maximise son utilité."
+        },
+        {
+          "numero": 9,
+          "n": 9,
+          "theme": null,
+          "multiple": false,
+          "enonce": "D’après le graphique ci-contre (E = 20 en ordonnée, F = 10 en abscisse), la contrainte budgétaire",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Pivote autour de F vers la gauche, lorsque le prix de Co augmente",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "Pivote autour de E vers la droite, lorsque le prix de Ci augmente",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Pivote autour de F vers la droite, lorsque le prix de Ci diminue",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : le revenu divisé par le prix donne chaque point d’intersection. Si le prix de Co augmente, seul l’axe vertical (E) recule : la droite pivote autour de F. Les propositions b et c font pivoter la droite autour du mauvais point ou dans le mauvais sens."
+        },
+        {
+          "numero": 10,
+          "n": 10,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Le consommateur définit les combinaisons des biens qu’il consomme",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Pour que la dépense totale soit la plus faible possible",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Pour que les quantités de biens consommés soient les plus grandes possibles",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Pour que sa satisfaction soit la plus élevée possible",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 2 : « objectif du consommateur : maximiser sa satisfaction (utilité) sous contrainte budgétaire »."
+        },
+        {
+          "numero": 11,
+          "n": 11,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une corrélation négative entre une variable A et une variable B signifie que",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Les variables A et B évoluent dans le même sens",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Les variations de A influencent négativement les variations de B",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Les variations de A influencent négativement les variations de B, et réciproquement",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : « corrélation négative : les variables évoluent dans le sens opposé » — et « corrélation ≠ causalité », ce qui élimine les propositions b et c, formulées en termes d’influence."
+        },
+        {
+          "numero": 12,
+          "n": 12,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les incitations sont",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "des signaux qui permettent aux individus de faire de meilleurs choix",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "des « punitions » distribuées aux individus lorsqu’ils font de mauvais choix",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "des signaux que les individus sont obligés de suivre pour faire des choix",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : « incitation : récompense à modifier son comportement pour atteindre une solution meilleure » — un signal qui oriente le choix, ni une punition ni une obligation."
+        },
+        {
+          "numero": 13,
+          "n": 13,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Chaque agent économique doit faire des choix",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "parce qu’il a à sa disposition de très nombreux biens qu’il peut consommer",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "parce qu’il peut produire différents biens",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "parce que le temps et l’argent sont rares",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : « choix nécessaires car ressource rare » — le temps et l’argent en sont les deux exemples du cours."
+        },
+        {
+          "numero": 14,
+          "n": 14,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Il existe des rendements décroissants dans la production, si toute chose égale par ailleurs,",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "la production marginale diminue avec l’embauche d’un nouveau travailleur.",
+              "correcte": true
+            },
+            {
+              "lettre": "b",
+              "texte": "le coût marginal de production diminue avec l’embauche d’un nouveau travailleur.",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "la recette marginale augmente avec l’embauche d’un nouveau travailleur.",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 3 : les rendements décroissants se lisent sur la production marginale, qui diminue quand on ajoute un travailleur."
+        },
+        {
+          "numero": 15,
+          "n": 15,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Les conventions sont mises en place :",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "lorsqu’il y a des conflits d’intérêt entre les agents",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "lorsqu’il y a une coordination difficile entre les agents",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "afin de maximiser les gains de chacun",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 4 : « résoudre problèmes de coordination grâce aux conventions, mais si conflit d’intérêt = difficile » — la convention naît donc d’une coordination difficile, pas d’un conflit."
+        },
+        {
+          "numero": 16,
+          "n": 16,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Une défaillance de marché existe dans l’économie",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "si les producteurs n’ont pas toutes les informations à leur disposition",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "si les décisions individuelles conduisent à une allocation efficace des ressources",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "si les entreprises ne sont pas en capacité d’influencer les prix des biens échangés sur un marché",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": true
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : les deux causes d’une défaillance de marché sont les externalités et le pouvoir de marché ; aucune des trois premières propositions ne les décrit."
+        },
+        {
+          "numero": 17,
+          "n": 17,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Prendre une décision « à la marge » consiste à",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Comparer les gains marginaux retirés de faire une activité plutôt qu’une autre",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Comparer les coûts et bénéfices de faire un peu plus d’une activité contre un peu moins d’une autre",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Comparer les coûts et bénéfices de faire une activité plutôt qu’une autre",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des propositions ci-dessus n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 1 : le raisonnement à la marge compare les coûts et bénéfices d’un peu plus d’une activité contre un peu moins d’une autre. Réponse confirmée par le sujet 2024-2025 et par la feuille de correction."
+        },
+        {
+          "numero": 18,
+          "n": 18,
+          "theme": null,
+          "multiple": false,
+          "enonce": "La théorie classique des marchés diffère de la théorie moderne des marchés car elle suppose",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Que les agents ont une rationalité limitée",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Que l’information est parfaite entre les agents",
+              "correcte": true
+            },
+            {
+              "lettre": "c",
+              "texte": "Que les produits peuvent être de qualités différentes",
+              "correcte": false
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 4 : hypothèses de la théorie classique — « information parfaite = les agents connaissent toutes les opportunités ». La rationalité limitée et la qualité différenciée relèvent de la théorie moderne."
+        },
+        {
+          "numero": 19,
+          "n": 19,
+          "theme": null,
+          "multiple": false,
+          "enonce": "L’aléa moral est un phénomène qui apparaît",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Lorsque les individus ont un pouvoir de négociation très important",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Dès qu’un contrat est signé entre deux agents",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Lorsque les co-contractants ont la possibilité de tricher sans être détectés",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Cours de X. Pautrel, « Introduction à l’économie », chap. 4 : l’aléa moral, c’est celui qui s’est engagé ex ante et décide ensuite de ne pas tenir, « du fait de l’information imparfaite » — donc sans être détecté."
+        },
+        {
+          "numero": 20,
+          "n": 20,
+          "theme": null,
+          "multiple": false,
+          "enonce": "Pierre et Luc sont deux entrepreneurs qui produisent des paquets de bonbons et des tablettes de chocolat. Il faut à Pierre 10 minutes pour produire un paquet de bonbons et 15 minutes pour produire une tablette de chocolat. Il faut à Luc 5 minutes pour produire un paquet de bonbons et 20 minutes pour produire une tablette de chocolat.",
+          "options": [
+            {
+              "lettre": "a",
+              "texte": "Pierre a un avantage comparatif dans la production de bonbons",
+              "correcte": false
+            },
+            {
+              "lettre": "b",
+              "texte": "Pierre a un avantage absolu dans la production de bonbons",
+              "correcte": false
+            },
+            {
+              "lettre": "c",
+              "texte": "Luc a un avantage comparatif dans la production de bonbons.",
+              "correcte": true
+            },
+            {
+              "lettre": "d",
+              "texte": "Aucune des réponses n’est exacte",
+              "correcte": false
+            }
+          ],
+          "source": "Reconstituée : coût d’opportunité d’un paquet de bonbons — 10/15 = 0,67 tablette pour Pierre, 5/20 = 0,25 pour Luc. Luc a donc l’avantage comparatif (et absolu) dans les bonbons, Pierre dans le chocolat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "introduction-a-l-economie/correction-de-ct-2024",
+    "titre": "Correction d’un CT (feuille de réponses)",
+    "type": "Examen",
+    "annee": "2023-2024",
+    "note": "Feuille de correction tapée par un étudiant : elle donne la bonne réponse de chaque question sous forme d’énoncé, mais ses lettres sont celles d’une AUTRE version du sujet (les propositions sont mélangées d’une copie à l’autre). On s’y fie donc pour l’énoncé de la bonne réponse, pas pour la lettre. La question 14 y est laissée sans réponse (« ????? »).",
+    "epreuve": {
+      "entete": {
+        "duree": null,
+        "documents": null,
+        "enseignant": null,
+        "consignes": [
+          "Une seule réponse possible par question."
+        ]
+      },
+      "parties": [
+        {
+          "titre": "Bonnes réponses, question par question",
+          "points": null,
+          "enonce": [],
+          "questions": [
+            {
+              "ref": "1",
+              "texte": "Un modèle mathématique en économie : permet d’expliquer la réalité à l’aide d’hypothèses.",
+              "points": null
+            },
+            {
+              "ref": "2",
+              "texte": "Les données statistiques : aucune des réponses.",
+              "points": null
+            },
+            {
+              "ref": "3",
+              "texte": "La science économique : s’intéresse aux interactions en présence de ressources rares.",
+              "points": null
+            },
+            {
+              "ref": "4",
+              "texte": "On appelle « économie positive » : une approche économique qui cherche à expliquer comment fonctionne l’économie.",
+              "points": null
+            },
+            {
+              "ref": "5",
+              "texte": "Dans la vision planifiée / socialiste de l’économie : la société connaît mieux les objectifs à atteindre que chaque individu.",
+              "points": null
+            },
+            {
+              "ref": "6",
+              "texte": "Une courbe d’indifférence représente toutes les combinaisons entre 2 biens : qui offrent à un consommateur une satisfaction identique.",
+              "points": null
+            },
+            {
+              "ref": "7",
+              "texte": "Une économie est en équilibre lorsque : aucune des propositions.",
+              "points": null
+            },
+            {
+              "ref": "8",
+              "texte": "La courbe de demande individuelle : est déterminée par les préférences des agents, leurs contraintes budgétaires et les prix relatifs des biens.",
+              "points": null
+            },
+            {
+              "ref": "9",
+              "texte": "Le graphique représente la contrainte budgétaire suivante : aucune des propositions ci-dessous n’est exacte.",
+              "points": null
+            },
+            {
+              "ref": "10",
+              "texte": "Le producteur définit la quantité qu’il produit : pour que la différence entre sa recette moyenne et son coût moyen soit maximale.",
+              "points": null
+            },
+            {
+              "ref": "11",
+              "texte": "Une expérience naturelle en économie consiste à : utiliser les évènements historiques pour étudier les causalités entre variables économiques.",
+              "points": null
+            },
+            {
+              "ref": "12",
+              "texte": "Les incitations sont : des signaux qui permettent d’orienter les choix individuels.",
+              "points": null
+            },
+            {
+              "ref": "13",
+              "texte": "Même un milliardaire doit faire des choix : parce qu’il y a 24 h dans une journée.",
+              "points": null
+            },
+            {
+              "ref": "14",
+              "texte": "Il existe des rendements croissants dans la production, si toute chose égale par ailleurs : la feuille ne donne pas de réponse (« ????? »).",
+              "points": null
+            },
+            {
+              "ref": "15",
+              "texte": "Les conventions sont un moyen de coordonner les individus : aucune des propositions ci-dessous n’est exacte.",
+              "points": null
+            },
+            {
+              "ref": "16",
+              "texte": "Une défaillance de marché existe dans l’économie : aucune des propositions ci-dessous n’est exacte.",
+              "points": null
+            },
+            {
+              "ref": "17",
+              "texte": "Prendre une décision « à la marge » consiste à : comparer les coûts et bénéfices de faire un peu plus d’une activité contre un peu moins d’une autre.",
+              "points": null
+            },
+            {
+              "ref": "18",
+              "texte": "Le calcul du PIB réel : aucune des réponses n’est exacte.",
+              "points": null
+            },
+            {
+              "ref": "19",
+              "texte": "Supposons qu’un pêcheur pêche… : 60 $.",
+              "points": null
+            },
+            {
+              "ref": "20",
+              "texte": "Pierre et Luc sont deux entrepreneurs… : Pierre a un avantage absolu dans la production de bonbons.",
+              "points": null
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
