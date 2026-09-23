@@ -160,7 +160,10 @@ export interface Discipline {
  * /livres fait remonter tous livres confondus.
  */
 export interface Livre {
-  noteId: string
+  /** Livre ajouté depuis le site : son id dans la table Supabase `livres`. */
+  id?: string
+  /** Livre venu d'une fiche du vault : l'id de la note. */
+  noteId: string | null
   titre: string
   auteur: string | null
   statut: 'à lire' | 'en cours' | 'lu'
