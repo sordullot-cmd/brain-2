@@ -806,6 +806,102 @@ for (const note of notes) {
   if (n) note.nbCartes = n
 }
 
+// ------------------------------------------------------------------- livres
+
+/**
+ * Une fiche de livre = une note `type: livre` (modele `Template-Livre` du vault).
+ * La page /livres ne lit pas le HTML : elle a besoin de ce qui a ete retenu,
+ * livre par livre, pour le faire remonter tous livres confondus. On le releve
+ * ici, section par section, plutot que de le reparser cote client.
+ */
+const jour = (v) => {
+  if (!v) return null
+  if (v instanceof Date) return v.toISOString().slice(0, 10)
+  const s = String(v).trim()
+  return /^\d{4}-\d{2}-\d{2}/.test(s) ? s.slice(0, 10) : null
+}
+const texte = (v) => (v === null || v === undefined || v === '' ? null : String(v).trim() || null)
+
+/** Le contenu d'une section `## Titre`, jusqu'au titre suivant de meme niveau. */
+function section(body, titre) {
+  const lignes = body.split('\n')
+  const debut = lignes.findIndex((l) => /^##\s+/.test(l) && norm(l.replace(/^##\s+/, '')) === norm(titre))
+  if (debut < 0) return []
+  const fin = lignes.findIndex((l, i) => i > debut && /^#{1,2}\s+/.test(l))
+  return lignes.slice(debut + 1, fin < 0 ? undefined : fin).filter((l) => !/^---\s*$/.test(l))
+}
+const norm = (s) => s.normalize('NFC').toLowerCase().replace(/[’']/g, "'").trim()
+/** Les wikilinks deviennent leur texte : la page affiche des phrases, pas des liens. */
+const propre = (s) => s.replace(WIKILINK, (_, __, inner) => (inner.split('|')[1] || inner.split('|')[0]).trim()).trim()
+
+const puces = (lignes) =>
+  lignes
+    .map((l) => l.match(/^\s*[-*+]\s+(?!\[[ xX]\])(.*)$/)?.[1])
+    .filter((t) => t && t.trim())
+    .map(propre)
+const taches = (lignes) =>
+  lignes
+    .map((l) => l.match(/^\s*[-*+]\s+\[([ xX])\]\s+(.*)$/))
+    .filter((m) => m && m[2].trim())
+    .map((m) => ({ texte: propre(m[2]), fait: m[1] !== ' ' }))
+const citations = (lignes) => {
+  const blocs = []
+  let cur = []
+  for (const l of [...lignes, '']) {
+    const m = l.match(/^>\s?(.*)$/)
+    if (m) cur.push(m[1])
+    else if (cur.length) {
+      const t = propre(cur.join(' ').trim())
+      if (t) blocs.push(t)
+      cur = []
+    }
+  }
+  return blocs
+}
+
+/** Une couverture : un fichier du vault (par son nom, comme un embed) ou une URL. */
+function couverture(v) {
+  const s = texte(v)
+  if (!s) return null
+  if (/^https?:\/\//.test(s)) return { url: s }
+  const nom = s.replace(/^!?\[\[|\]\]$/g, '').split('|')[0].split('/').pop().normalize('NFC')
+  const m = mediaByName.get(nom)
+  return m ? { media: m.id } : null
+}
+
+const STATUTS = new Set(['à lire', 'en cours', 'lu'])
+const livres = notes
+  .filter((n) => !n.isMeta && n.type === 'livre')
+  .map((n) => {
+    const fm = n.frontmatter
+    const statut = norm(String(fm.statut ?? ''))
+    const noteSur5 = Number(fm.note)
+    // « En une phrase » : le modele y laisse une consigne en citation, on l'ignore.
+    const phrase =
+      citations(section(n.body, 'En une phrase'))
+        .map((t) => t.replace(/^Ce que dit le livre, si je devais le résumer à quelqu.un\.\s*/, ''))
+        .find(Boolean) ?? null
+    return {
+      noteId: n.id,
+      titre: texte(fm.titre) ?? n.title,
+      auteur: texte(fm.auteur),
+      statut: STATUTS.has(statut) ? statut : 'à lire',
+      genre: texte(fm.genre),
+      note: noteSur5 >= 1 && noteSur5 <= 5 ? Math.round(noteSur5) : null,
+      ajoute: jour(fm.ajoute),
+      debut: jour(fm.debut),
+      fin: jour(fm.fin),
+      recommandePar: texte(fm.recommande_par),
+      couverture: couverture(fm.couverture),
+      phrase,
+      appris: puces(section(n.body, "Ce que j'ai appris")),
+      appliquer: taches(section(n.body, 'Ce que je vais appliquer')),
+      citations: citations(section(n.body, 'Citations')),
+      mtime: n.mtime,
+    }
+  })
+  .sort((a, b) => b.mtime - a.mtime)
+
 // ------------------------------------------------------------------- sortie
 
 // Le corps brut n'est plus utile cote client (on sert le HTML) : on l'ecarte
@@ -835,6 +931,7 @@ const payload = {
   projects,
   facettesProjets,
   disciplines,
+  livres,
   tags: [...tagCounts.entries()]
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
@@ -849,7 +946,7 @@ const mb = (payload.stats.bytes / 1024 / 1024).toFixed(1)
 const jsonKb = (fs.statSync(OUT_JSON).size / 1024).toFixed(0)
 console.log(`\n  Vault indexe : ${VAULT}`)
 console.log(`  ${payload.stats.notesTotal} notes · ${payload.stats.media} medias (${mb} Mo) · ${payload.stats.tags} tags`)
-console.log(`  ${payload.stats.projects} projets · ${payload.stats.disciplines} disciplines`)
+console.log(`  ${payload.stats.projects} projets · ${payload.stats.disciplines} disciplines · ${livres.length} livres`)
 console.log(`  ${copies} medias copies · ${orphelins} orphelins supprimes`)
 console.log(
   `  ${deriv.made} derives crees · ${deriv.reused} reutilises` +

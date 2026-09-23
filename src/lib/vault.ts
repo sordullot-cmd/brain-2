@@ -154,6 +154,33 @@ export interface Discipline {
   notes: string[]
 }
 
+/**
+ * Une fiche de livre du vault (`type: livre`), relevée par l'indexeur : ses
+ * propriétés, et ce qu'elle retient section par section — c'est ce que la page
+ * /livres fait remonter tous livres confondus.
+ */
+export interface Livre {
+  noteId: string
+  titre: string
+  auteur: string | null
+  statut: 'à lire' | 'en cours' | 'lu'
+  genre: string | null
+  /** Sur 5, une fois lu. */
+  note: number | null
+  /** Dates `AAAA-MM-JJ`. */
+  ajoute: string | null
+  debut: string | null
+  fin: string | null
+  recommandePar: string | null
+  /** Une image du vault (`media`) ou une adresse externe (`url`). */
+  couverture: { media?: string; url?: string } | null
+  phrase: string | null
+  appris: string[]
+  appliquer: { texte: string; fait: boolean }[]
+  citations: string[]
+  mtime: number
+}
+
 export interface VaultData {
   generatedAt: string
   vaultPath: string
@@ -176,6 +203,8 @@ export interface VaultData {
   /** Les tags portés par les projets, une entrée par facette (voir `Facette`). */
   facettesProjets: FacetteProjets[]
   disciplines: Discipline[]
+  /** Absent d'un index produit avant la page /livres. */
+  livres?: Livre[]
   tags: { name: string; count: number }[]
 }
 

@@ -23,6 +23,7 @@ const NotesList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.N
 const NoteView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.NoteView })))
 const TagsList = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagsList })))
 const TagView = lazy(() => import('./pages/Notes').then((m) => ({ default: m.TagView })))
+const Livres = lazy(() => import('./pages/Livres').then((m) => ({ default: m.Livres })))
 const Search = lazy(() => import('./components/Search').then((m) => ({ default: m.Search })))
 
 export default function App() {
@@ -98,6 +99,10 @@ export default function App() {
               <Route path="/annales" element={<AnnalesList />} />
               <Route path="/annales/:matiere/:slug" element={<AnnaleView />} />
               <Route path="/annales/:matiere/:slug/qcm" element={<QcmView />} />
+              <Route path="/livres" element={<Livres data={data} />} />
+              {/* Le tableau de bord Obsidian des livres est fait de requêtes
+                  Dataview, illisibles hors d'Obsidian : /livres le remplace. */}
+              <Route path="/note/LIVRES/_LIVRES.md" element={<Navigate to="/livres" replace />} />
               <Route path="/notes" element={<NotesList data={data} />} />
               <Route path="/note/*" element={<NoteView data={data} />} />
               <Route path="/tags" element={<TagsList data={data} />} />

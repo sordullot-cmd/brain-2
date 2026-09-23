@@ -10,6 +10,7 @@ const NAV = [
   { to: '/projets', label: 'Projets' },
   { to: '/cours', label: 'Cours' },
   { to: '/annales', label: 'Annales' },
+  { to: '/livres', label: 'Livres' },
   { to: '/tags', label: 'Tags' },
 ]
 
