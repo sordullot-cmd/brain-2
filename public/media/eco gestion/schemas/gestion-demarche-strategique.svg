@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <!-- Source : slide « La démarche stratégique », Introduction à la gestion, partie 2 chapitre 1 (capture collée dans les notes du camarade, 2026-2027 ; identique au diaporama Seance 5, p. 10). -->
+  <rect width="960" height="340" fill="#ffffff"/>
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/></marker>
+  </defs>
+  <g font-size="15" fill="#ffffff" font-weight="600" text-anchor="middle">
+    <path d="M10,20 H220 L240,42 L220,64 H10 z" fill="#1d4ed8"/><text x="120" y="48">1re étape</text>
+    <path d="M245,20 H455 L475,42 L455,64 H245 L265,42 z" fill="#1d4ed8"/><text x="365" y="48">2e étape</text>
+    <path d="M480,20 H690 L710,42 L690,64 H480 L500,42 z" fill="#be123c"/><text x="600" y="48">3e étape</text>
+    <path d="M715,20 H925 L945,42 L925,64 H715 L735,42 z" fill="#1d4ed8"/><text x="835" y="48">4e étape</text>
+  </g>
+  <g font-size="16" fill="#1f2937" text-anchor="middle">
+    <text x="120" y="98">Analyse du macro-</text><text x="120" y="118">environnement</text><text x="120" y="138" font-weight="700">Diagnostic externe</text>
+    <text x="365" y="98" font-weight="700">Diagnostic</text><text x="365" y="118" font-weight="700">interne</text>
+    <text x="600" y="98">Choix d’une stratégie</text><text x="600" y="118">fondée sur les</text><text x="600" y="138" font-weight="700">Compétences Distinctives</text>
+    <text x="835" y="98" font-weight="700">Déploiement</text><text x="835" y="118" font-weight="700">opérationnel</text>
+  </g>
+  <g stroke="#1f2937" stroke-width="2.5" marker-end="url(#f)">
+    <line x1="120" y1="156" x2="120" y2="196"/><line x1="365" y1="156" x2="365" y2="196"/>
+    <line x1="600" y1="156" x2="600" y2="196"/><line x1="835" y1="156" x2="835" y2="196"/>
+  </g>
+  <g stroke="#1f2937" stroke-width="1.5">
+    <rect x="20" y="205" width="200" height="110" rx="6" fill="#dbeafe"/>
+    <rect x="265" y="205" width="200" height="110" rx="6" fill="#dbeafe"/>
+    <rect x="500" y="205" width="200" height="110" rx="6" fill="#fce7f3"/>
+    <rect x="735" y="205" width="200" height="110" rx="6" fill="#dbeafe"/>
+  </g>
+  <g font-size="17" fill="#111827" text-anchor="middle">
+    <text x="120" y="245">Évaluer les</text><text x="120" y="270" font-weight="700">Facteurs Clefs</text><text x="120" y="293" font-weight="700">de Succès</text>
+    <text x="365" y="250">Évaluer</text><text x="365" y="275" font-weight="700">l’Avantage</text><text x="365" y="298" font-weight="700">Concurrentiel</text>
+    <text x="600" y="255">Allocations</text><text x="600" y="280">de ressources</text>
+    <text x="835" y="255">Établissement</text><text x="835" y="280">des budgets</text>
+  </g>
+</svg>
