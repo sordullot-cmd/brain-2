@@ -478,6 +478,114 @@ export function coursSections(d: VaultData) {
   }
 }
 
+/* ------------------------------------------------------------------ matières
+
+   Un cours s'étale sur plusieurs fichiers — la gestion en compte quatre, un par
+   chapitre — et ses notes d'amphi brutes vivent à part, dans `_brut/`. Lus
+   fichier par fichier, ça fait une page de cartes éparpillées où le même cours
+   revient cinq fois. On regroupe donc par UE : une matière, ses chapitres dans
+   l'ordre, et les notes brutes qui en parlent.
+   -------------------------------------------------------------------------- */
+
+export interface Matiere {
+  ue: string
+  /** Nom du cours : « Gestion », « Problèmes économiques »… */
+  nom: string
+  coef: number | null
+  periode: number | null
+  cycle: string | null
+  /** Les fiches d'UE, dans l'ordre où le plan les cite. */
+  chapitres: Note[]
+  /** Les notes d'amphi brutes qui portent sur ce cours. */
+  brut: Note[]
+}
+
+/**
+ * Les noms de fichiers sont sans accents (ils doivent rester sûrs partout) ;
+ * le site, lui, les affiche. Seuls les préfixes de cours sont concernés.
+ */
+const ACCENTS: Record<string, string> = {
+  economie: 'Économie',
+  'problemes economiques': 'Problèmes économiques',
+  methodologie: 'Méthodologie',
+}
+
+/** Le préfixe du nom de fichier, avant « - » : « Gestion », « Economie »… */
+const prefixe = (n: Note) => n.stem.split(' - ')[0].trim()
+
+/** Le nom d'un cours : `matiere:` en frontmatter, sinon le préfixe du fichier. */
+function nomMatiere(n: Note) {
+  const fm = texte(n.frontmatter.matiere)
+  if (fm) return fm
+  const p = prefixe(n)
+  return ACCENTS[norm(p)] ?? p
+}
+
+/**
+ * Le titre d'un chapitre sans ce que la carte du cours dit déjà : le nom du
+ * cours devant, le code d'UE derrière. « Gestion - Partie 2 Strategie et
+ * environnement UE 12A » devient « Partie 2 Strategie et environnement ».
+ */
+export function titreChapitre(n: Note) {
+  const t = n.title.includes(' - ') ? n.title.slice(n.title.indexOf(' - ') + 3) : n.title
+  return t.replace(/\s+UE\s+\w+$/i, '').trim() || n.title
+}
+
+/**
+ * Les cours, une entrée par UE, dans l'ordre où ils tombent. `orphelines` : les
+ * notes brutes qu'aucun cours ne réclame.
+ */
+export function matieres(d: VaultData): { liste: Matiere[]; orphelines: Note[] } {
+  const { fiches, brut } = coursSections(d)
+
+  // L'ordre des chapitres est celui du plan (la note taguée `hub`) : c'est là
+  // qu'il est écrit, ligne par UE. Ce que le plan ne cite pas passe après, par titre.
+  const hub = d.notes.find((n) => n.domain === COURS_DOMAIN && n.tags.includes('hub'))
+  const rangPlan = (n: Note) => {
+    const i = hub?.links.indexOf(n.id) ?? -1
+    return i < 0 ? Infinity : i
+  }
+
+  const map = new Map<string, Matiere>()
+  for (const n of fiches) {
+    const f = fiche(n)
+    const ue = f.ue!
+    let m = map.get(ue)
+    if (!m) {
+      m = { ue, nom: nomMatiere(n), coef: null, periode: null, cycle: null, chapitres: [], brut: [] }
+      map.set(ue, m)
+    }
+    m.chapitres.push(n)
+    if (f.coef !== null) m.coef = Math.max(m.coef ?? 0, f.coef)
+    if (f.periode !== null) m.periode = Math.min(m.periode ?? Infinity, f.periode)
+    m.cycle ??= cycleDe(n)
+  }
+
+  const liste = [...map.values()]
+  for (const m of liste)
+    m.chapitres.sort((a, b) => rangPlan(a) - rangPlan(b) || a.title.localeCompare(b.title))
+
+  // Une note brute va au cours dont elle cite le nom — le plus long qui colle,
+  // pour que « Problèmes économiques contemporains » n'aille pas en « Économie ».
+  const orphelines: Note[] = []
+  for (const n of brut) {
+    const t = norm(n.title)
+    const cible = liste
+      .filter((m) => t.includes(norm(m.nom)) || new RegExp(`\\b${norm(m.ue)}\\b`).test(t))
+      .sort((a, b) => b.nom.length - a.nom.length)[0]
+    if (cible) cible.brut.push(n)
+    else orphelines.push(n)
+  }
+
+  liste.sort(
+    (a, b) =>
+      (a.periode ?? 99) - (b.periode ?? 99) ||
+      (b.coef ?? 0) - (a.coef ?? 0) ||
+      a.ue.localeCompare(b.ue)
+  )
+  return { liste, orphelines }
+}
+
 /** Le cycle d'une note, lu dans ses tags (`cycle-3` → « cycle 3 »). */
 export const cycleDe = (n: Note) => n.tags.find((t) => /^cycle-\d+$/.test(t))?.replace('-', ' ') ?? null
 

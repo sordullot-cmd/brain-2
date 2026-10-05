@@ -30,9 +30,12 @@ import {
   fmtBytes,
   fmtDate,
   indexById,
+  matieres,
   norm,
   noteUrl,
+  titreChapitre,
   useNotesText,
+  type Matiere,
   type Note,
   type VaultData,
 } from '../lib/vault'
@@ -62,7 +65,7 @@ const teinteStatut = (statut: string) => {
 }
 
 export function CoursList({ data }: { data: VaultData }) {
-  const { toutes, fiches, chapitres, exercices, pages, brut } = useMemo(() => coursSections(data), [data])
+  const { toutes, fiches, chapitres, exercices, pages } = useMemo(() => coursSections(data), [data])
 
   /**
    * Le plan de la formation porte son intitulé dans son frontmatter, sous la
@@ -76,16 +79,19 @@ export function CoursList({ data }: { data: VaultData }) {
   const annee = plan?.frontmatter.annee ? String(plan.frontmatter.annee) : null
   const surTitre = ['Cours', etablissement, annee].filter(Boolean).join(' · ')
 
-  /** Les périodes, dans l'ordre : c'est le calendrier des partiels. */
+  /**
+   * Un cours = une carte, ses chapitres dedans. Groupées par période, dans
+   * l'ordre : c'est le calendrier des partiels.
+   */
+  const { liste, orphelines } = useMemo(() => matieres(data), [data])
   const periodes = useMemo(() => {
-    const map = new Map<number | null, Note[]>()
-    for (const n of fiches) {
-      const p = fiche(n).periode
-      if (!map.has(p)) map.set(p, [])
-      map.get(p)!.push(n)
+    const map = new Map<number | null, Matiere[]>()
+    for (const m of liste) {
+      if (!map.has(m.periode)) map.set(m.periode, [])
+      map.get(m.periode)!.push(m)
     }
-    return [...map.entries()].sort((a, b) => (a[0] ?? 99) - (b[0] ?? 99))
-  }, [fiches])
+    return [...map.entries()]
+  }, [liste])
 
   const total = useMemo(() => {
     const f = fiches.map(fiche)
@@ -116,7 +122,7 @@ export function CoursList({ data }: { data: VaultData }) {
       <PageHead
         eyebrow={surTitre}
         title={diplome || 'Mes cours'}
-        desc="Les fiches d'UE du vault, dans l'ordre où elles tombent. Chacune porte ce qu'il lui manque encore et la date de sa dernière revue."
+        desc="Un cours par carte, ses chapitres dans l'ordre du plan. Chaque chapitre est une page : on passe de l'un à l'autre sans revenir ici."
         right={
           total.cartes > 0 ? (
             <Link
@@ -132,7 +138,8 @@ export function CoursList({ data }: { data: VaultData }) {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pb-24">
         {/* Où j'en suis, en quatre chiffres. */}
         <div className="flex flex-wrap gap-x-14 gap-y-6 pb-12 mb-14 border-b border-border">
-          <Chiffre n={fiches.length} l="fiches" />
+          <Chiffre n={liste.length} l="cours" />
+          <Chiffre n={fiches.length} l="chapitres" />
           <Chiffre n={total.coef} l="coefficients" />
           <Chiffre n={total.trous} l="points à récupérer" teinte={total.trous > 0 ? TEINTE.trou : undefined} />
           <Link to="/cours/revision" className="hover:opacity-70 transition-opacity">
@@ -142,12 +149,12 @@ export function CoursList({ data }: { data: VaultData }) {
 
         {periodes.length > 0 && (
           <div className="space-y-14">
-            {periodes.map(([p, notes]) => (
+            {periodes.map(([p, cours]) => (
               <section key={String(p)}>
-                <Titre titre={p ? `Période ${p}` : 'Sans période'} compte={notes.length} />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                  {notes.map((n) => (
-                    <CarteFiche key={n.id} note={n} />
+                <Titre titre={p ? `Période ${p}` : 'Sans période'} compte={cours.length} />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+                  {cours.map((m) => (
+                    <CarteCours key={m.ue} matiere={m} />
                   ))}
                 </div>
               </section>
@@ -218,15 +225,15 @@ export function CoursList({ data }: { data: VaultData }) {
           </section>
         )}
 
-        {brut.length > 0 && (
+        {orphelines.length > 0 && (
           <section className="mt-20">
-            <Titre titre="Notes d'amphi en attente" compte={brut.length} />
+            <Titre titre="Notes d'amphi en attente" compte={orphelines.length} />
             <p className="caption text-subtle leading-relaxed mb-6 max-w-2xl">
               Prises telles quelles, pas encore mises en fiche : ce qui est déposé ici passe en premier au prochain
               tri.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {brut.map((n) => (
+              {orphelines.map((n) => (
                 <Link
                   key={n.id}
                   to={coursUrl(n)}
@@ -248,32 +255,72 @@ export function CoursList({ data }: { data: VaultData }) {
   )
 }
 
-function CarteFiche({ note }: { note: Note }) {
-  const f = fiche(note)
+/**
+ * Un cours entier sur une carte : son en-tête mène au premier chapitre, puis
+ * chaque chapitre a sa ligne. Les notes d'amphi brutes du même cours ferment la
+ * carte, au lieu de faire bande à part en bas de page.
+ */
+function CarteCours({ matiere: m }: { matiere: Matiere }) {
+  const fs = m.chapitres.map(fiche)
+  const trous = fs.reduce((s, f) => s + f.aVerifier, 0)
+  const cartes = m.chapitres.reduce((s, n, i) => s + (n.nbCartes ?? fs[i].cartes), 0)
+  const revu = Math.max(0, ...fs.map((f) => f.revu ?? 0))
+
   return (
-    <Link
-      to={coursUrl(note)}
-      className="rounded-xl border border-border p-5 hover:border-brand/30 transition-colors flex flex-col"
-    >
-      <div className="flex items-center gap-3 mb-3.5">
-        <span className="caption uppercase text-subtle">UE {f.ue}</span>
-        {f.coef !== null && <span className="caption text-subtle tabular-nums">coef {f.coef}</span>}
-        {f.statut && <Statut statut={f.statut} />}
-      </div>
+    <div className="rounded-xl border border-border flex flex-col">
+      <Link to={coursUrl(m.chapitres[0])} className="group p-5 pb-4">
+        <div className="flex items-center gap-3 mb-3.5">
+          <span className="caption uppercase text-subtle">UE {m.ue}</span>
+          {m.coef !== null && <span className="caption text-subtle tabular-nums">coef {m.coef}</span>}
+          {m.cycle && <span className="caption text-subtle ml-auto">{m.cycle}</span>}
+        </div>
+        <div className="display-sm group-hover:opacity-70 transition-opacity">{m.nom}</div>
+        <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2 caption">
+          <Metrique n={m.chapitres.length} l={m.chapitres.length > 1 ? 'chapitres' : 'chapitre'} />
+          <Metrique n={trous} l="à récupérer" teinte={trous > 0 ? TEINTE.trou : undefined} />
+          <Metrique n={cartes} l="cartes" />
+          {revu > 0 && <span className="text-subtle/60 mono ml-auto">revu le {fmtDate(revu)}</span>}
+        </div>
+      </Link>
 
-      <div className="label mb-2.5">{note.title}</div>
-      {f.notion && <p className="caption text-subtle line-clamp-2 leading-[1.6]">{f.notion}</p>}
+      <ol className="border-t border-border">
+        {m.chapitres.map((n, i) => (
+          <li key={n.id} className="border-b border-border last:border-b-0">
+            <Link
+              to={coursUrl(n)}
+              className="flex items-baseline gap-4 px-5 py-3 hover:bg-surface transition-colors"
+            >
+              <span className="caption text-subtle tabular-nums w-4 shrink-0">{i + 1}</span>
+              <span className="label flex-1 min-w-0 truncate">{titreChapitre(n)}</span>
+              {fs[i].aVerifier > 0 && (
+                <span className="caption tabular-nums shrink-0" style={{ color: TEINTE.trou }}>
+                  {fs[i].aVerifier}
+                </span>
+              )}
+              {fs[i].statut && (
+                <span
+                  className="w-1.5 h-1.5 rounded-full shrink-0 self-center"
+                  style={{ background: teinteStatut(fs[i].statut!) }}
+                  title={fs[i].statut!}
+                  aria-label={fs[i].statut!}
+                />
+              )}
+            </Link>
+          </li>
+        ))}
+      </ol>
 
-      <div className="mt-5 pt-4 border-t border-border flex flex-wrap items-baseline gap-x-6 gap-y-2 caption">
-        <Metrique
-          n={f.aVerifier}
-          l="à récupérer"
-          teinte={f.aVerifier > 0 ? TEINTE.trou : undefined}
-        />
-        <Metrique n={note.nbCartes ?? f.cartes} l="cartes" />
-        {f.revu && <span className="text-subtle/60 mono ml-auto">revu le {fmtDate(f.revu)}</span>}
-      </div>
-    </Link>
+      {m.brut.length > 0 && (
+        <div className="border-t border-dashed border-border px-5 py-3.5 flex flex-wrap items-baseline gap-x-4 gap-y-1.5">
+          <span className="caption uppercase text-subtle/60">Notes d'amphi</span>
+          {m.brut.map((n) => (
+            <Link key={n.id} to={coursUrl(n)} className="caption text-subtle hover:text-foreground transition-colors">
+              {n.title}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -367,12 +414,16 @@ export function CoursView({ data }: { data: VaultData }) {
 
   const active = useScrollSpy(useMemo(() => specIds(sections), [sections]))
 
-  // Précédent / suivant : l'ordre des fiches d'UE, celui de la liste.
-  const { fiches } = useMemo(() => coursSections(data), [data])
-  const rang = note ? fiches.findIndex((n) => n.id === note.id) : -1
-  const item = (n: Note | undefined): PagerItem | null => (n ? { to: coursUrl(n), title: n.title } : null)
-  const prev = useMemo(() => (rang > 0 ? item(fiches[rang - 1]) : null), [fiches, rang])
-  const next = useMemo(() => (rang >= 0 ? item(fiches[rang + 1]) : null), [fiches, rang])
+  // Précédent / suivant : les chapitres du même cours, dans l'ordre du plan.
+  // On ne déborde pas sur le cours voisin : on tourne les pages d'un cours.
+  const { liste } = useMemo(() => matieres(data), [data])
+  const matiere = note ? liste.find((m) => m.chapitres.some((c) => c.id === note.id)) ?? null : null
+  const chapitres = matiere?.chapitres ?? []
+  const rang = note ? chapitres.findIndex((n) => n.id === note.id) : -1
+  const item = (n: Note | undefined): PagerItem | null =>
+    n ? { to: coursUrl(n), title: titreChapitre(n) } : null
+  const prev = useMemo(() => (rang > 0 ? item(chapitres[rang - 1]) : null), [chapitres, rang])
+  const next = useMemo(() => (rang >= 0 ? item(chapitres[rang + 1]) : null), [chapitres, rang])
   useDockPager(prev, next)
 
   /**
@@ -434,8 +485,12 @@ export function CoursView({ data }: { data: VaultData }) {
           <SpecPager prev={prev} next={next} />
         </div>
 
-        <div className="caption uppercase text-subtle mb-5">{entete || 'Note de cours'}</div>
-        <h1 className="display-md max-w-4xl">{note.title}</h1>
+        {matiere && chapitres.length > 1 && <Chapitres matiere={matiere} rang={rang} />}
+
+        <div className="caption uppercase text-subtle mb-5">
+          {matiere ? [matiere.nom, `chapitre ${rang + 1} sur ${chapitres.length}`, entete].filter(Boolean).join(' · ') : entete || 'Note de cours'}
+        </div>
+        <h1 className="display-md max-w-4xl">{matiere ? titreChapitre(note) : note.title}</h1>
         {f.notion && <p className="mt-5 text-[15px] leading-relaxed text-muted max-w-2xl text-pretty">{f.notion}</p>}
 
         {/* Les cartes de cette fiche-là, jouables d'ici : le bouton ne mène pas
@@ -491,6 +546,29 @@ export function CoursView({ data }: { data: VaultData }) {
         <article onClick={onClick} className="fiche-cours min-w-0">
           <NoteBody id={note.id} media={idx.media} />
 
+          {/* Arrivé au bout du chapitre, le suivant est là, sans remonter. */}
+          {(prev || next) && (
+            <nav className="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-3" aria-label="Chapitres">
+              {prev ? (
+                <Link to={prev.to} className="rounded-xl border border-border p-5 hover:border-brand/30 transition-colors">
+                  <div className="caption uppercase text-subtle mb-2.5">← Chapitre {rang}</div>
+                  <div className="label">{prev.title}</div>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <Link
+                  to={next.to}
+                  className="rounded-xl border border-border p-5 text-right hover:border-brand/30 transition-colors"
+                >
+                  <div className="caption uppercase text-subtle mb-2.5">Chapitre {rang + 2} →</div>
+                  <div className="label">{next.title}</div>
+                </Link>
+              )}
+            </nav>
+          )}
+
           {/* De quoi rebondir sans repasser par la liste : ce que la fiche cite,
               et ce qui la cite. */}
           {(note.tags.length > 0 || links.length > 0 || backlinks.length > 0) && (
@@ -525,6 +603,35 @@ export function CoursView({ data }: { data: VaultData }) {
         </article>
       </div>
     </div>
+  )
+}
+
+/**
+ * Les chapitres du cours, en onglets au-dessus du titre : on voit où l'on est
+ * dans le cours et l'on saute à n'importe quelle page d'un clic.
+ */
+function Chapitres({ matiere: m, rang }: { matiere: Matiere; rang: number }) {
+  return (
+    <nav className="mb-10 -mx-5 sm:mx-0 px-5 sm:px-0 overflow-x-auto" aria-label={`Chapitres de ${m.nom}`}>
+      <ol className="flex gap-2 w-max">
+        {m.chapitres.map((n, i) => (
+          <li key={n.id}>
+            <Link
+              to={coursUrl(n)}
+              aria-current={i === rang ? 'page' : undefined}
+              className={`label flex items-baseline gap-2 px-4 py-2.5 rounded-full transition-colors whitespace-nowrap ${
+                i === rang
+                  ? 'bg-foreground text-background'
+                  : 'bg-surface text-subtle hover:bg-surface-strong hover:text-foreground'
+              }`}
+            >
+              <span className="tabular-nums opacity-60">{i + 1}</span>
+              <span className="max-w-[26ch] truncate">{titreChapitre(n)}</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </nav>
   )
 }
 
