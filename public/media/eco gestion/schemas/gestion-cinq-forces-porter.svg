@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <!-- Source : slide « Analyse microéconomique : modèle des 5 forces » (exemple Coca-Cola), Introduction à la gestion, partie 2 chapitre 1 — capture collée dans les notes des deux camarades, 2026-2027. Mêmes cases, mêmes numéros, même « + ÉTAT » que la slide ; les bouteilles de l'exemple sont retirées. -->
+  <rect width="900" height="520" fill="#ffffff"/>
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/></marker>
+  </defs>
+  <g fill="#e5e7eb" stroke="#6b7280" stroke-width="1.5">
+    <rect x="320" y="20" width="260" height="100" rx="6"/>
+    <rect x="320" y="200" width="260" height="110" rx="6" fill="#dbeafe" stroke="#1d4ed8"/>
+    <rect x="320" y="390" width="260" height="100" rx="6"/>
+    <rect x="20" y="200" width="250" height="110" rx="6"/>
+    <rect x="630" y="200" width="250" height="110" rx="6"/>
+    <rect x="40" y="415" width="120" height="50" rx="6" fill="#bfdbfe" stroke="#1d4ed8"/>
+  </g>
+  <g fill="#1f2937" text-anchor="middle" font-size="15">
+    <text x="450" y="48" fill="#6b7280">2</text>
+    <text x="450" y="74" font-weight="700" font-size="17">FOURNISSEURS</text>
+    <text x="450" y="98">Pouvoir de négociation</text>
+
+    <text x="450" y="226" fill="#6b7280">1</text>
+    <text x="450" y="252" font-weight="700" font-size="17">CONCURRENTS</text>
+    <text x="450" y="274" font-weight="700" font-size="17">DIRECTS</text>
+    <text x="450" y="298">Rivalité entre les firmes</text>
+
+    <text x="450" y="418" fill="#6b7280">3</text>
+    <text x="450" y="444" font-weight="700" font-size="17">ACHETEURS</text>
+    <text x="450" y="468">Pouvoir de négociation</text>
+
+    <text x="145" y="226" fill="#6b7280">4</text>
+    <text x="145" y="250" font-weight="700" font-size="17">ENTRANTS POTENTIELS</text>
+    <text x="145" y="274">Menace d’entrée</text>
+    <text x="145" y="294">de nouveaux concurrents</text>
+
+    <text x="755" y="226" fill="#6b7280">5</text>
+    <text x="755" y="250" font-weight="700" font-size="17">OFFREURS DE SUBSTITUTS</text>
+    <text x="755" y="274">Pression des produits ou</text>
+    <text x="755" y="294">services substituables</text>
+
+    <text x="100" y="446" font-weight="700" font-size="17">+ ÉTAT</text>
+  </g>
+  <g stroke="#1f2937" stroke-width="3" marker-end="url(#f)">
+    <line x1="450" y1="122" x2="450" y2="192"/>
+    <line x1="450" y1="388" x2="450" y2="318"/>
+    <line x1="272" y1="255" x2="312" y2="255"/>
+    <line x1="628" y1="255" x2="588" y2="255"/>
+  </g>
+</svg>

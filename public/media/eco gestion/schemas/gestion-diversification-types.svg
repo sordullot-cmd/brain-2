@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <!-- Source : slide « Diversification verticale vs horizontale », Introduction à la gestion, partie 2 — capture collée dans les notes du camarade, 2026-2027. Mêmes trois colonnes, mêmes libellés, même disposition des trois « Business ». -->
+  <rect width="900" height="400" fill="#ffffff"/>
+  <g fill="#1e40af"><rect x="0" y="0" width="298" height="40"/><rect x="301" y="0" width="298" height="40"/><rect x="602" y="0" width="298" height="40"/></g>
+  <g fill="#e5e7eb"><rect x="0" y="42" width="298" height="34"/><rect x="301" y="42" width="298" height="34"/><rect x="602" y="42" width="298" height="34"/></g>
+  <g fill="#f8fafc"><rect x="0" y="78" width="298" height="322"/><rect x="301" y="78" width="298" height="322"/><rect x="602" y="78" width="298" height="322"/></g>
+  <g text-anchor="middle" font-weight="700">
+    <g fill="#ffffff" font-size="21"><text x="149" y="28">Non liée</text><text x="450" y="28">Verticale</text><text x="751" y="28">Horizontale</text></g>
+    <g fill="#374151" font-size="17"><text x="149" y="65">Logique financière</text><text x="450" y="65">Logique de filière</text><text x="751" y="65">Complémentarité autre</text></g>
+  </g>
+  <g fill="#3b82f6" stroke="#1e3a8a" stroke-width="1.5">
+    <circle cx="80" cy="150" r="42"/><circle cx="200" cy="235" r="42"/><circle cx="80" cy="330" r="42"/>
+    <circle cx="450" cy="150" r="42"/><circle cx="450" cy="227" r="42"/><circle cx="450" cy="304" r="42"/>
+    <circle cx="680" cy="235" r="42"/><circle cx="751" cy="230" r="42"/><circle cx="822" cy="235" r="42"/>
+  </g>
+  <g fill="#ffffff" text-anchor="middle" font-size="14" font-weight="700">
+    <text x="80" y="146">Business</text><text x="80" y="164">A</text>
+    <text x="200" y="231">Business</text><text x="200" y="249">B</text>
+    <text x="80" y="326">Business</text><text x="80" y="344">C</text>
+    <text x="450" y="142">Business</text><text x="450" y="159">A</text>
+    <text x="450" y="221">Business</text><text x="450" y="238">B</text>
+    <text x="450" y="300">Business</text><text x="450" y="317">C</text>
+    <text x="672" y="236">Business</text><text x="672" y="254">A</text>
+    <text x="751" y="222">Business</text><text x="751" y="240">B</text>
+    <text x="830" y="236">Business</text><text x="830" y="254">C</text>
+  </g>
+</svg>
