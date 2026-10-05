@@ -14,6 +14,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
+import { execFileSync } from 'node:child_process'
 import matter from 'gray-matter'
 import { marked } from 'marked'
 import { imageSize } from './image-size.mjs'
@@ -55,6 +56,32 @@ const SKIP_DIRS = new Set(['.git', '.obsidian', '.claude', '.trash', 'node_modul
  */
 const isPlanche = (folder) => folder.split('/').includes('planches')
 const SKIP_FILES = new Set(['.DS_Store', '.gitattributes'])
+
+/**
+ * Ce que le `.gitignore` du vault tient hors de son depot public ne se publie
+ * pas davantage ici : notes de camarades, .docx et PDF deposes dans `_brut/`
+ * (ou Sacha a deja laisse tomber des papiers administratifs perso), archives
+ * Drive. Le site ne doit jamais etre la fuite que le vault a fermee.
+ * `--directory` replie un dossier entierement ignore en une seule entree.
+ */
+let IGNORES = []
+try {
+  IGNORES = execFileSync('git', ['-C', VAULT, 'ls-files', '-z', '-o', '-i', '--exclude-standard', '--directory'], {
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+  })
+    .split('\0')
+    .filter(Boolean)
+    .map((r) => r.normalize('NFC'))
+} catch {
+  console.warn('  (git indisponible sur le vault : le .gitignore ne filtre pas cet index)')
+}
+const IGNORES_EXACTS = new Set(IGNORES.filter((r) => !r.endsWith('/')))
+const IGNORES_DOSSIERS = IGNORES.filter((r) => r.endsWith('/'))
+const estIgnore = (full) => {
+  const rel = path.relative(VAULT, full).split(path.sep).join('/').normalize('NFC')
+  return IGNORES_EXACTS.has(rel) || IGNORES_DOSSIERS.some((d) => rel.startsWith(d))
+}
 
 const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.svg'])
 const VIDEO_EXT = new Set(['.mp4', '.webm', '.mov', '.m4v'])
@@ -104,6 +131,7 @@ function walk(dir, acc = []) {
   for (const e of entries) {
     if (e.name.startsWith('._')) continue
     const full = path.join(dir, e.name)
+    if (estIgnore(full)) continue
     if (e.isDirectory()) {
       if (SKIP_DIRS.has(e.name)) continue
       acc.push({ dir: true, full })
