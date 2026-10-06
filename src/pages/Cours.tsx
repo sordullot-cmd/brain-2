@@ -24,6 +24,7 @@ import {
 import {
   COURS_DOMAIN,
   coursSections,
+  condenseDe,
   coursUrl,
   cycleDe,
   fiche,
@@ -467,6 +468,7 @@ export function CoursView({ data }: { data: VaultData }) {
     )
 
   const f = fiche(note)
+  const condense = condenseDe(note, idx.media)
   const links = note.links.map((i) => idx.notes.get(i)!).filter(Boolean)
   const backlinks = note.backlinks.map((i) => idx.notes.get(i)!).filter(Boolean)
   const entete = [f.ue && `UE ${f.ue}`, f.periode && `période ${f.periode}`, f.coef !== null && `coef ${f.coef}`]
@@ -504,6 +506,18 @@ export function CoursView({ data }: { data: VaultData }) {
             >
               Lancer le QCM ({questions.length} question{questions.length > 1 ? 's' : ''})
             </Link>
+          )}
+          {/* Le cours en deux pages, à imprimer : produit par /condense dans le vault. */}
+          {condense && (
+            <a
+              href={condense.url}
+              target="_blank"
+              rel="noopener"
+              download={condense.name}
+              className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
+            >
+              Fiche condensée (PDF)
+            </a>
           )}
         </div>
 

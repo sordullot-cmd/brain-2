@@ -364,6 +364,18 @@ export const COURS_DOMAIN = 'eco gestion'
 
 /** Les notes d'amphi pas encore mises en fiche vivent dans ce sous-dossier. */
 const BRUT = '_brut'
+/** Les fiches condensées de /condense : un PDF à télécharger, pas une page de plus. */
+const CONDENSES = '_condenses'
+
+/**
+ * Le PDF condensé d'une fiche, s'il existe : même nom, dans `_condenses/` à
+ * côté d'elle (voir le skill /condense du vault).
+ */
+export function condenseDe(note: Note, media: Map<string, Media>): Media | null {
+  const i = note.path.lastIndexOf('/')
+  const pdf = `${note.path.slice(0, i + 1)}${CONDENSES}/${note.path.slice(i + 1).replace(/\.md$/, '.pdf')}`
+  return media.get(pdf) ?? media.get(pdf.normalize('NFC')) ?? null
+}
 
 /**
  * Une note de cours s'appelle comme son fichier.
@@ -442,7 +454,9 @@ export function fiche(n: Note): Fiche {
  * parce que c'est l'ordre dans lequel on les révise.
  */
 export function coursSections(d: VaultData) {
-  const toutes = d.notes.filter((n) => n.domain === COURS_DOMAIN)
+  const toutes = d.notes.filter(
+    (n) => n.domain === COURS_DOMAIN && !n.folder.split('/').includes(CONDENSES)
+  )
   const brut = toutes.filter((n) => n.folder.split('/').includes(BRUT))
   const rangees = toutes.filter((n) => !n.folder.split('/').includes(BRUT))
 
