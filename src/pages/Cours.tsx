@@ -26,7 +26,6 @@ import {
   COURS_DOMAIN,
   coursSections,
   condenseDe,
-  prioritesDe,
   coursUrl,
   cycleDe,
   fiche,
@@ -88,7 +87,6 @@ export function CoursList({ data }: { data: VaultData }) {
    * l'ordre : c'est le calendrier des partiels.
    */
   const { liste, orphelines } = useMemo(() => matieres(data), [data])
-  const media = useMemo(() => indexById(data).media, [data])
   const periodes = useMemo(() => {
     const map = new Map<number | null, Matiere[]>()
     for (const m of liste) {
@@ -159,7 +157,7 @@ export function CoursList({ data }: { data: VaultData }) {
                 <Titre titre={p ? `Période ${p}` : 'Sans période'} compte={cours.length} />
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
                   {cours.map((m) => (
-                    <CarteCours key={m.ue} matiere={m} media={media} />
+                    <CarteCours key={m.ue} matiere={m} />
                   ))}
                 </div>
               </section>
@@ -265,8 +263,7 @@ export function CoursList({ data }: { data: VaultData }) {
  * chaque chapitre a sa ligne. Les notes d'amphi brutes du même cours ferment la
  * carte, au lieu de faire bande à part en bas de page.
  */
-function CarteCours({ matiere: m, media }: { matiere: Matiere; media: Map<string, Media> }) {
-  const priorites = prioritesDe(m.ue, media)
+function CarteCours({ matiere: m }: { matiere: Matiere }) {
   const fs = m.chapitres.map(fiche)
   const trous = fs.reduce((s, f) => s + f.aVerifier, 0)
   const cartes = m.chapitres.reduce((s, n, i) => s + (n.nbCartes ?? fs[i].cartes), 0)
@@ -316,18 +313,6 @@ function CarteCours({ matiere: m, media }: { matiere: Matiere; media: Map<string
         ))}
       </ol>
 
-      {priorites && (
-        <a
-          href={priorites.url}
-          target="_blank"
-          rel="noopener"
-          download={priorites.name}
-          className="border-t border-border px-5 py-3.5 flex items-baseline gap-3 hover:bg-surface transition-colors"
-        >
-          <span className="label flex-1">Priorités + révision IA</span>
-          <span className="caption text-subtle">PDF</span>
-        </a>
-      )}
 
       {m.brut.length > 0 && (
         <div className="border-t border-dashed border-border px-5 py-3.5 flex flex-wrap items-baseline gap-x-4 gap-y-1.5">
@@ -488,7 +473,6 @@ export function CoursView({ data }: { data: VaultData }) {
 
   const f = fiche(note)
   const condense = condenseDe(note, idx.media)
-  const priorites = prioritesDe(fiche(note).ue, idx.media)
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pt-12 pb-24">
@@ -532,18 +516,6 @@ export function CoursView({ data }: { data: VaultData }) {
               className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
             >
               Fiche condensée (PDF)
-            </a>
-          )}
-          {/* Toute l'UE : quoi réviser d'abord, et l'annexe pour réviser avec une IA (/priorites). */}
-          {priorites && (
-            <a
-              href={priorites.url}
-              target="_blank"
-              rel="noopener"
-              download={priorites.name}
-              className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
-            >
-              Priorités + révision IA (PDF)
             </a>
           )}
         </div>
