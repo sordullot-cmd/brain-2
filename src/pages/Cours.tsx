@@ -14,6 +14,7 @@ import {
 import { NoteBody } from './Projet'
 import { QcmSession } from './Qcm'
 import { qcmDeFiche } from '../lib/controle'
+import { epurerCours } from '../lib/epurer'
 import {
   chargerPerso,
   chargerProgression,
@@ -410,9 +411,10 @@ export function CoursView({ data }: { data: VaultData }) {
    * précède — `SpecNav` ne déplie que celles de la partie où l'on lit.
    */
   const html = note ? text?.[note.id]?.html : undefined
+  // Le sommaire suit ce qui est affiché : le cours seul (voir epurer.ts).
   const sections: SpecSection[] = useMemo(() => {
     if (!html) return []
-    const doc = new DOMParser().parseFromString(html, 'text/html')
+    const doc = new DOMParser().parseFromString(epurerCours(html), 'text/html')
     const out: SpecSection[] = []
     for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
       const s: SpecSection = { id: h.id, label: (h.textContent ?? '').trim() }
@@ -487,11 +489,6 @@ export function CoursView({ data }: { data: VaultData }) {
   const f = fiche(note)
   const condense = condenseDe(note, idx.media)
   const priorites = prioritesDe(fiche(note).ue, idx.media)
-  const links = note.links.map((i) => idx.notes.get(i)!).filter(Boolean)
-  const backlinks = note.backlinks.map((i) => idx.notes.get(i)!).filter(Boolean)
-  const entete = [f.ue && `UE ${f.ue}`, f.periode && `période ${f.periode}`, f.coef !== null && `coef ${f.coef}`]
-    .filter(Boolean)
-    .join(' · ')
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pt-12 pb-24">
@@ -508,7 +505,7 @@ export function CoursView({ data }: { data: VaultData }) {
         {matiere && chapitres.length > 1 && <Chapitres matiere={matiere} rang={rang} />}
 
         <div className="caption uppercase text-subtle mb-5">
-          {matiere ? [matiere.nom, `chapitre ${rang + 1} sur ${chapitres.length}`, entete].filter(Boolean).join(' · ') : entete || 'Note de cours'}
+          {matiere ? `${matiere.nom} · chapitre ${rang + 1} sur ${chapitres.length}` : 'Note de cours'}
         </div>
         <h1 className="display-md max-w-4xl">{matiere ? titreChapitre(note) : note.title}</h1>
         {f.notion && <p className="mt-5 text-[15px] leading-relaxed text-muted max-w-2xl text-pretty">{f.notion}</p>}
@@ -551,30 +548,6 @@ export function CoursView({ data }: { data: VaultData }) {
           )}
         </div>
 
-        {/* Le suivi ne vaut que pour une fiche d'UE : une note d'amphi n'a ni
-            trous comptés ni cartes, afficher deux zéros ne dirait rien. */}
-        <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3 caption">
-          {f.ue ? (
-            <>
-              {f.statut && (
-                <span className="flex items-center gap-1.5 text-subtle">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ background: teinteStatut(f.statut) }}
-                    aria-hidden
-                  />
-                  {f.statut}
-                </span>
-              )}
-              <Metrique n={f.aVerifier} l="à récupérer" teinte={f.aVerifier > 0 ? TEINTE.trou : undefined} />
-              <Metrique n={note.nbCartes ?? f.cartes} l="cartes" />
-              {f.revu && <span className="text-subtle/60 mono">revu le {fmtDate(f.revu)}</span>}
-            </>
-          ) : (
-            <span className="text-subtle/60 mono">modifiée le {fmtDate(note.mtime)}</span>
-          )}
-          <span className="text-subtle/60 mono ml-auto truncate">{note.path}</span>
-        </div>
       </div>
 
       {sections.length > 1 && <div className="mt-10"><SpecNavMobile sections={sections} active={active} /></div>}
@@ -588,7 +561,7 @@ export function CoursView({ data }: { data: VaultData }) {
 
         {/* `fiche-cours` masque le H1 du markdown : le titre est déjà en tête de page. */}
         <article onClick={onClick} className="fiche-cours min-w-0">
-          <NoteBody id={note.id} media={idx.media} />
+          <NoteBody id={note.id} media={idx.media} transform={epurerCours} />
 
           {/* Arrivé au bout du chapitre, le suivant est là, sans remonter. */}
           {(prev || next) && (
@@ -613,37 +586,6 @@ export function CoursView({ data }: { data: VaultData }) {
             </nav>
           )}
 
-          {/* De quoi rebondir sans repasser par la liste : ce que la fiche cite,
-              et ce qui la cite. */}
-          {(note.tags.length > 0 || links.length > 0 || backlinks.length > 0) && (
-            <section className="mt-16 pt-10 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-10">
-              {note.tags.length > 0 && (
-                <Bloc titre="Tags">
-                  <div className="flex flex-wrap gap-1.5">
-                    {note.tags.map((t) => (
-                      <Link
-                        key={t}
-                        to={`/tags/${encodeURIComponent(t)}`}
-                        className="caption px-2 py-1.5 rounded-full bg-surface text-subtle hover:bg-surface-strong hover:text-foreground transition-colors"
-                      >
-                        #{t}
-                      </Link>
-                    ))}
-                  </div>
-                </Bloc>
-              )}
-              {links.length > 0 && (
-                <Bloc titre={`Cette fiche renvoie à (${links.length})`}>
-                  <Liens notes={links} />
-                </Bloc>
-              )}
-              {backlinks.length > 0 && (
-                <Bloc titre={`Citée par (${backlinks.length})`}>
-                  <Liens notes={backlinks} />
-                </Bloc>
-              )}
-            </section>
-          )}
         </article>
       </div>
     </div>

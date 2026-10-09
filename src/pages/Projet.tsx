@@ -266,10 +266,20 @@ export function ProjetDetail({ data }: { data: VaultData }) {
  *
  * Le HTML vient de notre propre indexeur (contenu local), pas d'une source tierce.
  */
-export function NoteBody({ id, media }: { id: string; media?: Map<string, Media> }) {
+export function NoteBody({
+  id,
+  media,
+  transform,
+}: {
+  id: string
+  media?: Map<string, Media>
+  /** Retouche du HTML rendu avant affichage (les fiches de cours, réduites au cours). */
+  transform?: (html: string) => string
+}) {
   const text = useNotesText()
   const { onClick, node } = useProseLightbox(media)
-  const html = text?.[id]?.html
+  const brut = text?.[id]?.html
+  const html = useMemo(() => (brut !== undefined && transform ? transform(brut) : brut), [brut, transform])
   const { hash } = useLocation()
 
   /**
