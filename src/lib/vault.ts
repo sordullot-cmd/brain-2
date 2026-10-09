@@ -366,6 +366,8 @@ export const COURS_DOMAIN = 'eco gestion'
 const BRUT = '_brut'
 /** Les fiches condensées de /condense : un PDF à télécharger, pas une page de plus. */
 const CONDENSES = '_condenses'
+/** Les cartes des priorités de /priorites, une par UE : un PDF à télécharger aussi. */
+const PRIORITES = '_priorites'
 
 /**
  * Le PDF condensé d'une fiche, s'il existe : même nom, dans `_condenses/` à
@@ -375,6 +377,20 @@ export function condenseDe(note: Note, media: Map<string, Media>): Media | null 
   const i = note.path.lastIndexOf('/')
   const pdf = `${note.path.slice(0, i + 1)}${CONDENSES}/${note.path.slice(i + 1).replace(/\.md$/, '.pdf')}`
   return media.get(pdf) ?? media.get(pdf.normalize('NFC')) ?? null
+}
+
+/**
+ * Le PDF des priorités d'une UE (carte des priorités + annexe « Réviser avec
+ * une IA »), s'il existe : `eco gestion/_priorites/UE <ue> - <matière>.pdf`
+ * (voir le skill /priorites du vault).
+ */
+export function prioritesDe(ue: string | null, media: Map<string, Media>): Media | null {
+  if (!ue) return null
+  const debut = `${COURS_DOMAIN}/${PRIORITES}/UE ${ue} - `.normalize('NFC')
+  for (const m of media.values()) {
+    if (m.ext === 'pdf' && m.path.normalize('NFC').startsWith(debut)) return m
+  }
+  return null
 }
 
 /**
@@ -455,7 +471,9 @@ export function fiche(n: Note): Fiche {
  */
 export function coursSections(d: VaultData) {
   const toutes = d.notes.filter(
-    (n) => n.domain === COURS_DOMAIN && !n.folder.split('/').includes(CONDENSES)
+    (n) =>
+      n.domain === COURS_DOMAIN &&
+      !n.folder.split('/').some((d) => d === CONDENSES || d === PRIORITES)
   )
   const brut = toutes.filter((n) => n.folder.split('/').includes(BRUT))
   const rangees = toutes.filter((n) => !n.folder.split('/').includes(BRUT))
