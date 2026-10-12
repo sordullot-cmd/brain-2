@@ -518,6 +518,19 @@ export function CoursView({ data }: { data: VaultData }) {
               Fiche condensée (PDF)
             </a>
           )}
+          {/* Tous les chapitres de la matière, réduits au cours : produit par
+              scripts/cours-pdf.mjs après chaque index. */}
+          {matiere && (
+            <a
+              href={`/cours-pdf/UE-${encodeURIComponent(matiere.ue)}.pdf`}
+              target="_blank"
+              rel="noopener"
+              download={`${matiere.nom} — tout le cours.pdf`}
+              className="label px-5 py-3 rounded-full border border-border text-subtle hover:text-foreground hover:border-brand/30 transition-colors"
+            >
+              Tout le cours (PDF)
+            </a>
+          )}
         </div>
 
       </div>
